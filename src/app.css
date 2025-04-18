@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+@plugin "daisyui"{
+    themes: light --default, dark --prefersdark, silk;
+}
+@plugin "daisyui/theme" {
+    name: "silk";
+    default: true;
+    --color-primary: #b48415;
+  }
