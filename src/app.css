@@ -1,12 +1,27 @@
-@import 'tailwindcss';
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poetsen+One&display=swap');
+@import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin "daisyui"{
-    themes: light --default, dark --prefersdark, silk;
+    themes: light --default, dark --prefersdark, cmyk;
 }
 @plugin "daisyui/theme" {
-    name: "silk";
+    name: "cmyk";
     default: true;
-    --color-primary: #b48415;
+    --color-primary: #FC6519;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Poetsen One", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  p, body {
+    font-family: "Inter", system-ui, sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  
