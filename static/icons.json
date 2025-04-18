@@ -1,21 +1,19 @@
 {
-  "name": "ColearnSpace",
-  "short_name": "ColearnSpace",
   "icons": [
     {
-      "src": "windows11/SmallTile.scale-100.png?v=2",
+      "src": "windows11/SmallTile.scale-100.png",
       "sizes": "71x71"
     },
     {
-      "src": "windows11/SmallTile.scale-125.png?v=2",
+      "src": "windows11/SmallTile.scale-125.png",
       "sizes": "89x89"
     },
     {
-      "src": "windows11/SmallTile.scale-150.png?v=2",
+      "src": "windows11/SmallTile.scale-150.png",
       "sizes": "107x107"
     },
     {
-      "src": "windows11/SmallTile.scale-200.png?v=2",
+      "src": "windows11/SmallTile.scale-200.png",
       "sizes": "142x142"
     },
     {
@@ -450,28 +448,5 @@
       "src": "ios/1024.png",
       "sizes": "1024x1024"
     }
-  ],
-  "start_url": "/courses",
-  "display_override": [
-    "fullscreen",
-    "minimal-ui",
-    "window-controls-overlay",
-    "standalone"
-  ],
-  "display": "standalone",
-  "background_color": "#FC6519",
-  "theme_color": "#FC6519",
-  "id": "colearnspace",
-  "description": "ColearnSpace is your digital skill-building hub — crafted for curious minds. Skip the chaos of YouTube playlists and dive into structured, community-powered courses designed for growth, support, and learning at your pace.",
-  "lang": "en",
-  "orientation": "portrait-primary",
-  "iarc_rating_id": "13",
-  "prefer_related_applications": false,
-  "categories": [
-    "books",
-    "education",
-    "lifestyle",
-    "productivity",
-    "social"
   ]
 }
