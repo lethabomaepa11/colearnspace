@@ -1,75 +1,150 @@
 <script>
 	import { page } from '$app/state';
+	import Loading from '$lib/components/Loading.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
+	import { ArrowLeft, Youtube } from '@lucide/svelte';
 	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 
 	// Simulated course data for demo
-	let course = {
+	let isLoading = $state(false);
+	let course = $state({
 		title: 'Beginner Web Development',
 		category: 'Web Development',
 		description: 'Learn HTML, CSS, JavaScript, and React — from scratch to basic apps.',
 		author: 'MusaTech',
-		videos: [
-			{ title: 'HTML Basics', videoId: 'UB1O30fR-EE' },
-			{ title: 'CSS Crash Course', videoId: 'yfoY53QXEnI' },
-			{ title: 'JavaScript for Beginners', videoId: 'hdI2bqOjy3c' },
-			{ title: 'React Basics', videoId: 'bMknfKXIFA8' }
+		modules: [
+			{
+				title: 'Module 1: HTML Basics',
+				description: '<h1>HTML Basics</h1>',
+				videos: [
+					{ id: 'UB1O30fR-EE', title: 'HTML Tutorial for Beginners' },
+					{ id: 'yfoY53QXEnI', title: 'HTML Crash Course for Beginners' }
+				]
+			},
+			{
+				title: 'Module 2: CSS Crash Course',
+				description: '<h1>CSS Crash Course</h1>',
+				videos: [
+					{ id: 'UB1O30fR-EE', title: 'CSS Tutorial for Beginners' },
+					{ id: 'yfoY53QXEnI', title: 'CSS Crash Course in One Video' }
+				]
+			},
+			{
+				title: 'Module 3: JavaScript for Beginners',
+				description: '<h1>JavaScript for Beginners</h1>',
+				videos: [
+					{ id: 'UB1O30fR-EE', title: 'JavaScript Tutorial for Beginners' },
+					{ id: 'yfoY53QXEnI', title: 'Beginner JavaScript Crash Course' }
+				]
+			},
+			{
+				title: 'Module 4: React Basics',
+				description: '<h1>React Basics</h1>',
+				videos: [
+					{ id: 'UB1O30fR-EE', title: 'React Tutorial for Beginners' },
+					{ id: 'yfoY53QXEnI', title: 'React Crash Course 2023' }
+				]
+			}
 		]
-	};
-
-	let currentIndex = 0;
-	let currentVideo = course.videos[currentIndex];
-
-	function switchVideo(index) {
-		currentIndex = index;
-		currentVideo = course.videos[index];
-	}
+	});
+	let totalVideos = $state(0);
+	onMount(() => {
+		isLoading = true;
+		let localCourse = JSON.parse(localStorage.getItem('course'));
+		if (localCourse) {
+			course = localCourse;
+			let modules = JSON.parse(localStorage.getItem('modules'));
+			if (modules) {
+				course.modules = modules;
+				totalVideos = modules.reduce((acc, mod) => acc + mod.videos.length, 0);
+				isLoading = false;
+			}
+		}
+	});
 </script>
 
-<section class="bg-base-100 min-h-screen px-6 py-20">
-	<div class="mx-auto max-w-6xl">
-		<div class="mb-10">
-			<h1 class="text-primary mb-2 text-4xl font-bold">{course.title}</h1>
-			<div class="mt-2 text-sm text-gray-500">
-				📂 <a href="/courses#{course.category}" class="link link-hover">{course.category}</a> · 👤
-				<a href="/author/{course.author}" class="link link-hover">{course.author}</a>
-				· 🎬 {course.videos.length} Lessons
-			</div>
-		</div>
-
-		<!-- Video & Lesson Layout -->
-		<div class="grid gap-10 lg:grid-cols-3">
-			<!-- Video Player -->
-			<div class="lg:col-span-2">
-				<div class="mb-4 h-[300px] w-full overflow-hidden rounded-xl">
-					<iframe
-						class="h-full w-full rounded-xl"
-						src={`https://www.youtube.com/embed/${currentVideo.videoId}`}
-						title={currentVideo.title}
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowfullscreen
-					></iframe>
+{#if isLoading}
+	<Loading />
+{:else}
+	<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
+		<div class="mx-auto max-w-6xl">
+			<div class="mb-10">
+				<div class="flex items-center gap-1">
+					<button
+						onclick={() => window.history.back()}
+						class="btn btn-outline btn-circle text-black"><ArrowLeft /></button
+					>
+					<h1 class="text-primary mb-2 text-4xl font-bold">{course.title}</h1>
 				</div>
-				<h2 class="text-primary mb-2 text-2xl font-semibold">{currentVideo.title}</h2>
+				<div class="mt-2 flex flex-wrap items-center text-sm text-gray-500">
+					📂 <a href="/courses#{course.category}" class="link link-hover">{course.category}</a> · 👤
+					<a href="/author/{course.author}" class="link link-hover">{course.author}</a>
+					· {course.modules.length} Modules ·
+					<span class="flex items-center gap-1"
+						><Youtube />
+						{totalVideos} Youtube videos</span
+					>
+				</div>
 			</div>
+			<main class="flex w-full flex-col items-start justify-between gap-3 md:flex-row">
+				<div class="md:w-[80svw]">
+					<div
+						style="position: relative; width: 100%; max-width: 560px; aspect-ratio: 16 / 9; background-color: #000; cursor: pointer;"
+					>
+						<img
+							src="https://img.youtube.com/vi/{course.modules[0].videos[0].id}/hqdefault.jpg"
+							alt="YouTube Video Thumbnail"
+							style="width: 100%; height: 100%; object-fit: cover;"
+						/>
+					</div>
+				</div>
+				<!-- Video & Lesson Layout -->
 
-			<!-- Lesson List -->
-			<div class="bg-base-200 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
-				<h3 class="mb-4 text-lg font-bold text-gray-700">📚 Lessons</h3>
-				<ul class="space-y-3">
-					{#each course.videos as video, i}
-						<li
-							class="hover:bg-primary cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition hover:text-white
-                {i === currentIndex ? 'bg-primary text-white' : 'text-gray-700'}"
-							on:click={() => switchVideo(i)}
-						>
-							{i + 1}. {video.title}
-						</li>
-					{/each}
-				</ul>
-			</div>
+				<div class="grid w-full gap-10">
+					<!-- Module List -->
+					<div class="bg-base-200 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
+						<span class="mb-4 flex items-center justify-between">
+							<h3 class="text-lg font-bold text-gray-700">Modules</h3>
+							<a
+								href="/courses/{page.params.slug}/module/{course.modules[0].slug}"
+								class="link link-primary">Start Course</a
+							>
+						</span>
+						<ul class="space-y-3">
+							{#each course.modules as mod, i}
+								<li
+									class="hover:bg-primary cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition hover:text-white
+                "
+								>
+									{#if i === 0}
+										<a
+											href="/courses/{page.params.slug == 'preview'
+												? 'preview'
+												: course.slug}/module/{mod.slug}"
+											class="link link-hover"
+											title="{course.title}/module/{mod.title}">{i + 1}. {mod.title}</a
+										>
+									{:else}
+										<button class="link link-hover" title="{course.title}/module/{mod.title}"
+											>{i + 1}. {mod.title}</button
+										>
+									{/if}
+								</li>
+							{/each}
+						</ul>
+					</div>
+				</div>
+			</main>
 		</div>
-	</div>
-	<TrixDisplay content={course.description} />
-</section>
+		<div class="mt-5"></div>
+		<TrixDisplay content={course.description} />
+		<a
+			href="/courses/{page.params.slug}/module/{course.modules[0].slug}"
+			class="btn btn-primary mt-5">Start course</a
+		>
+		{#if page.params.slug === 'preview'}
+			<button class="btn btn-primary mt-5">Publish Course</button>
+		{/if}
+	</section>
+{/if}

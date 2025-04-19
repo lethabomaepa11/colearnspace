@@ -1,5 +1,6 @@
 <script>
 	import { BookOpen, Users, Youtube, Sprout, HandHelping, Sparkles } from '@lucide/svelte';
+	import { fade } from 'svelte/transition';
 
 	// Functionality can go here later (e.g., scroll effects, AOS)
 </script>
@@ -14,7 +15,7 @@ ColearnSpace is your digital learning hub – built for students, by students. D
 </svelte:head>
 
 <!-- HERO SECTION -->
-<main class="flex">
+<main transition:fade class="flex">
 	<section
 		class="relative isolate flex h-screen w-full flex-col items-center justify-center overflow-hidden px-6 text-center text-white"
 	>

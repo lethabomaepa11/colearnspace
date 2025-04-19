@@ -4,10 +4,15 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @plugin "daisyui"{
-    themes: light --default, dark --prefersdark, cmyk;
+    themes: light --default, dark --prefersdark, cmyk, dim;
 }
 @plugin "daisyui/theme" {
     name: "cmyk";
+    default: true;
+    --color-primary: #FC6519;
+  }
+  @plugin "daisyui/theme" {
+    name: "dim";
     default: true;
     --color-primary: #FC6519;
   }

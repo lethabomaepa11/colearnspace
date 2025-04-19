@@ -1,5 +1,6 @@
 <script>
 	import SideBar from '$lib/components/SideBar.svelte';
+	import { slide } from 'svelte/transition';
 
 	let courses = [
 		{
@@ -49,7 +50,7 @@
 	<meta name="description" content="Explore a wide range of skill courses on ColearnSpace" />
 </svelte:head>
 
-<section class="bg-base-100 min-h-screen w-full px-6 py-24 md:w-[80svw]">
+<section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-24 md:w-[80svw]">
 	<div class="mx-auto max-w-7xl">
 		<!-- Filters -->
 		<div class="mb-12 flex w-full flex-col items-center justify-between gap-4 md:flex-row">

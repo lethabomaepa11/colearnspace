@@ -1,11 +1,26 @@
 <script>
 	import { page } from '$app/state';
-	import { LogIn, Menu, User } from '@lucide/svelte';
+	import { LogIn, Menu, Moon, Sun, User } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 	let { isLoggedIn, user } = $props();
 	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
+
+	let darkTheme = $state(false);
+	const toggleTheme = () => {
+		darkTheme = !darkTheme;
+		localStorage.setItem('darkTheme', darkTheme);
+	};
+
+	onMount(() => {
+		darkTheme = localStorage.getItem('darkTheme') === 'true';
+	});
 </script>
 
-<div class="navbar bg-base-100/95 fixed z-10 rounded border-b border-gray-200 backdrop-blur">
+<div
+	class="navbar bg-base-100/95 fixed z-10 rounded border-b backdrop-blur {darkTheme
+		? 'border-gray-700'
+		: 'border-gray-100'}"
+>
 	<div class="navbar-start">
 		<div class="dropdown">
 			<div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -54,7 +69,22 @@
 			{/if}
 		</ul>
 	</div>
-	<div class="navbar-end">
+	<div class="navbar-end flex items-center gap-4">
+		<label class="swap swap-rotate">
+			<input
+				type="checkbox"
+				onclick={toggleTheme}
+				bind:checked={darkTheme}
+				value="dim"
+				class="theme-controller hidden"
+			/>
+			{#if darkTheme}
+				<Sun />
+			{:else}
+				<Moon />
+			{/if}
+		</label>
+
 		{#if isLoggedIn}
 			<a href="/profile" class="btn btn-primary btn-circle text-base text-white"><User /></a>
 		{:else}

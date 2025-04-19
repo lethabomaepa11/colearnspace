@@ -1,17 +1,22 @@
 <script>
-	let { value = $bindable() } = $props();
+	import { onMount } from 'svelte';
+
+	let { value = $bindable(), id } = $props();
 	const handleEditorValueChange = () => {
 		// @ts-ignore
 		//since the value of the trix editor is not bindable or reactive, i track the value of the hidden input element manually
-		value = document.getElementById('content').value;
+		value = document.getElementById(id).value;
 	};
+
+	onMount(() => {
+		handleEditorValueChange();
+	});
 </script>
 
 <main>
-	<trix-toolbar id="contentToolbar"></trix-toolbar>
-	<input id="content" type="hidden" name="content" bind:value />
-	<trix-editor onkeydown={handleEditorValueChange} toolbar="contentToolbar" input="content"
-	></trix-editor>
+	<trix-toolbar class="text-primary" id="{id}Toolbar"></trix-toolbar>
+	<input {id} type="hidden" name={id} bind:value />
+	<trix-editor onkeyup={handleEditorValueChange} toolbar="{id}Toolbar" input={id}></trix-editor>
 </main>
 
 <style>

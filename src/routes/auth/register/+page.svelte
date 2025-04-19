@@ -63,7 +63,7 @@
 	/>
 </svelte:head>
 
-<main class="flex min-h-screen flex-col items-center justify-center">
+<main transition:slide class="flex min-h-screen flex-col items-center justify-center">
 	<div class="flex flex-col items-center justify-center space-y-2">
 		<h1 class="mb-4 text-2xl font-bold">Create an account</h1>
 		{#if isLoading}
