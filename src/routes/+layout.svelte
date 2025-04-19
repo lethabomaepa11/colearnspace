@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import BottomNav from '$lib/components/BottomNav.svelte';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import '../app.css';
 
@@ -11,4 +12,5 @@
 
 	<NavBar isLoggedIn={data.isLoggedIn} user={data.user} />
 	{@render children()}
+	<BottomNav />
 </main>

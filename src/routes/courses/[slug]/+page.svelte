@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/state';
+	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { onMount } from 'svelte';
 
 	// Simulated course data for demo
@@ -29,9 +30,10 @@
 	<div class="mx-auto max-w-6xl">
 		<div class="mb-10">
 			<h1 class="text-primary mb-2 text-4xl font-bold">{course.title}</h1>
-			<p class="text-gray-600">{course.description}</p>
 			<div class="mt-2 text-sm text-gray-500">
-				📂 {course.category} · 👤 {course.author} · 🎬 {course.videos.length} Lessons
+				📂 <a href="/courses#{course.category}" class="link link-hover">{course.category}</a> · 👤
+				<a href="/author/{course.author}" class="link link-hover">{course.author}</a>
+				· 🎬 {course.videos.length} Lessons
 			</div>
 		</div>
 
@@ -69,4 +71,5 @@
 			</div>
 		</div>
 	</div>
+	<TrixDisplay content={course.description} />
 </section>

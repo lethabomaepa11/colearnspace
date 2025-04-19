@@ -24,4 +24,34 @@
     font-style: normal;
   }
   
-  
+  trix-editor {
+    min-height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    }
+    
+    trix-editor h1, .content :global(h1) {
+    @apply text-2xl font-bold mb-2;
+    }
+    
+    trix-editor blockquote, .content :global(blockquote) {
+    @apply border-l-4 border-gray-300 pl-4 italic text-gray-600;
+    }
+    
+    trix-editor pre, .content :global(pre) {
+    @apply bg-gray-100 p-2 rounded text-sm font-mono;
+    }
+    
+    trix-editor a, .content :global(a) {
+    @apply text-blue-600 underline;
+    }
+    
+    trix-editor ul, .content :global(ul) {
+    @apply list-disc list-inside;
+    }
+    
+    trix-editor ol, .content :global(ol) {
+    @apply list-decimal list-inside;
+    }
+    

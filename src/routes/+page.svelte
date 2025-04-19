@@ -38,7 +38,7 @@ ColearnSpace is your digital learning hub – built for students, by students. D
 
 		<div class="flex items-center gap-4">
 			<!-- CTA Buttons -->
-			<a href="/auth/register" class="btn btn-primary btn-lg"> 🚀 Get Started Free </a>
+			<a href="/auth/register" class="btn btn-primary btn-lg"> 🚀 Get Started</a>
 			<a href="/courses" class="btn btn-lg btn-outline text-primary"> Explore Courses </a>
 		</div>
 

@@ -1,4 +1,6 @@
 <script>
+	import SideBar from '$lib/components/SideBar.svelte';
+
 	let courses = [
 		{
 			title: 'HTML, CSS & JavaScript 101',
@@ -46,34 +48,36 @@
 	<title>Courses | ColearnSpace</title>
 	<meta name="description" content="Explore a wide range of skill courses on ColearnSpace" />
 </svelte:head>
-<section class="bg-base-100 min-h-screen px-6 py-24">
+
+<section class="bg-base-100 min-h-screen w-full px-6 py-24 md:w-[80svw]">
 	<div class="mx-auto max-w-7xl">
-		<h1 class="font-poetsen text-primary mb-12 text-center text-4xl font-bold">
-			Explore Public Skill Courses
-		</h1>
-
 		<!-- Filters -->
-		<div class="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
-			<input
-				type="text"
-				placeholder="🔍 Search for a course..."
-				bind:value={search}
-				class="input input-lg input-bordered w-full md:max-w-md"
-			/>
-
-			<select
-				bind:value={selectedCategory}
-				class="select select-lg select-bordered w-full md:max-w-xs"
-			>
-				{#each categories as cat}
-					<option value={cat}>{cat}</option>
-				{/each}
-			</select>
+		<div class="mb-12 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+			<fieldset class="fieldset w-full md:max-w-md">
+				<legend class="fieldset-legend">Search for a course</legend>
+				<input
+					type="text"
+					placeholder="🔍 Search for a course..."
+					bind:value={search}
+					class="input input-lg input-bordered w-full md:max-w-md"
+				/>
+			</fieldset>
+			<fieldset class="fieldset w-full md:max-w-xs">
+				<legend class="fieldset-legend">Filter by category</legend>
+				<select
+					bind:value={selectedCategory}
+					class="select select-lg select-bordered w-full md:max-w-xs"
+				>
+					{#each categories as cat}
+						<option value={cat}>{cat}</option>
+					{/each}
+				</select>
+			</fieldset>
 		</div>
 
 		<!-- Grid of Courses -->
 		{#if filteredCourses.length > 0}
-			<div class="grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 				{#each filteredCourses as course}
 					<a
 						href={`/courses/${course.slug}`}
