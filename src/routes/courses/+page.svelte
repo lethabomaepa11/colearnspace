@@ -1,5 +1,6 @@
 <script>
 	import SideBar from '$lib/components/SideBar.svelte';
+	import { courseSearch } from '$lib/states.svelte';
 	import { slide } from 'svelte/transition';
 
 	let courses = [
@@ -33,13 +34,17 @@
 		}
 	];
 
-	let search = '';
-	let selectedCategory = 'All';
+	let selectedCategory = $state('All');
+	let filteredCourses = $state(courses);
 
-	$: filteredCourses = courses.filter((course) => {
-		const matchTitle = course.title.toLowerCase().includes(search.toLowerCase());
-		const matchCategory = selectedCategory === 'All' || course.category === selectedCategory;
-		return matchTitle && matchCategory;
+	const clean = (text) => text.toLowerCase().replace(/[^a-z0-9 ]/gi, ''); // removes punctuation/special chars
+
+	$effect(() => {
+		filteredCourses = courses.filter((course) => {
+			const matchTitle = clean(course.title).includes(clean(courseSearch.text));
+			const matchCategory = selectedCategory === 'All' || course.category === selectedCategory;
+			return matchTitle && matchCategory;
+		});
 	});
 
 	let categories = ['All', ...new Set(courses.map((c) => c.category))];
@@ -53,27 +58,13 @@
 <section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-24 md:w-[80svw]">
 	<div class="mx-auto max-w-7xl">
 		<!-- Filters -->
-		<div class="mb-12 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
-			<fieldset class="fieldset w-full md:max-w-md">
-				<legend class="fieldset-legend">Search for a course</legend>
-				<input
-					type="text"
-					placeholder="🔍 Search for a course..."
-					bind:value={search}
-					class="input input-lg input-bordered w-full md:max-w-md"
-				/>
-			</fieldset>
-			<fieldset class="fieldset w-full md:max-w-xs">
-				<legend class="fieldset-legend">Filter by category</legend>
-				<select
-					bind:value={selectedCategory}
-					class="select select-lg select-bordered w-full md:max-w-xs"
+		<div class="mb-8 flex w-full items-center gap-4 overflow-x-auto">
+			{#each categories as cat}
+				<button
+					class="btn btn-sm {selectedCategory === cat ? 'btn-primary ' : ' btn-neutral'}"
+					onclick={() => (selectedCategory = cat)}>{cat}</button
 				>
-					{#each categories as cat}
-						<option value={cat}>{cat}</option>
-					{/each}
-				</select>
-			</fieldset>
+			{/each}
 		</div>
 
 		<!-- Grid of Courses -->

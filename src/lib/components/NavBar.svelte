@@ -1,23 +1,15 @@
 <script>
 	import { page } from '$app/state';
-	import { LogIn, Menu, Moon, Sun, User } from '@lucide/svelte';
+	import { courseSearch, sideBar, theme } from '$lib/states.svelte';
+	import { LogIn, Menu, Moon, Plus, Search, Sun, User } from '@lucide/svelte';
 	import { onMount } from 'svelte';
+	import CoursesTopNav from './CoursesTopNav.svelte';
 	let { isLoggedIn, user } = $props();
 	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
-
-	let darkTheme = $state(false);
-	const toggleTheme = () => {
-		darkTheme = !darkTheme;
-		localStorage.setItem('darkTheme', darkTheme);
-	};
-
-	onMount(() => {
-		darkTheme = localStorage.getItem('darkTheme') === 'true';
-	});
 </script>
 
 <div
-	class="navbar bg-base-100/95 fixed z-10 rounded border-b backdrop-blur {darkTheme
+	class="navbar bg-base-100/95 fixed z-10 rounded border-b backdrop-blur {theme.darkTheme
 		? 'border-gray-700'
 		: 'border-gray-100'}"
 >
@@ -46,9 +38,14 @@
 				{/if}
 			</ul>
 		</div>
-		<a href="/" class="btn btn-ghost text-xl">
-			<img src="/site/branding/ColearnSpace-full.png" class="h-[120px]" alt="ColearnSpace logo" />
-		</a>
+		<div class="flex h-full overflow-hidden">
+			<button onclick={sideBar.toggle} tabindex="0" class="btn btn-ghost hidden lg:flex">
+				<Menu />
+			</button>
+			<a href="/" class="btn btn-ghost">
+				<img src="/site/branding/ColearnSpace-full.png" class="h-[100px]" alt="ColearnSpace logo" />
+			</a>
+		</div>
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal z-1 px-1">
@@ -69,16 +66,28 @@
 			{/if}
 		</ul>
 	</div>
+	{#if page.url.pathname === '/courses'}
+		<CoursesTopNav />
+	{/if}
+
 	<div class="navbar-end flex items-center gap-4">
+		{#if !infoPages.includes(page.url.pathname)}
+			<a href="/courses/create" class="btn btn-outline hidden items-center justify-center md:flex"
+				><Plus /> Create</a
+			>
+		{/if}
+		<button class="btn btn-ghost btn-circle lg:hidden" onclick={courseSearch.toggleMobileSearch}
+			><Search /></button
+		>
 		<label class="swap swap-rotate">
 			<input
 				type="checkbox"
-				onclick={toggleTheme}
-				bind:checked={darkTheme}
+				onclick={theme.toggleTheme}
+				bind:checked={theme.darkTheme}
 				value="dim"
 				class="theme-controller hidden"
 			/>
-			{#if darkTheme}
+			{#if theme.darkTheme}
 				<Sun />
 			{:else}
 				<Moon />
@@ -86,9 +95,13 @@
 		</label>
 
 		{#if isLoggedIn}
-			<a href="/profile" class="btn btn-primary btn-circle text-base text-white"><User /></a>
+			<a href="/profile" class="btn btn-primary btn-circle hidden text-base text-white md:flex"
+				><User /></a
+			>
 		{:else}
-			<a href="/auth/login" class="btn btn-primary text-base text-white"><LogIn /> Login</a>
+			<a href="/auth/login" class="btn btn-primary btn-circle hidden text-base text-white md:flex"
+				><LogIn /></a
+			>
 		{/if}
 	</div>
 </div>

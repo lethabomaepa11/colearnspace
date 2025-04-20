@@ -110,6 +110,6 @@
 		<button class="btn btn-primary mt-5">Complete Course</button>
 	{/if}
 	{#if page.params.slug === 'preview'}
-		<button onclick={publishCourse} class="btn btn-primary mt-5">Publish Course</button>
+		<button class="btn btn-primary mt-5">Publish Course</button>
 	{/if}
 </section>

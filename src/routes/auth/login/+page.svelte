@@ -57,7 +57,8 @@
 			<button class="btn z-10 bg-black text-white" onclick={() => login(true)}
 				><Github />Continue with Github</button
 			>
-			<p class="mt-4 text-sm text-gray-500">Or continue with email</p>
+
+			<p class="divider mt-4 text-sm text-gray-500">Or continue with email</p>
 			<form onsubmit={() => login(false)} class="flex flex-col items-center justify-center">
 				{#if form.mainError}<div transition:slide role="alert" class="alert alert-error w-full p-3">
 						<span>{form.mainError}</span>

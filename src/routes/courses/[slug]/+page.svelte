@@ -49,6 +49,7 @@
 		]
 	});
 	let totalVideos = $state(0);
+	let thumbnail = $state('https://colearnspace.netlify.app/site/branding/ColearnSpace-icon2.png'); //default
 	onMount(() => {
 		isLoading = true;
 		let localCourse = JSON.parse(localStorage.getItem('course'));
@@ -57,7 +58,13 @@
 			let modules = JSON.parse(localStorage.getItem('modules'));
 			if (modules) {
 				course.modules = modules;
+
 				totalVideos = modules.reduce((acc, mod) => acc + mod.videos.length, 0);
+				if (totalVideos != 0) {
+					thumbnail = modules.find((mod) => mod.videos.length > 0).videos[0].id;
+					thumbnail = `https://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`;
+				}
+				//search for a module that has a video, use the id of the first video in that module
 				isLoading = false;
 			}
 		}
@@ -93,8 +100,8 @@
 						style="position: relative; width: 100%; max-width: 560px; aspect-ratio: 16 / 9; background-color: #000; cursor: pointer;"
 					>
 						<img
-							src="https://img.youtube.com/vi/{course.modules[0].videos[0].id}/hqdefault.jpg"
-							alt="YouTube Video Thumbnail"
+							src={thumbnail}
+							alt="{course.title} Thumbnail"
 							style="width: 100%; height: 100%; object-fit: cover;"
 						/>
 					</div>
@@ -119,9 +126,7 @@
 								>
 									{#if i === 0}
 										<a
-											href="/courses/{page.params.slug == 'preview'
-												? 'preview'
-												: course.slug}/module/{mod.slug}"
+											href="/courses/{page.params.slug}/module/{mod.slug}"
 											class="link link-hover"
 											title="{course.title}/module/{mod.title}">{i + 1}. {mod.title}</a
 										>

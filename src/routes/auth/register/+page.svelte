@@ -72,7 +72,7 @@
 			<button class="btn z-10 bg-black text-white" onclick={() => register(true)}
 				><Github />Continue with Github</button
 			>
-			<p class="mt-4 text-sm text-gray-500">Or continue with email</p>
+			<p class="divider mt-4 text-sm text-gray-500">Or continue with email</p>
 			<form onsubmit={() => register(false)} class="flex flex-col items-center justify-center">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Your full name</legend>
