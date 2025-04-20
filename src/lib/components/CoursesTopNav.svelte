@@ -25,6 +25,9 @@
 					if (!history) {
 						history = [courseSearch.text];
 						localStorage.setItem('courseSearchHistory', JSON.stringify(history));
+					} else {
+						history.push(courseSearch.text);
+						localStorage.setItem('courseSearchHistory', JSON.stringify(history));
 					}
 					courseSearch.history = history;
 				};

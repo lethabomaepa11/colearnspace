@@ -73,7 +73,7 @@
 				{#each filteredCourses as course}
 					<a
 						href={`/courses/${course.slug}`}
-						class="bg-base-200 group overflow-hidden rounded-xl shadow-lg transition duration-300 hover:shadow-xl"
+						class="bg-base-200 group overflow-hidden rounded-xl transition duration-300 hover:shadow-xl"
 					>
 						<div class="relative overflow-hidden">
 							<img
