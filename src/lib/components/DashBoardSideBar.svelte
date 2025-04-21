@@ -1,7 +1,16 @@
 <script>
 	import { page } from '$app/state';
 	import { sideBar, theme } from '$lib/states.svelte';
-	import { Building, ChartBarIncreasing, LucideBook, PlusCircle } from '@lucide/svelte';
+	import {
+		Activity,
+		Building,
+		ChartBarIncreasing,
+		LayoutDashboard,
+		LucideBook,
+		PlusCircle,
+		Settings,
+		UserCog
+	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	let courses = [
@@ -34,73 +43,77 @@
 			slug: 'graphic-design-basics'
 		}
 	];
-	let categories = ['All', ...new Set(courses.map((c) => c.category))];
-	onMount(() => {
-		sideBar.open = localStorage.getItem('sbstate') === 'true';
-	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <ul
 	transition:slide
-	class="menu bg-base-100 fixed top-0 left-0 mt-20 hidden h-screen transition {sideBar.open
-		? 'w-[250px]'
-		: 'w-[150px]'} border-r {theme.darkTheme
+	class="menu bg-base-100 fixed top-0 left-0 mt-20 hidden h-screen w-[250px] border-r
+		 transition {theme.darkTheme
 		? 'divide-gray-500 border-gray-700'
 		: 'divide-gray-200 border-gray-100'}  space-y-2 divide-y md:flex"
 >
 	<ul class="space-y-2">
 		<li class="px-4">
 			<a
-				href="/courses"
-				class="{sideBar.open
-					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+				href="/dashboard"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/dashboard'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<LayoutDashboard size={20} />
+
+				<span>Dashboard</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/dashboard"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
 					.pathname === '/courses'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<LucideBook size={20} />
+				<UserCog size={20} />
 
-				<span class={!sideBar.open && 'text-xs'}>Courses</span>
+				<span>Profile</span>
 			</a>
 		</li>
 		<li class="px-4">
 			<a
-				href="/courses/org"
-				class="{sideBar.open
-					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses/org'
+				href="/dashboard"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/courses'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<Building size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Organizations</span>
+				<Activity size={20} />
+
+				<span>Account Activity</span>
 			</a>
 		</li>
 		<li class="px-4">
 			<a
-				href="/courses/rankings"
-				class="{sideBar.open
-					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses/rankings'
+				href="/dashboard"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/courses'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<ChartBarIncreasing size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Rankings</span>
+				<Settings size={20} />
+
+				<span>Settings</span>
 			</a>
 		</li>
 	</ul>
 	{#if sideBar.open}
 		<li>
 			<details open>
-				<summary> <h2 class="menu-title text-neutral-content">Categories</h2></summary>
+				<summary> <h2 class="menu-title text-neutral-content">My Courses</h2></summary>
 				<ul>
-					{#each categories as category}
-						<li><a>{category}</a></li>
+					{#each courses as course}
+						<li><a href="/courses/{course.slug}">{course.title}</a></li>
 					{/each}
 				</ul>
 			</details>

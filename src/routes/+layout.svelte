@@ -4,18 +4,34 @@
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
-	import { theme } from '$lib/states.svelte';
+	import { currentUser, theme } from '$lib/states.svelte';
+	import { supabase } from '$lib/supabaseClient';
 
 	let { children, data } = $props();
-	onMount(() => {
+	let sessionUser = $state(data.user);
+	onMount(async () => {
 		theme.darkTheme = localStorage.getItem('darkTheme') === 'true';
+		if (!sessionUser) {
+			const {
+				data: { user }
+			} = await supabase.auth.getUser();
+
+			sessionUser = user;
+		}
+		if (sessionUser) {
+			sessionUser.isLoggedIn = true;
+			sessionUser.name =
+				sessionUser?.user_metadata?.first_name ??
+				sessionUser?.user_metadata?.full_name ??
+				sessionUser?.user_metadata?.user_name;
+		}
 	});
 </script>
 
 <main class="">
 	<div class=""></div>
 
-	<NavBar isLoggedIn={data.isLoggedIn} user={data.user} />
+	<NavBar user={sessionUser} />
 	{@render children()}
-	<BottomNav isLoggedIn={data.isLoggedIn} />
+	<BottomNav user={sessionUser} />
 </main>

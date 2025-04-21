@@ -1,7 +1,9 @@
 <script>
 	import { page } from '$app/state';
+	import { currentUser } from '$lib/states.svelte';
 	import { LogIn, LucideBook, PlusCircle, User } from '@lucide/svelte';
-	let { isLoggedIn } = $props();
+	import AvatarDropDown from './AvatarDropDown.svelte';
+	let { user } = $props();
 </script>
 
 <div class="dock md:hidden">
@@ -23,12 +25,25 @@
 		<span class="dock-label">Create</span>
 	</a>
 
-	{#if isLoggedIn}
-		<a
-			href="/profile"
-			class="{page.url.pathname === '/profile' ? 'dock-active text-primary ' : ''} dock-label"
-			><User /> <span class="dock-label">You</span></a
-		>
+	{#if user?.isLoggedIn}
+		<div class="{page.url.pathname === '/dashboard' ? 'dock-active text-primary' : ''} dock-label">
+			<div class="dropdown dropdown-top dropdown-center">
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">
+					{#if user?.user_metadata?.avatar_url}
+						<img
+							src={user.user_metadata.avatar_url}
+							alt="user avatar"
+							class="h-8 w-8 rounded-full object-cover"
+						/>
+					{:else}
+						<User />
+					{/if}
+					<span class="dock-label">You</span>
+				</div>
+				<AvatarDropDown {user} />
+			</div>
+		</div>
 	{:else}
 		<a
 			href="/auth/login"

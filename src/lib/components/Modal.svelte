@@ -13,6 +13,8 @@
 				>
 			</span>
 		{/if}
-		{@render children()}
+		<div class="space-y-3">
+			{@render children()}
+		</div>
 	</div>
 </dialog>

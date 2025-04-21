@@ -67,16 +67,16 @@ const authGuard= async ({ event, resolve }) => {
   event.locals.session = session
   event.locals.user = user
 
-  if(event.locals.session && event.url.pathname == "/login"){
+  if(event.locals.session && event.url.pathname == "/auth/login"){
   //redirect logged in user from login page
-    redirect(303,"/community");
+    redirect(303,"/dashboard");
   }
-  if(event.locals.session && event.url.pathname == "/signup"){
+  if(event.locals.session && event.url.pathname == "/auth/signup"){
     //redirect logged in user from signup page
-    redirect(303,"/community");
+    redirect(303,"/dashboard");
   }
-  if(!event.locals.session && event.url.pathname == "/profile"){
-    redirect(303, '/login')
+  if(!event.locals.session && event.url.pathname == "/dashboard"){
+    redirect(303, '/auth/login')
   }
 
 

@@ -1,10 +1,11 @@
 <script>
 	import { page } from '$app/state';
-	import { courseSearch, sideBar, theme } from '$lib/states.svelte';
+	import { courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
 	import { LogIn, Menu, Moon, Plus, Search, Sun, User } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import CoursesTopNav from './CoursesTopNav.svelte';
-	let { isLoggedIn, user } = $props();
+	import AvatarDropDown from './AvatarDropDown.svelte';
+	let { user } = $props();
 	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
 </script>
 
@@ -39,7 +40,11 @@
 			</ul>
 		</div>
 		<div class="flex h-full overflow-hidden">
-			<button onclick={sideBar.toggle} tabindex="0" class="btn btn-ghost hidden lg:flex">
+			<button
+				onclick={() => sideBar.toggle(page.url.pathname)}
+				tabindex="0"
+				class="btn btn-ghost hidden lg:flex"
+			>
 				<Menu />
 			</button>
 			<a href="/" class="btn btn-ghost">
@@ -94,10 +99,21 @@
 			{/if}
 		</label>
 
-		{#if isLoggedIn}
-			<a href="/profile" class="btn btn-primary btn-circle hidden text-base text-white md:flex"
-				><User /></a
-			>
+		{#if user?.isLoggedIn}
+			<div class="dropdown dropdown-left" role="button">
+				<button class="btn btn-primary btn-circle hidden text-base text-white md:flex">
+					{#if user?.user_metadata?.avatar_url}
+						<img
+							src={user.user_metadata.avatar_url}
+							alt="user avatar"
+							class="h-8 w-8 rounded-full object-cover"
+						/>
+					{:else}
+						<User />
+					{/if}
+				</button>
+				<AvatarDropDown {user} />
+			</div>
 		{:else}
 			<a href="/auth/login" class="btn btn-primary btn-circle hidden text-base text-white md:flex"
 				><LogIn /></a

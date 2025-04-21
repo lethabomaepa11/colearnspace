@@ -453,10 +453,10 @@
   ],
   "start_url": "/courses",
   "display_override": [
+    "standalone",
     "fullscreen",
     "minimal-ui",
-    "window-controls-overlay",
-    "standalone"
+    "window-controls-overlay"
   ],
   "display": "standalone",
   "background_color": "#FC6519",
@@ -472,6 +472,8 @@
     "education",
     "lifestyle",
     "productivity",
-    "social"
+    "social",
+    "programming",
+    "skills"
   ]
 }

@@ -1,5 +1,6 @@
 <script>
 	import Loading from '$lib/components/Loading.svelte';
+	import { githubAuth } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Github } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
@@ -16,9 +17,7 @@
 	const register = async (withGithub = false) => {
 		isLoading = true;
 		if (withGithub) {
-			const { data, error } = await supabase.auth.signInWithOAuth({
-				provider: 'github'
-			});
+			githubAuth.default();
 			return;
 		}
 		form.emailError = '';
