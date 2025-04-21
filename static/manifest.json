@@ -453,11 +453,10 @@
   ],
   "start_url": "/courses",
   "display_override": [
-   
     "fullscreen",
-    "standalone",
     "minimal-ui",
-    "window-controls-overlay"
+    "window-controls-overlay",
+    "standalone"
   ],
   "display": "standalone",
   "background_color": "#FC6519",
