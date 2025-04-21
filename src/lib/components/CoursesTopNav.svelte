@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/state';
 	import { courseSearch } from '$lib/states.svelte';
 	import { ArrowLeft, Mic, Plus, Search } from '@lucide/svelte';
 	import { Popover } from 'melt/builders';
@@ -20,16 +21,7 @@
 				recognition.onresult = (event) => {
 					const voiceInput = event.results[0][0].transcript;
 					courseSearch.text = voiceInput;
-
-					let history = JSON.parse(localStorage.getItem('courseSearchHistory'));
-					if (!history) {
-						history = [courseSearch.text];
-						localStorage.setItem('courseSearchHistory', JSON.stringify(history));
-					} else {
-						history.push(courseSearch.text);
-						localStorage.setItem('courseSearchHistory', JSON.stringify(history));
-					}
-					courseSearch.history = history;
+					addToHistory(courseSearch.text);
 				};
 
 				recognition.start();
@@ -41,6 +33,20 @@
 				"Sorry, your browser doesn't support voice search. Please use Chrome on desktop or Android."
 			);
 		}
+	};
+	const addToHistory = (text) => {
+		if (text.trim().length < 4) return;
+		let history = JSON.parse(localStorage.getItem('courseSearchHistory'));
+		if (!history) {
+			history = [text];
+			localStorage.setItem('courseSearchHistory', JSON.stringify(history));
+		} else {
+			if (!history.includes(text)) {
+				history.push(text);
+				localStorage.setItem('courseSearchHistory', JSON.stringify(history));
+			}
+		}
+		courseSearch.history = history;
 	};
 </script>
 
@@ -54,6 +60,7 @@
 				class=" w-full grow focus:outline-0 active:outline-0"
 				placeholder="Search"
 				bind:value={courseSearch.text}
+				onchange={addToHistory(courseSearch.text)}
 			/>
 
 			<button class="btn btn-ghost"><Search /></button>
@@ -92,6 +99,7 @@
 					class=" w-full grow focus:outline-0 active:outline-0"
 					placeholder="Search"
 					bind:value={courseSearch.text}
+					onchange={addToHistory(courseSearch.text)}
 				/>
 
 				<button class="btn btn-ghost"><Search /></button>

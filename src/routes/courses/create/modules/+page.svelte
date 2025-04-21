@@ -13,13 +13,13 @@
 		{
 			title: 'Module 1',
 			description: '<h1>Module 1 description</h1>',
-			videos: [],
+			module_videos: [],
 			slug: ''
 		},
 		{
 			title: 'Module 2',
 			description: '<h1>Module 2 description</h1>',
-			videos: [],
+			module_videos: [],
 			slug: ''
 		}
 	]);
@@ -33,7 +33,7 @@
 			if (localModules) {
 				modules = localModules;
 				modules.map((mod) => {
-					mod.videos = mod.videos.map((video) => {
+					mod.module_videos = mod.module_videos.map((video) => {
 						return 'https://www.youtube.com/watch?v=' + video.id;
 					});
 				});
@@ -46,11 +46,11 @@
 		modules.push({
 			title: `Module ${modules.length + 1}`,
 			description: `<h1>Module ${modules.length + 1} description</h1>`,
-			videos: []
+			module_videos: []
 		});
 	}
 	function addVideo(index) {
-		modules[index].videos.push('');
+		modules[index].module_videos.push('');
 	}
 	async function getYouTubeTitle(videoUrlOrId) {
 		const videoId = extractYouTubeID(videoUrlOrId);
@@ -60,7 +60,6 @@
 		if (!res.ok) throw new Error('Failed to fetch video data');
 
 		const data = await res.json();
-		console.log(data);
 		return data.title;
 	}
 	function extractYouTubeID(url) {
@@ -68,13 +67,13 @@
 		return match ? match[1] : null;
 	}
 	function removeVideo(modIndex, vidIndex) {
-		if (modules[modIndex].videos.length > 1) {
-			modules[modIndex].videos.splice(vidIndex, 1);
+		if (modules[modIndex].module_videos.length > 1) {
+			modules[modIndex].module_videos.splice(vidIndex, 1);
 		}
 	}
-	async function processVideos(videos) {
+	async function processmodule_videos(module_videos) {
 		return await Promise.all(
-			videos.map(async (video) => {
+			module_videos.map(async (video) => {
 				const id = extractYouTubeID(video);
 				const title = await getYouTubeTitle(video);
 				return { id, title };
@@ -105,8 +104,8 @@
 			}
 
 			// Validate video URLs
-			for (let j = 0; j < mod.videos.length; j++) {
-				const url = mod.videos[j];
+			for (let j = 0; j < mod.module_videos.length; j++) {
+				const url = mod.module_videos[j];
 				if (!url.trim()) {
 					errorMessage = `Video ${j + 1} in '<b>${mod.title}</b>' module ${i + 1} cannot be empty.`;
 					document.getElementById('errorModal').showModal();
@@ -122,10 +121,10 @@
 			}
 		}
 
-		// Process videos
+		// Process module_videos
 		await Promise.all(
 			modules.map(async (mod, i) => {
-				modules[i].videos = await processVideos(mod.videos);
+				modules[i].module_videos = await processmodule_videos(mod.module_videos);
 			})
 		);
 
@@ -141,7 +140,7 @@
 
 		// Rebuild video URLs for preview
 		modules.map((mod) => {
-			mod.videos = mod.videos.map((video) => {
+			mod.module_videos = mod.module_videos.map((video) => {
 				return 'https://www.youtube.com/watch?v=' + video.id;
 			});
 		});
@@ -164,8 +163,8 @@
 <Modal title="How to add modules" id="infoModal">
 	<p>1. Click on the accordion and rename your module</p>
 	<p>2. Then you will need to add your module description or instructions</p>
-	<p>3. Finally, you can add videos to your module</p>
-	<p>4. Remember that only youtube videos are supported</p>
+	<p>3. Finally, you can add module_videos to your module</p>
+	<p>4. Remember that only youtube module_videos are supported</p>
 </Modal>
 <Modal title="Preview" id="previewModal">
 	<p>Preview of your course</p>
@@ -195,17 +194,17 @@
 						<TrixEditor id={mod.title} bind:value={mod.description} />
 						<!-- Video Links -->
 						<div>
-							<label class="label font-bold">YouTube videos (for this module)</label>
+							<label class="label font-bold">YouTube module_videos (for this module)</label>
 							<div class="grid gap-4 md:grid-cols-2">
-								{#each mod.videos as url, m (m)}
+								{#each mod.module_videos as url, m (m)}
 									<div class="relative">
 										<input
 											type="url"
 											class="input input-bordered w-full"
 											placeholder="https://youtube.com/watch?v=..."
-											bind:value={modules[i].videos[m]}
+											bind:value={modules[i].module_videos[m]}
 										/>
-										{#if mod.videos.length > 1}
+										{#if mod.module_videos.length > 1}
 											<button
 												type="button"
 												class="absolute top-2 right-2 text-red-500"

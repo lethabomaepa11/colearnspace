@@ -1,12 +1,18 @@
 <script>
 	import { page } from '$app/state';
-	import { courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
-	import { LogIn, Menu, Moon, Plus, Search, Sun, User } from '@lucide/svelte';
+	import { course, courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
+	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import CoursesTopNav from './CoursesTopNav.svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
+	import Modal from './Modal.svelte';
 	let { user } = $props();
 	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
+	let localCourse = $state();
+
+	onMount(() => {
+		localCourse = JSON.parse(localStorage.getItem('course'));
+	});
 </script>
 
 <div
@@ -77,9 +83,38 @@
 
 	<div class="navbar-end flex items-center gap-4">
 		{#if !infoPages.includes(page.url.pathname)}
-			<a href="/courses/create" class="btn btn-outline hidden items-center justify-center md:flex"
-				><Plus /> Create</a
-			>
+			<div class="dropdown" role="button">
+				{#if !localCourse}
+					<a
+						href="/courses/create"
+						class="btn btn-outline hidden items-center justify-center md:flex"><Plus /> Create</a
+					>
+				{:else}
+					<button class="btn btn-outline hidden items-center justify-center md:flex"
+						><Plus /> Create</button
+					>
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<ul
+						tabindex="0"
+						class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
+					>
+						<summary class="menu-title"><h2>Course Creator</h2></summary>
+						<li><a href="/courses/create" class="text-base">Continue Editing</a></li>
+						<li>
+							<button onclick={course.removeFromLocalStorage} class="text-error text-base"
+								>Create New Course</button
+							>
+						</li>
+					</ul>
+				{/if}
+			</div>
+			{#if page.url.pathname == '/courses/preview' || page.url.pathname.includes('/courses/preview/')}
+				<button
+					onclick={() => course.publish(user)}
+					class="btn btn-primary hidden items-center justify-center md:flex"
+					><UploadCloud /> Publish</button
+				>
+			{/if}
 		{/if}
 		<button class="btn btn-ghost btn-circle lg:hidden" onclick={courseSearch.toggleMobileSearch}
 			><Search /></button

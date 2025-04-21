@@ -453,8 +453,9 @@
   ],
   "start_url": "/courses",
   "display_override": [
-    "standalone",
+   
     "fullscreen",
+    "standalone",
     "minimal-ui",
     "window-controls-overlay"
   ],

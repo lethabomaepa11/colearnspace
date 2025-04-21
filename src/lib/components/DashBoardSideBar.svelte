@@ -69,6 +69,19 @@
 		</li>
 		<li class="px-4">
 			<a
+				href="/courses"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/courses'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<LucideBook size={20} />
+
+				<span>Courses</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
 				href="/dashboard"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
 					.pathname === '/courses'
@@ -107,16 +120,14 @@
 			</a>
 		</li>
 	</ul>
-	{#if sideBar.open}
-		<li>
-			<details open>
-				<summary> <h2 class="menu-title text-neutral-content">My Courses</h2></summary>
-				<ul>
-					{#each courses as course}
-						<li><a href="/courses/{course.slug}">{course.title}</a></li>
-					{/each}
-				</ul>
-			</details>
-		</li>
-	{/if}
+	<li>
+		<details open>
+			<summary> <h2 class="menu-title text-neutral-content">My Courses</h2></summary>
+			<ul>
+				{#each courses as course}
+					<li><a href="/courses/{course.slug}">{course.title}</a></li>
+				{/each}
+			</ul>
+		</details>
+	</li>
 </ul>

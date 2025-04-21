@@ -24,6 +24,17 @@
 				sessionUser?.user_metadata?.first_name ??
 				sessionUser?.user_metadata?.full_name ??
 				sessionUser?.user_metadata?.user_name;
+
+			const { data: user } = await supabase.from('user').select().eq('id', sessionUser.id);
+
+			if (user.length === 0) {
+				await supabase.from('user').insert({
+					id: sessionUser.id,
+					name: sessionUser.name,
+					username: sessionUser.email.split('@')[0],
+					email: sessionUser.email
+				});
+			}
 		}
 	});
 </script>

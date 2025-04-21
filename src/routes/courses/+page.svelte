@@ -1,38 +1,13 @@
 <script>
+	import { goto } from '$app/navigation';
 	import SideBar from '$lib/components/SideBar.svelte';
 	import { courseSearch } from '$lib/states.svelte';
+	import { Youtube } from '@lucide/svelte';
+	import moment from 'moment';
 	import { slide } from 'svelte/transition';
 
-	let courses = [
-		{
-			title: 'HTML, CSS & JavaScript 101',
-			category: 'Web Development',
-			author: 'MusaTech',
-			videoId: 'dD2EISBDjWM',
-			slug: 'web-dev-basics'
-		},
-		{
-			title: 'UI Design Fundamentals',
-			category: 'UI/UX Design',
-			author: 'KeaLearn',
-			videoId: '3a4J2U8vHvg',
-			slug: 'ui-design-fundamentals'
-		},
-		{
-			title: 'Python for Beginners',
-			category: 'Programming',
-			author: 'CodeBro',
-			videoId: 'rfscVS0vtbw',
-			slug: 'python-data-basics'
-		},
-		{
-			title: 'Graphic Design Basics',
-			category: 'Design',
-			author: 'CreativeBae',
-			videoId: '8g3YzN6q7Zk',
-			slug: 'graphic-design-basics'
-		}
-	];
+	let { data } = $props();
+	let courses = $state(data.courses);
 
 	let selectedCategory = $state('All');
 	let filteredCourses = $state(courses);
@@ -45,6 +20,21 @@
 			const matchCategory = selectedCategory === 'All' || course.category === selectedCategory;
 			return matchTitle && matchCategory;
 		});
+	});
+
+	//get  the courses a thumbnail
+	courses = courses.map((course) => {
+		let thumbnail = 'https://colearnspace.netlify.app/site/branding/ColearnSpace-icon2.png'; //default
+
+		let totalVideos = course.module.reduce((acc, mod) => acc + mod.module_videos.length, 0);
+		course = { ...course, totalVideos: totalVideos };
+
+		if (totalVideos != 0) {
+			thumbnail = course.module.find((mod) => mod.module_videos.length > 0).module_videos[0].id;
+			thumbnail = `https://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`;
+		}
+		course = { ...course, thumbnail };
+		return course;
 	});
 
 	let categories = ['All', ...new Set(courses.map((c) => c.category))];
@@ -77,7 +67,7 @@
 					>
 						<div class="relative overflow-hidden">
 							<img
-								src={`https://img.youtube.com/vi/${course.videoId}/hqdefault.jpg`}
+								src={course.thumbnail}
 								alt={course.title}
 								class="h-48 w-full object-cover transition duration-300 group-hover:scale-105"
 							/>
@@ -91,10 +81,15 @@
 							<h3 class="text-primary text-lg font-bold group-hover:underline">
 								{course.title}
 							</h3>
-							<p class="mt-1 text-sm text-gray-600">by {course.author}</p>
+							<button
+								onclick={() => goto(`/author/${course.user.username}`)}
+								class="z-30 mt-1 text-sm text-gray-600">by {course.user.name}</button
+							>
 							<div class="mt-3 flex items-center justify-between text-xs text-gray-500">
-								<span>🎥 YouTube Embedded</span>
-								<span>📘 Beginner Friendly</span>
+								{#if course.totalVideos != 0}
+									<span class="flex items-center gap-1"><Youtube /> YouTube Embedded</span>
+								{/if}
+								<span>{moment(course.created_at).fromNow()}</span>
 							</div>
 						</div>
 					</a>

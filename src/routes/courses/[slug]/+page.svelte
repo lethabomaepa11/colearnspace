@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Loading from '$lib/components/Loading.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
@@ -6,74 +7,44 @@
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
-	// Simulated course data for demo
+	let { data } = $props();
 	let isLoading = $state(false);
-	let course = $state({
-		title: 'Beginner Web Development',
-		category: 'Web Development',
-		description: 'Learn HTML, CSS, JavaScript, and React — from scratch to basic apps.',
-		author: 'MusaTech',
-		modules: [
-			{
-				title: 'Module 1: HTML Basics',
-				description: '<h1>HTML Basics</h1>',
-				videos: [
-					{ id: 'UB1O30fR-EE', title: 'HTML Tutorial for Beginners' },
-					{ id: 'yfoY53QXEnI', title: 'HTML Crash Course for Beginners' }
-				]
-			},
-			{
-				title: 'Module 2: CSS Crash Course',
-				description: '<h1>CSS Crash Course</h1>',
-				videos: [
-					{ id: 'UB1O30fR-EE', title: 'CSS Tutorial for Beginners' },
-					{ id: 'yfoY53QXEnI', title: 'CSS Crash Course in One Video' }
-				]
-			},
-			{
-				title: 'Module 3: JavaScript for Beginners',
-				description: '<h1>JavaScript for Beginners</h1>',
-				videos: [
-					{ id: 'UB1O30fR-EE', title: 'JavaScript Tutorial for Beginners' },
-					{ id: 'yfoY53QXEnI', title: 'Beginner JavaScript Crash Course' }
-				]
-			},
-			{
-				title: 'Module 4: React Basics',
-				description: '<h1>React Basics</h1>',
-				videos: [
-					{ id: 'UB1O30fR-EE', title: 'React Tutorial for Beginners' },
-					{ id: 'yfoY53QXEnI', title: 'React Crash Course 2023' }
-				]
-			}
-		]
-	});
+	let course = $state(data.course);
 	let totalVideos = $state(0);
 	let thumbnail = $state('https://colearnspace.netlify.app/site/branding/ColearnSpace-icon2.png'); //default
 	onMount(() => {
 		isLoading = true;
 		let localCourse = JSON.parse(localStorage.getItem('course'));
-		if (localCourse) {
+		if (!localCourse && page.params.slug == 'preview') {
+			window.location.href = '/courses/create';
+		}
+		if (localCourse && page.params.slug == 'preview') {
 			course = localCourse;
 			let modules = JSON.parse(localStorage.getItem('modules'));
 			if (modules) {
-				course.modules = modules;
-
-				totalVideos = modules.reduce((acc, mod) => acc + mod.videos.length, 0);
-				if (totalVideos != 0) {
-					thumbnail = modules.find((mod) => mod.videos.length > 0).videos[0].id;
-					thumbnail = `https://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`;
-				}
+				course = { ...course, module: modules };
 				//search for a module that has a video, use the id of the first video in that module
-				isLoading = false;
 			}
 		}
+
+		totalVideos = course.module.reduce((acc, mod) => acc + mod.module_videos.length, 0);
+		if (totalVideos != 0) {
+			thumbnail = course.module.find((mod) => mod.module_videos.length > 0).module_videos[0].id;
+			thumbnail = `https://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`;
+			console.log(course);
+		}
+		isLoading = false;
 	});
 </script>
 
+<svelte:head>
+	<title>Course | ColearnSpace</title>
+	<meta name="description" content="Course" />
+</svelte:head>
+
 {#if isLoading}
 	<Loading />
-{:else}
+{:else if course}
 	<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
 		<div class="mx-auto max-w-6xl">
 			<div class="mb-10">
@@ -86,11 +57,11 @@
 				</div>
 				<div class="mt-2 flex flex-wrap items-center text-sm text-gray-500">
 					📂 <a href="/courses#{course.category}" class="link link-hover">{course.category}</a> · 👤
-					<a href="/author/{course.author}" class="link link-hover">{course.author}</a>
-					· {course.modules.length} Modules ·
+					<a href="/author/{course.user?.username}" class="link link-hover">{course.user?.name}</a>
+					· {course.module.length} Modules ·
 					<span class="flex items-center gap-1"
 						><Youtube />
-						{totalVideos} Youtube videos</span
+						{totalVideos} Youtube video{totalVideos == 1 ? '' : 's'}</span
 					>
 				</div>
 			</div>
@@ -114,12 +85,12 @@
 						<span class="mb-4 flex items-center justify-between">
 							<h3 class="text-lg font-bold text-gray-700">Modules</h3>
 							<a
-								href="/courses/{page.params.slug}/module/{course.modules[0].slug}"
+								href="/courses/{page.params.slug}/module/{course.module[0].slug}"
 								class="link link-primary">Start Course</a
 							>
 						</span>
 						<ul class="space-y-3">
-							{#each course.modules as mod, i}
+							{#each course.module as mod, i}
 								<li
 									class="hover:bg-primary cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition hover:text-white
                 "
@@ -145,7 +116,7 @@
 		<div class="mt-5"></div>
 		<TrixDisplay content={course.description} />
 		<a
-			href="/courses/{page.params.slug}/module/{course.modules[0].slug}"
+			href="/courses/{page.params.slug}/module/{course.module[0].slug}"
 			class="btn btn-primary mt-5">Start course</a
 		>
 		{#if page.params.slug === 'preview'}

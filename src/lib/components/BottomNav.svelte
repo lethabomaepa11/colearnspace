@@ -1,9 +1,15 @@
 <script>
 	import { page } from '$app/state';
-	import { currentUser } from '$lib/states.svelte';
+	import { course, currentUser } from '$lib/states.svelte';
 	import { LogIn, LucideBook, PlusCircle, User } from '@lucide/svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
+	import { onMount } from 'svelte';
 	let { user } = $props();
+	let localCourse = $state();
+
+	onMount(() => {
+		localCourse = JSON.parse(localStorage.getItem('course'));
+	});
 </script>
 
 <div class="dock md:hidden">
@@ -14,16 +20,40 @@
 		<LucideBook />
 		<span class="dock-label">Courses</span>
 	</a>
-
-	<a
-		href="/courses/create"
-		class="{page.url.pathname.includes('/courses/create')
-			? 'dock-active text-primary'
-			: ''} dock-label"
-	>
-		<PlusCircle />
-		<span class="dock-label">Create</span>
-	</a>
+	{#if !localCourse}
+		<a
+			href="/courses/create"
+			class="{page.url.pathname.includes('/courses/create')
+				? 'dock-active text-primary'
+				: ''} dock-label"
+		>
+			<PlusCircle />
+			<span class="dock-label">Create</span>
+		</a>
+	{:else}
+		<div class="{page.url.pathname === '/dashboard' ? 'dock-active text-primary' : ''} dock-label">
+			<div class="dropdown dropdown-top dropdown-center">
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">
+					<PlusCircle />
+					<span class="dock-label">Create</span>
+				</div>
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<ul
+					tabindex="0"
+					class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
+				>
+					<summary class="menu-title"><h2>Course Creator</h2></summary>
+					<li><a href="/courses/create" class="text-base">Continue Editing</a></li>
+					<li>
+						<button onclick={course.removeFromLocalStorage} class="text-error text-base"
+							>Create New Course</button
+						>
+					</li>
+				</ul>
+			</div>
+		</div>
+	{/if}
 
 	{#if user?.isLoggedIn}
 		<div class="{page.url.pathname === '/dashboard' ? 'dock-active text-primary' : ''} dock-label">
