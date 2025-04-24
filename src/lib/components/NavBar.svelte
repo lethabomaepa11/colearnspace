@@ -55,7 +55,11 @@
 				<Menu />
 			</button>
 			<a href="/" class="btn btn-ghost">
-				<img src="/site/branding/ColearnSpace-full.png" class="h-[100px]" alt="ColearnSpace logo" />
+				<img
+					src="/site/branding/ColearnSpace-full{theme.darkTheme ? '-white' : ''}.png"
+					class="h-[100px]"
+					alt="ColearnSpace logo"
+				/>
 			</a>
 		</div>
 	</div>
