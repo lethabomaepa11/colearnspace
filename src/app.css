@@ -59,4 +59,7 @@
     trix-editor ol, .content :global(ol) {
     @apply list-decimal list-inside;
     }
+    *{
+      transition: all 0.3s ease-in-out;
+    }
     

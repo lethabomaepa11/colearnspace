@@ -22,7 +22,7 @@
 		isLoading = true;
 		//course.videos = await processVideos(course.videos);
 		//save to localstorage for preview
-		course.slug = course.title.toLowerCase().replace(/ /g, '-') + '-' + Date.now();
+		course.slug = course.title.toLowerCase().replace(/ /g, '-');
 		localStorage.setItem('course', JSON.stringify(course));
 
 		isLoading = false;

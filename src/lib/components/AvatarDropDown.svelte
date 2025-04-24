@@ -1,4 +1,6 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { supabase } from '$lib/supabaseClient';
 	import Loading from './Loading.svelte';
 	import Modal from './Modal.svelte';
@@ -13,7 +15,8 @@
 			actions.error = error;
 		} else {
 			actions.isLoggedOut = true;
-			window.location.href = '/courses';
+			if (page.url.pathname == '/dashboard') window.location.href = '/courses';
+			else window.location.reload();
 		}
 	};
 	let actions = $state({

@@ -13,6 +13,7 @@
 	onMount(() => {
 		localCourse = JSON.parse(localStorage.getItem('course'));
 	});
+	let isPublishing = $state(false);
 </script>
 
 <div
@@ -110,9 +111,16 @@
 			</div>
 			{#if page.url.pathname == '/courses/preview' || page.url.pathname.includes('/courses/preview/')}
 				<button
-					onclick={() => course.publish(user)}
+					onclick={() => {
+						isPublishing = true;
+						course.publish(user);
+					}}
 					class="btn btn-primary hidden items-center justify-center md:flex"
-					><UploadCloud /> Publish</button
+					>{#if isPublishing}
+						<Loading />
+					{:else}
+						<UploadCloud /> Publish
+					{/if}</button
 				>
 			{/if}
 		{/if}
@@ -150,8 +158,9 @@
 				<AvatarDropDown {user} />
 			</div>
 		{:else}
-			<a href="/auth/login" class="btn btn-primary btn-circle hidden text-base text-white md:flex"
-				><LogIn /></a
+			<a
+				href="/auth/login?goto={page.url.pathname}"
+				class="btn btn-primary btn-circle hidden text-base text-white md:flex"><LogIn /></a
 			>
 		{/if}
 	</div>

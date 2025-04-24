@@ -2,23 +2,18 @@
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
-	import { ArrowLeft, Plus } from '@lucide/svelte';
+	import { ArrowLeft, Plus, Trash } from '@lucide/svelte';
 	import { error } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	let course = $state('');
 	let isLoading = $state(false);
 	let errorMessage = $state('');
+	let errorModulesIndex = $state([]);
 	let modules = $state([
 		{
 			title: 'Module 1',
 			description: '<h1>Module 1 description</h1>',
-			module_videos: [],
-			slug: ''
-		},
-		{
-			title: 'Module 2',
-			description: '<h1>Module 2 description</h1>',
 			module_videos: [],
 			slug: ''
 		}
@@ -42,10 +37,19 @@
 		//document.getElementById('infoModal').showModal();
 		isLoading = false;
 	});
-	function addModule(index) {
+	async function addModule(index) {
+		const fakeData = await fetch('https://fakerapi.it/api/v1/texts?_quantity=1&_characters=20');
+		let title = await fakeData.json();
+
+		if (title.status.toLowerCase() === 'ok') {
+			title = title.data[0].title;
+		} else {
+			title = `Module ${modules.length - 1}`;
+		}
+
 		modules.push({
-			title: `Module ${modules.length + 1}`,
-			description: `<h1>Module ${modules.length + 1} description</h1>`,
+			title,
+			description: `<h1>${title} description</h1>`,
 			module_videos: []
 		});
 	}
@@ -67,9 +71,10 @@
 		return match ? match[1] : null;
 	}
 	function removeVideo(modIndex, vidIndex) {
-		if (modules[modIndex].module_videos.length > 1) {
-			modules[modIndex].module_videos.splice(vidIndex, 1);
-		}
+		modules[modIndex].module_videos.splice(vidIndex, 1);
+	}
+	function removeModule(modIndex) {
+		modules.splice(modIndex, 1);
 	}
 	async function processmodule_videos(module_videos) {
 		return await Promise.all(
@@ -82,7 +87,7 @@
 	}
 	async function handleSubmit() {
 		isLoading = true;
-
+		errorModulesIndex = [];
 		// Validation
 		for (let i = 0; i < modules.length; i++) {
 			const mod = modules[i];
@@ -90,15 +95,32 @@
 			// Validate title
 			if (!mod.title.trim()) {
 				errorMessage = `Module ${i + 1} title cannot be empty.`;
+				errorModulesIndex.push(i);
 				document.getElementById('errorModal').showModal();
 				isLoading = false;
 				return;
 			}
-
+			//check if there is no module with the same name
+			const hasTitleDuplicates = modules.some((modul, m) => {
+				if (modul.title == mod.title && i != m) {
+					errorMessage = `The title '${mod.title}' has been duplicated 
+					on Module ${i + 1} and Module ${m + 1}, please use different module title.`;
+					errorModulesIndex.push(i);
+					errorModulesIndex.push(m);
+					document.getElementById('errorModal').showModal();
+					isLoading = false;
+					return true;
+				}
+				return false;
+			});
+			if (hasTitleDuplicates) {
+				return;
+			}
 			// Validate description
 			if (!mod.description.trim() || mod.description.trim() === '<h1></h1>') {
 				errorMessage = `'<b>${mod.title}</b>' module description cannot be empty.`;
 				document.getElementById('errorModal').showModal();
+				errorModulesIndex.push(i);
 				isLoading = false;
 				return;
 			}
@@ -108,12 +130,14 @@
 				const url = mod.module_videos[j];
 				if (!url.trim()) {
 					errorMessage = `Video ${j + 1} in '<b>${mod.title}</b>' module ${i + 1} cannot be empty.`;
+					errorModulesIndex.push(i);
 					document.getElementById('errorModal').showModal();
 					isLoading = false;
 					return;
 				}
 				if (!extractYouTubeID(url)) {
 					errorMessage = `Video ${j + 1} in '<b>${mod.title}</b>' module is not a valid YouTube link.`;
+					errorModulesIndex.push(i);
 					document.getElementById('errorModal').showModal();
 					isLoading = false;
 					return;
@@ -130,8 +154,7 @@
 
 		//add slug
 		modules.map((mod) => {
-			mod.slug =
-				mod.title.replace(/\s+/g, '-').toLowerCase() + '-' + Math.floor(Math.random() * 1000);
+			mod.slug = mod.title.replace(/\s+/g, '-').toLowerCase();
 		});
 		// Save to localStorage for preview
 		localStorage.setItem('modules', JSON.stringify(modules));
@@ -185,9 +208,24 @@
 		</span>
 		<section class="space-y-5 p-3">
 			{#each modules as mod, i}
-				<div class="collapse-arrow bg-base-100 border-base-300 collapse border">
+				<div
+					class="collapse-arrow {errorModulesIndex.includes(i)
+						? 'border-error border-2'
+						: 'border-base-300'} bg-base-100 collapse border"
+				>
 					<input type="radio" name="modules" />
-					<div class="collapse-title font-semibold">
+
+					<div class="collapse-title flex items-center gap-2 font-semibold">
+						<p>{i + 1}</p>
+						{#if modules.length > 1}
+							<button
+								type="button"
+								class="btn btn-ghost top-0 right-0 z-20 rounded-full text-red-500"
+								onclick={() => removeModule(i)}
+							>
+								<Trash />
+							</button>
+						{/if}
 						<input type="text" bind:value={mod.title} class="input input-bordered z-[5] w-full" />
 					</div>
 					<div class="collapse-content text-sm">
@@ -197,22 +235,21 @@
 							<label class="label font-bold">YouTube module_videos (for this module)</label>
 							<div class="grid gap-4 md:grid-cols-2">
 								{#each mod.module_videos as url, m (m)}
-									<div class="relative">
+									<div class="input input-bordered relative flex w-full items-center">
+										<p>{m + 1}</p>
 										<input
 											type="url"
-											class="input input-bordered w-full"
+											class=" w-full"
 											placeholder="https://youtube.com/watch?v=..."
 											bind:value={modules[i].module_videos[m]}
 										/>
-										{#if mod.module_videos.length > 1}
-											<button
-												type="button"
-												class="absolute top-2 right-2 text-red-500"
-												onclick={() => removeVideo(i, m)}
-											>
-												✖
-											</button>
-										{/if}
+										<button
+											type="button"
+											class="btn btn-ghost text-red-500"
+											onclick={() => removeVideo(i, m)}
+										>
+											<Trash />
+										</button>
 									</div>
 								{/each}
 							</div>

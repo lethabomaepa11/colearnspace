@@ -1,10 +1,13 @@
 <script>
+	import { page } from '$app/state';
 	import Loading from '$lib/components/Loading.svelte';
 	import { githubAuth } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Github, XCircle } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
 	let form = $state({ email: '', password: '', emailError: '', passwordError: '', mainError: '' });
+	const redirectTo = page.url.searchParams.get('goto');
+
 	let isLoading = $state(false);
 	const login = async (withGithub = false) => {
 		isLoading = true;
@@ -31,7 +34,7 @@
 		});
 		const result = await res.json();
 		if (result.success) {
-			window.location.href = '/dashboard';
+			window.location.href = redirectTo;
 		} else {
 			isLoading = false;
 			form.mainError = 'Invalid email or password';

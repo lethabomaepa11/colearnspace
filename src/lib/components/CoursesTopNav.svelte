@@ -4,7 +4,7 @@
 	import { ArrowLeft, Mic, Plus, Search } from '@lucide/svelte';
 	import { Popover } from 'melt/builders';
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 
 	/**
 	 * The history feature is incomplete and will be added in the future
@@ -86,7 +86,10 @@
 
 <!--- For Mobile-->
 {#if courseSearch.mobileSearch}
-	<div transition:fly class="bg-base-100 fixed top-0 z-50 flex w-full items-center gap-4 px-4 py-5">
+	<div
+		transition:slide
+		class="bg-base-100 fixed top-0 z-50 flex w-full items-center gap-4 px-4 py-5"
+	>
 		<button onclick={courseSearch.toggleMobileSearch} class="btn btn-ghost btn-circle">
 			<ArrowLeft />
 		</button>

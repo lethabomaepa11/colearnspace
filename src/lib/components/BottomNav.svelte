@@ -76,7 +76,7 @@
 		</div>
 	{:else}
 		<a
-			href="/auth/login"
+			href="/auth/login?goto={page.url.pathname}"
 			class="{page.url.pathname === '/auth/login' ? 'dock-active text-primary' : ''} dock-label"
 			><LogIn /> <span class="dock-label">Login</span></a
 		>
