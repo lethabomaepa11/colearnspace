@@ -67,11 +67,11 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/courses/org"
+				href="/org"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses/org'
+					.pathname === '/org'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>

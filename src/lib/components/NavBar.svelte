@@ -46,18 +46,18 @@
 				{/if}
 			</ul>
 		</div>
-		<div class="flex h-full overflow-hidden">
+		<div class="m-0 flex h-full overflow-hidden p-0">
 			<button
 				onclick={() => sideBar.toggle(page.url.pathname)}
 				tabindex="0"
-				class="btn btn-ghost hidden lg:flex"
+				class="btn btn-ghost m-0 hidden rounded-full p-2 lg:flex"
 			>
 				<Menu />
 			</button>
 			<a href="/" class="btn btn-ghost">
 				<img
-					src="/site/branding/ColearnSpace-full{theme.darkTheme ? '-white' : ''}.png"
-					class="h-[100px]"
+					src="/site/branding/ColearnSpace-text{theme.darkTheme ? '-white' : ''}.png"
+					class="m-0 h-[80px] p-0"
 					alt="ColearnSpace logo"
 				/>
 			</a>

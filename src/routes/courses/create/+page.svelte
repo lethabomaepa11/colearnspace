@@ -61,7 +61,7 @@
 {:else}
 	<section transition:fly class="bg-base-100 min-h-screen py-20 md:px-10">
 		<div class="mx-auto w-full p-8 md:max-w-5xl md:rounded-2xl md:shadow-xl">
-			<span class="text-primary mb-8 flex w-full items-center justify-between text-3xl font-bold">
+			<span class="mb-8 flex w-full items-center justify-between text-3xl font-bold">
 				<h1>📘 Create a Course</h1>
 				<button
 					class="btn btn-circle text-primary"

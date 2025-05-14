@@ -200,7 +200,7 @@
 	</main>
 {:else}
 	<main transition:slide class="py-20">
-		<span class="text-primary mb-2 flex items-center justify-between text-4xl font-bold">
+		<span class="mb-2 flex items-center justify-between text-4xl font-bold">
 			<h1>
 				<a href="/courses/create" class="btn btn-outline btn-circle text-black"><ArrowLeft /></a>
 				{course.title}
