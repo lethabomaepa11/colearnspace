@@ -26,7 +26,7 @@ export let courseSearch = $state({
 export let sideBar = $state({
 	open: true,
 	toggle: (pathname) => {
-		if(!pathname.includes('/courses')) return;//only toggle the sidebar if it is visible, its in the layout of /courses/...
+		if(!pathname.includes('/portal')) return;//only toggle the sidebar if it is visible, its in the layout of /portal/...
 		sideBar.open = !sideBar.open;
 		localStorage.setItem('sbstate', sideBar.open);
 	}
@@ -80,7 +80,7 @@ export let course = $state({
 					})
 					localStorage.removeItem('course')
 					localStorage.removeItem('modules')
-					goto(`/courses/${courses[0].slug}`)
+					goto(`/portal/courses/${courses[0].slug}`)
 			
 		}
 		})
@@ -89,7 +89,7 @@ export let course = $state({
 	removeFromLocalStorage: () => {
 		localStorage.removeItem('course');
 		localStorage.removeItem('modules');
-		goto('/courses/create');
+		goto('/portal/courses/create');
 	},
 
 	})

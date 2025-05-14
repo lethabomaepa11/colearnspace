@@ -451,7 +451,7 @@
       "sizes": "1024x1024"
     }
   ],
-  "start_url": "/courses",
+  "start_url": "/portal",
   "display_override": [
     "fullscreen",
     "minimal-ui",

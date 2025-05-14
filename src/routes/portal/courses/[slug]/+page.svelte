@@ -16,7 +16,7 @@
 		isLoading = true;
 		let localCourse = JSON.parse(localStorage.getItem('course'));
 		if (!localCourse && page.params.slug == 'preview') {
-			window.location.href = '/courses/create';
+			window.location.href = '/portal/courses/create';
 		}
 		if (localCourse && page.params.slug == 'preview') {
 			course = localCourse;
@@ -56,7 +56,10 @@
 					<h1 class="text-primary mb-2 text-4xl font-bold">{course.title}</h1>
 				</div>
 				<div class="mt-2 flex flex-wrap items-center text-sm text-gray-500">
-					📂 <a href="/courses#{course.category}" class="link link-hover">{course.category}</a> · 👤
+					📂 <a href="/portal/courses#{course.category}" class="link link-hover"
+						>{course.category}</a
+					>
+					· 👤
 					<a href="/author/{course.user?.username}" class="link link-hover">{course.user?.name}</a>
 					· {course.module.length} Modules ·
 					<span class="flex items-center gap-1"
@@ -85,7 +88,7 @@
 						<span class="mb-4 flex items-center justify-between">
 							<h3 class="text-lg font-bold text-gray-700">Modules</h3>
 							<a
-								href="/courses/{page.params.slug}/module/{course.module[0].slug}"
+								href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
 								class="link link-primary">Start Course</a
 							>
 						</span>
@@ -97,7 +100,7 @@
 								>
 									{#if i === 0}
 										<a
-											href="/courses/{page.params.slug}/module/{mod.slug}"
+											href="/portal/courses/{page.params.slug}/module/{mod.slug}"
 											class="link link-hover"
 											title="{course.title}/module/{mod.title}">{i + 1}. {mod.title}</a
 										>
@@ -116,7 +119,7 @@
 		<div class="mt-5"></div>
 		<TrixDisplay content={course.description} />
 		<a
-			href="/courses/{page.params.slug}/module/{course.module[0].slug}"
+			href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
 			class="btn btn-primary mt-5">Start course</a
 		>
 		{#if page.params.slug === 'preview'}

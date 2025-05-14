@@ -53,19 +53,18 @@ This system will include:
 
 ### 3.1 Architecture Diagram
 
-
 Client (SvelteKit) ↔ Supabase Backend (Postgres + Auth + Storage)
 
 ### 3.2 Technology Stack
 
-| Layer       | Technology                     |
-|------------|---------------------------------|
-| Frontend    | SvelteKit, Tailwind/DaisyUI     |
-| Backend     | Supabase (Auth, RLS, DB)        |
-| Database    | PostgreSQL (via Supabase)       |
-| Storage     | Supabase Storage                |
-| Auth        | Supabase Auth (OAuth/email)     |
-| Video Source| YouTube (embeds only)           |
+| Layer        | Technology                  |
+| ------------ | --------------------------- |
+| Frontend     | SvelteKit, Tailwind/DaisyUI |
+| Backend      | Supabase (Auth, RLS, DB)    |
+| Database     | PostgreSQL (via Supabase)   |
+| Storage      | Supabase Storage            |
+| Auth         | Supabase Auth (OAuth/email) |
+| Video Source | YouTube (embeds only)       |
 
 ---
 
@@ -95,25 +94,25 @@ Client (SvelteKit) ↔ Supabase Backend (Postgres + Auth + Storage)
 
 ## 5. Use Case Diagrams
 
-| Actor       | Use Case                                    |
-|-------------|---------------------------------------------|
-| Visitor     | Access public courses, Register             |
-| User        | Take courses, Track progress                |
-| Creator     | Create/edit/delete public courses           |
-| Org Admin   | Create org, invite members, private courses |
-| Moderator   | Review reports, moderate content            |
+| Actor     | Use Case                                    |
+| --------- | ------------------------------------------- |
+| Visitor   | Access public courses, Register             |
+| User      | Take courses, Track progress                |
+| Creator   | Create/edit/delete public courses           |
+| Org Admin | Create org, invite members, private courses |
+| Moderator | Review reports, moderate content            |
 
 ---
 
 ## 6. User Roles
 
-| Role            | Permissions                                         |
-|-----------------|-----------------------------------------------------|
-| Guest           | View public courses                                 |
-| User            | Enroll in courses, track progress                   |
-| Course Creator  | Create/edit/delete public courses                   |
-| Org Member      | Access org-specific private courses                 |
-| Org Admin       | Create org, invite/remove members, create courses   |
+| Role           | Permissions                                       |
+| -------------- | ------------------------------------------------- |
+| Guest          | View public courses                               |
+| User           | Enroll in courses, track progress                 |
+| Course Creator | Create/edit/delete public courses                 |
+| Org Member     | Access org-specific private courses               |
+| Org Admin      | Create org, invite/remove members, create courses |
 
 ---
 
@@ -121,26 +120,27 @@ Client (SvelteKit) ↔ Supabase Backend (Postgres + Auth + Storage)
 
 ### Pages:
 
-- `/` – Home/Discover  
-- `/courses` – List of all courses  
-- `/courses/:id` – Course detail page  
-- `/courses/:id/module/:module_id` – Learning screen with embedded video  
-- `/create` – Course/module creation  
-- `/orgs` – Organization dashboard  
-- `/orgs/:org_id` – Org profile, members, courses  
-- `/auth/*` – Login/signup  
-- `/dashboard` – User profile and progress  
+- `/` – Landing page
+- `/portal` – Home, discover courses and project showcases
+- `/portal/courses` – List of all courses
+- `/portal/courses/:id` – Course detail page
+- `/portal/courses/:id/module/:module_id` – Learning screen with embedded video
+- `/portal/courses/create` – Course/module creation
+- `/portal/org` – Organization dashboard
+- `/portal/org/:org_id` – Org profile, members, courses
+- `/auth/*` – Login/signup
+- `/dashboard` – User profile and progress
 
 ---
 
 ## 8. System Flow (Example)
 
-1. User signs up  
-2. Joins an existing org via invite link or creates a new org  
-3. User creates a course and adds modules with YouTube URLs  
-4. Other users enroll and mark progress  
-5. Org admins view activity  
-6. Users earn completions, badges (future feature)  
+1. User signs up
+2. Joins an existing org via invite link or creates a new org
+3. User creates a course and adds modules with YouTube URLs
+4. Other users enroll and mark progress
+5. Org admins view activity
+6. Users earn completions, badges (future feature)
 
 ---
 
@@ -166,5 +166,3 @@ Client (SvelteKit) ↔ Supabase Backend (Postgres + Auth + Storage)
 ## 11. Conclusion
 
 **CoLearnSpace** provides a scalable, community-focused LMS tailored for embedding YouTube learning. It empowers grassroots knowledge sharing while offering organizational structures for private group learning.
-
-

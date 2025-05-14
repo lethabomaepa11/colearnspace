@@ -61,7 +61,7 @@
 	<!-- CTA -->
 	<div class="mt-12">
 		<a
-			href="/courses"
+			href="/portal/courses"
 			class="btn btn-primary rounded-full px-8 py-3 text-lg font-semibold text-white"
 		>
 			Browse All Courses

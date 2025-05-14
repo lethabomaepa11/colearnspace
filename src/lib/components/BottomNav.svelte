@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { course, currentUser } from '$lib/states.svelte';
-	import { LogIn, LucideBook, PlusCircle, User } from '@lucide/svelte';
+	import { Code, Home, LogIn, LucideBook, PlusCircle, User } from '@lucide/svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import { onMount } from 'svelte';
 	let { user } = $props();
@@ -14,16 +14,23 @@
 
 <div class="dock md:hidden">
 	<a
-		href="/courses"
-		class="{page.url.pathname === '/courses' ? 'dock-active text-primary' : ''} dock-label"
+		href="/portal"
+		class="{page.url.pathname === '/portal' ? 'dock-active text-primary' : ''} dock-label"
+	>
+		<Home />
+		<span class="dock-label">Discover</span>
+	</a>
+	<a
+		href="/portal/courses"
+		class="{page.url.pathname === '/portal/courses' ? 'dock-active text-primary' : ''} dock-label"
 	>
 		<LucideBook />
 		<span class="dock-label">Courses</span>
 	</a>
 	{#if !localCourse}
 		<a
-			href="/courses/create"
-			class="{page.url.pathname.includes('/courses/create')
+			href="/portal/courses/create"
+			class="{page.url.pathname.includes('/portal/courses/create')
 				? 'dock-active text-primary'
 				: ''} dock-label"
 		>
@@ -44,7 +51,7 @@
 					class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
 				>
 					<summary class="menu-title"><h2>Course Creator</h2></summary>
-					<li><a href="/courses/create" class="text-base">Continue Editing</a></li>
+					<li><a href="/portal/courses/create" class="text-base">Continue Editing</a></li>
 					<li>
 						<button onclick={course.removeFromLocalStorage} class="text-error text-base"
 							>Create New Course</button
@@ -54,6 +61,13 @@
 			</div>
 		</div>
 	{/if}
+	<a
+		href="/portal/projects"
+		class="{page.url.pathname === '/portal/projects' ? 'dock-active text-primary' : ''} dock-label"
+	>
+		<Code />
+		<span class="dock-label">Projects</span>
+	</a>
 
 	{#if user?.isLoggedIn}
 		<div class="{page.url.pathname === '/dashboard' ? 'dock-active text-primary' : ''} dock-label">

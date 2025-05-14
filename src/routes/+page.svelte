@@ -24,7 +24,6 @@
 	onMount(() => {
 		const interval = setInterval(() => {
 			image = getRandomItem(images);
-			console.log('Still Running: ', moment().calendar());
 		}, 30000);
 
 		return () => clearInterval(interval);
@@ -49,9 +48,7 @@
 			<img class="w-full" src={image} alt="Sharing Knowledge" />
 		</div>
 
-		<div
-			class="flex min-h-screen w-screen flex-col items-center justify-center rounded-xl bg-black/80"
-		>
+		<div class="flex min-h-screen w-screen flex-col items-center justify-center bg-black/80">
 			<!-- Headline -->
 			<h1
 				class="font-poetsen text-primary relative z-10 mb-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-tight md:text-6xl"
@@ -69,7 +66,7 @@
 			<div class="flex items-center gap-4">
 				<!-- CTA Buttons -->
 				<a href="/auth/register" class="btn btn-primary btn-lg"> 🚀 Get Started</a>
-				<a href="/courses" class="btn btn-lg btn-outline text-primary"> Explore Courses </a>
+				<a href="/portal/courses" class="btn btn-lg btn-outline text-primary"> Explore Courses </a>
 			</div>
 		</div>
 

@@ -33,10 +33,11 @@
 					<li><a href="/" class="text-base">Home</a></li>
 					<li>
 						<details>
-							<summary class="text-base">Courses</summary>
+							<summary class="text-base">Discover</summary>
 							<ul class="p-2">
-								<li><a class="text-base" href="/courses/categories">Categories</a></li>
-								<li><a class="text-base" href="/courses">All Courses</a></li>
+								<li><a class="text-base" href="/portal">Portal</a></li>
+								<li><a class="text-base" href="/portal/projects">Projects</a></li>
+								<li><a class="text-base" href="/portal/courses">Courses</a></li>
 							</ul>
 						</details>
 					</li>
@@ -69,10 +70,11 @@
 				<li><a href="/" class="text-base">Home</a></li>
 				<li>
 					<details>
-						<summary class="text-base">Courses</summary>
+						<summary class="text-base">Discover</summary>
 						<ul class="p-2">
-							<li><a class="text-base" href="/courses/categories">Categories</a></li>
-							<li><a class="text-base" href="/courses">All Courses</a></li>
+							<li><a class="text-base" href="/portal">Portal</a></li>
+							<li><a class="text-base" href="/portal/projects">Projects</a></li>
+							<li><a class="text-base" href="/portal/courses">Courses</a></li>
 						</ul>
 					</details>
 				</li>
@@ -82,7 +84,7 @@
 			{/if}
 		</ul>
 	</div>
-	{#if page.url.pathname === '/courses'}
+	{#if page.url.pathname.includes('/portal')}
 		<CoursesTopNav />
 	{/if}
 
@@ -91,7 +93,7 @@
 			<div class="dropdown" role="button">
 				{#if !localCourse}
 					<a
-						href="/courses/create"
+						href="/portal/courses/create"
 						class="btn btn-outline hidden items-center justify-center md:flex"><Plus /> Create</a
 					>
 				{:else}
@@ -104,7 +106,7 @@
 						class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
 					>
 						<summary class="menu-title"><h2>Course Creator</h2></summary>
-						<li><a href="/courses/create" class="text-base">Continue Editing</a></li>
+						<li><a href="/portal/courses/create" class="text-base">Continue Editing</a></li>
 						<li>
 							<button onclick={course.removeFromLocalStorage} class="text-error text-base"
 								>Create New Course</button
@@ -113,7 +115,7 @@
 					</ul>
 				{/if}
 			</div>
-			{#if page.url.pathname == '/courses/preview' || page.url.pathname.includes('/courses/preview/')}
+			{#if page.url.pathname == '/portal/courses/preview' || page.url.pathname.includes('/portal/courses/preview/')}
 				<button
 					onclick={() => {
 						isPublishing = true;

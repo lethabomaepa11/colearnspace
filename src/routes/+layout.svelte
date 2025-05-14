@@ -6,9 +6,20 @@
 	import '../app.css';
 	import { currentUser, theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
+	import { fly } from 'svelte/transition';
+	import Loading from '$lib/components/Loading.svelte';
 
 	let { children, data } = $props();
 	let sessionUser = $state(data.user);
+	let isUserOnline = $state(true);
+	const checkOnlineStatus = async () => {
+		try {
+			const response = await fetch('https://fakerapi.it/api/v1/texts?_quantity=1&_characters=20');
+			return response.status >= 200 && response.status < 300;
+		} catch (error) {
+			return false; //the user is most likely offline (not connected to the internet)
+		}
+	};
 	onMount(async () => {
 		theme.darkTheme = localStorage.getItem('darkTheme') === 'true';
 		if (!sessionUser) {
@@ -36,11 +47,24 @@
 				});
 			}
 		}
+		setInterval(async () => {
+			isUserOnline = await checkOnlineStatus();
+		}, 30000);
 	});
 </script>
 
 <main class="">
-	<div class=""></div>
+	{#if !isUserOnline}
+		<div transition:fly={{ y: 20, duration: 300 }} class="toast toast-bottom z-50">
+			<!-- Keep your existing DaisyUI markup unchanged -->
+			<div
+				class="notification alert alert-error mb-2 flex items-center gap-3 rounded-lg p-4 text-sm font-medium shadow-lg"
+			>
+				Connection Lost <br />
+				<Loading text="Reconnecting..." textClass="text-md" />
+			</div>
+		</div>
+	{/if}
 
 	<NavBar user={sessionUser} />
 	{@render children()}

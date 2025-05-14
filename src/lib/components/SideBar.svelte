@@ -1,7 +1,14 @@
 <script>
 	import { page } from '$app/state';
 	import { sideBar, theme } from '$lib/states.svelte';
-	import { Building, ChartBarIncreasing, LucideBook, PlusCircle } from '@lucide/svelte';
+	import {
+		Building,
+		ChartBarIncreasing,
+		Home,
+		LucideBook,
+		PlusCircle,
+		Trophy
+	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	let courses = [
@@ -52,17 +59,45 @@
 	<ul class="space-y-2">
 		<li class="px-4">
 			<a
-				href="/courses"
+				href="/portal"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses'
+					.pathname === '/portal'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<Home size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Discover</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/portal/courses"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/portal/courses'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
 				<LucideBook size={20} />
 
 				<span class={!sideBar.open && 'text-xs'}>Courses</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/portal/projects"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/portal/projects'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<Trophy size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Projects</span>
 			</a>
 		</li>
 		<li class="px-4">
@@ -77,20 +112,6 @@
 			>
 				<Building size={20} />
 				<span class={!sideBar.open && 'text-xs'}>Organizations</span>
-			</a>
-		</li>
-		<li class="px-4">
-			<a
-				href="/courses/rankings"
-				class="{sideBar.open
-					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses/rankings'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<ChartBarIncreasing size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Rankings</span>
 			</a>
 		</li>
 	</ul>

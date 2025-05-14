@@ -62,7 +62,7 @@
 			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 				{#each filteredCourses as course}
 					<a
-						href={`/courses/${course.slug}`}
+						href={`/portal/courses/${course.slug}`}
 						class="bg-base-200 group overflow-hidden rounded-xl transition duration-300 hover:shadow-xl"
 					>
 						<div class="relative overflow-hidden">
@@ -81,10 +81,7 @@
 							<h3 class="text-primary text-lg font-bold group-hover:underline">
 								{course.title}
 							</h3>
-							<button
-								onclick={() => goto(`/author/${course.user.username}`)}
-								class="z-30 mt-1 text-sm text-gray-600">by {course.user.name}</button
-							>
+							<button class="z-30 mt-1 text-sm text-gray-600">by {course.user.name}</button>
 							<div class="mt-3 flex items-center justify-between text-xs text-gray-500">
 								{#if course.totalVideos != 0}
 									<span class="flex items-center gap-1"><Youtube /> YouTube Embedded</span>

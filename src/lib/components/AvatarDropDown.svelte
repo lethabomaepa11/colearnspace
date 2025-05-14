@@ -15,7 +15,7 @@
 			actions.error = error;
 		} else {
 			actions.isLoggedOut = true;
-			if (page.url.pathname == '/dashboard') window.location.href = '/courses';
+			if (page.url.pathname == '/dashboard') window.location.href = '/portal';
 			else window.location.reload();
 		}
 	};

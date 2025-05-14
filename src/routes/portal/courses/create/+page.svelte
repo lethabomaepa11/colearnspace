@@ -52,7 +52,7 @@
 </Modal>
 <Modal title="Next steps" id="courseInfoModal">
 	<p>In the next page, you will create modules, make sure to have your youtube video links ready</p>
-	<a href="/courses/create/modules" class="btn btn-primary mt-2 w-full">Proceed</a>
+	<a href="/portal/courses/create/modules" class="btn btn-primary mt-2 w-full">Proceed</a>
 </Modal>
 {#if isLoading}
 	<main class="flex min-h-screen items-center justify-center">

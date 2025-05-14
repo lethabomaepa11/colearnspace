@@ -69,9 +69,9 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/courses"
+				href="/portal/courses"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses'
+					.pathname === '/portal/courses'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
@@ -125,7 +125,7 @@
 			<summary> <h2 class="menu-title text-neutral-content">My Courses</h2></summary>
 			<ul>
 				{#each courses as course}
-					<li><a href="/courses/{course.slug}">{course.title}</a></li>
+					<li><a href="/portal/courses/{course.slug}">{course.title}</a></li>
 				{/each}
 			</ul>
 		</details>

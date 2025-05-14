@@ -22,7 +22,7 @@
 		isLoading = true;
 		course = JSON.parse(localStorage.getItem('course'));
 		if (!course) {
-			window.location.href = '/courses/create';
+			window.location.href = '/portal/courses/create';
 		} else {
 			let localModules = JSON.parse(localStorage.getItem('modules'));
 			if (localModules) {
@@ -192,7 +192,7 @@
 <Modal title="Preview" id="previewModal">
 	<p>Preview of your course</p>
 	<p>The next page will be a preview of the course when it gets published.</p>
-	<a href="/courses/preview" class="btn btn-primary mt-2 w-full">Proceed</a>
+	<a href="/portal/courses/preview" class="btn btn-primary mt-2 w-full">Proceed</a>
 </Modal>
 {#if isLoading}
 	<main class="flex min-h-screen items-center justify-center">
@@ -202,7 +202,9 @@
 	<main transition:slide class="py-20">
 		<span class="mb-2 flex items-center justify-between text-4xl font-bold">
 			<h1>
-				<a href="/courses/create" class="btn btn-outline btn-circle text-black"><ArrowLeft /></a>
+				<a href="/portal/courses/create" class="btn btn-outline btn-circle text-black"
+					><ArrowLeft /></a
+				>
 				{course.title}
 			</h1>
 		</span>

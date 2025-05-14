@@ -28,7 +28,7 @@
 		console.log(currentVideo);
 	}
 	function handleNextModule() {
-		window.location.href = `/courses/${page.params.slug}/module/${nextModule.slug}`;
+		window.location.href = `/portal/courses/${page.params.slug}/module/${nextModule.slug}`;
 	}
 	onMount(() => {
 		if (page.params.slug === 'preview') {
