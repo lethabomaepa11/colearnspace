@@ -50,7 +50,7 @@
 	};
 </script>
 
-<div transition:fly class="hidden w-full items-center gap-4 lg:flex">
+<div transition:slide class="hidden w-full items-center gap-4 lg:flex">
 	<div class="dropdown w-full" role="button">
 		<label class="input w-full">
 			<Search />

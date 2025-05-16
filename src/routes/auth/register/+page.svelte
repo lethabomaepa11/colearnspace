@@ -62,8 +62,8 @@
 	/>
 </svelte:head>
 
-<main transition:slide class="flex min-h-screen flex-col items-center justify-center">
-	<div class="flex flex-col items-center justify-center space-y-2">
+<main transition:slide class="flex min-h-screen w-screen flex-col items-center justify-center">
+	<div class="flex w-full flex-col items-center justify-center space-y-2 p-5 lg:w-[400px]">
 		<h1 class="mb-4 text-2xl font-bold">Create an account</h1>
 		{#if isLoading}
 			<Loading />
@@ -72,21 +72,29 @@
 				><Github />Continue with Github</button
 			>
 			<p class="divider mt-4 text-sm text-gray-500">Or continue with email</p>
-			<form onsubmit={() => register(false)} class="flex flex-col items-center justify-center">
-				<fieldset class="fieldset">
+			<form
+				onsubmit={() => register(false)}
+				class="flex w-full flex-col items-center justify-center"
+			>
+				<fieldset class="fieldset w-full">
 					<legend class="fieldset-legend">Your full name</legend>
-					<input type="text" class="input" placeholder="John Doe" bind:value={form.name} />
+					<input
+						type="text"
+						class="input input-lg w-full"
+						placeholder="John Doe"
+						bind:value={form.name}
+					/>
 					{#if form.nameError}<p transition:slide class="label text-error">
 							{form.nameError}
 						</p>{/if}
 				</fieldset>
-				<fieldset class="fieldset">
+				<fieldset class="fieldset w-full">
 					<legend class="fieldset-legend">Email</legend>
 					<input
 						name="email"
 						autocomplete="email"
 						type="email"
-						class="input"
+						class="input input-lg w-full"
 						placeholder="example@domain"
 						bind:value={form.email}
 					/>
@@ -94,12 +102,12 @@
 							{form.emailError}
 						</p>{/if}
 				</fieldset>
-				<fieldset class="fieldset">
+				<fieldset class="fieldset w-full">
 					<legend class="fieldset-legend">Create Password</legend>
 					<input
 						name="password"
 						type="password"
-						class="input"
+						class="input input-lg w-full"
 						placeholder="*********"
 						bind:value={form.password}
 					/>
@@ -107,7 +115,7 @@
 							{form.passwordError}
 						</p>{/if}
 				</fieldset>
-				<button type="submit" onclick={() => register(false)} class="btn btn-primary w-full"
+				<button type="submit" onclick={() => register(false)} class="btn btn-primary my-5 w-full"
 					>Register</button
 				>
 			</form>
