@@ -1,8 +1,6 @@
 <!--Featured Challenges-->
 <section class="bg-primary px-6 py-10 text-center">
-	<h2 class="font-poetsen mb-16 text-3xl font-bold md:text-4xl">
-		Create and learn with micro-courses
-	</h2>
+	<h2 class="font-poetsen mb-16 text-3xl font-bold md:text-4xl">Take On Challenges</h2>
 
 	<div class="mx-auto grid max-w-6xl gap-10 md:grid-cols-3">
 		<!-- Course 1 -->
@@ -17,8 +15,8 @@
 			/>
 			<div class="bg-base-200 p-4 text-left">
 				<p class="text-primary mb-1 text-sm font-semibold">Web Development</p>
-				<h3 class="text-lg font-bold group-hover:underline">Javascript for beginners</h3>
-				<p class="text-sm">by DevTech</p>
+				<h3 class="text-lg font-bold group-hover:underline">Develop a website for a startup</h3>
+				<p class="text-xs">12 people participating</p>
 			</div>
 		</a>
 
@@ -34,8 +32,8 @@
 			/>
 			<div class="bg-base-200 p-4 text-left">
 				<p class="text-primary mb-1 text-sm font-semibold">UI/UX Design</p>
-				<h3 class="text-lg font-bold group-hover:underline">Figma basics</h3>
-				<p class="text-sm">by UiPro</p>
+				<h3 class="text-lg font-bold group-hover:underline">Design a website for a hospital</h3>
+				<p class="text-xs">5 people participating</p>
 			</div>
 		</a>
 
@@ -51,8 +49,8 @@
 			/>
 			<div class="bg-base-200 p-4 text-left">
 				<p class="text-primary mb-1 text-sm font-semibold">Programming</p>
-				<h3 class="text-lg font-bold group-hover:underline">Creating a chatbot with Python</h3>
-				<p class="text-sm">by CodeBro</p>
+				<h3 class="text-lg font-bold group-hover:underline">Create a chatbot with Python</h3>
+				<p class="text-xs">7 people participating</p>
 			</div>
 		</a>
 	</div>
@@ -60,10 +58,10 @@
 	<!-- CTA -->
 	<div class="mt-12">
 		<a
-			href="/portal/courses"
+			href="/portal/projects/challenges"
 			class="btn btn-outline rounded-full px-8 py-3 text-lg font-semibold text-white"
 		>
-			Browse All Courses
+			Browse All Challenges
 		</a>
 	</div>
 </section>

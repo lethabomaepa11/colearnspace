@@ -12,7 +12,7 @@
     --color-primary: #FC6519;
   }
   @plugin "daisyui/theme" {
-    name: "dim";
+    name: "dark";
     default: true;
     --color-primary: #FC6519;
   }

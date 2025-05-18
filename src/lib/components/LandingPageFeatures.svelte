@@ -4,7 +4,7 @@
 
 <section class="bg-primary px-6 py-24 text-center text-white">
 	<h2 class="font-poetsen mb-16 text-4xl font-bold md:text-5xl">
-		Why You'll Love <span class="text-accent">ColearnSpace</span>
+		Why You'll Love <span class="text-black underline">ColearnSpace</span>
 	</h2>
 
 	<div class="mx-auto grid max-w-6xl gap-10 md:grid-cols-3">
@@ -13,8 +13,10 @@
 			class="group rounded-xl bg-white/90 p-8 shadow-md backdrop-blur transition hover:-translate-y-1 hover:shadow-xl"
 		>
 			<BookOpen class="text-primary mx-auto mb-4 h-10 w-10" />
-			<h3 class="text-primary mb-3 text-xl font-bold">No Login Needed</h3>
-			<p class="text-black">Jump right in — explore public courses without any signup hassle.</p>
+			<h3 class="text-primary mb-3 text-xl font-bold">Access without login</h3>
+			<p class="text-black">
+				Jump right in — explore public courses and challenges without any signup hassle.
+			</p>
 		</div>
 
 		<!-- Feature 2 -->
@@ -32,7 +34,9 @@
 		>
 			<Youtube class="text-primary mx-auto mb-4 h-10 w-10" />
 			<h3 class="text-primary mb-3 text-xl font-bold">Embed Videos</h3>
-			<p class="text-black">Use YouTube to teach. No uploads. Just plug in great content.</p>
+			<p class="text-black">
+				Create a course based on youtube videos. No uploads. Just plug in great content.
+			</p>
 		</div>
 
 		<!-- Feature 4 -->
@@ -41,7 +45,7 @@
 		>
 			<Sprout class="text-primary mx-auto mb-4 h-10 w-10" />
 			<h3 class="text-primary mb-3 text-xl font-bold">Real-World Growth</h3>
-			<p class="text-black">Level up through challenges, micro-courses, and skill tracks.</p>
+			<p class="text-black">Level up through challenges and micro-courses.</p>
 		</div>
 
 		<!-- Feature 5 -->
@@ -59,7 +63,7 @@
 		>
 			<Sparkles class="text-primary mx-auto mb-4 h-10 w-10" />
 			<h3 class="text-primary mb-3 text-xl font-bold">Made for You</h3>
-			<p class="text-black">Built by a student for students. It just understands your needs.</p>
+			<p class="text-black">Built by a student for everyone. It just understands your needs.</p>
 		</div>
 	</div>
 </section>

@@ -1,6 +1,8 @@
 <script>
+	import LandingPageChallenges from '$lib/components/LandingPageChallenges.svelte';
 	import LandingPageCoursePreview from '$lib/components/LandingPageCoursePreview.svelte';
 	import LandingPageFeatures from '$lib/components/LandingPageFeatures.svelte';
+	import LandingPageShowcases from '$lib/components/LandingPageShowcases.svelte';
 	import Testimonials from '$lib/components/Testimonials.svelte';
 	import { theme } from '$lib/states.svelte';
 	import moment from 'moment';
@@ -11,21 +13,7 @@
 	const getRandomItem = (array) => {
 		return array[Math.floor(Math.random() * array.length)];
 	};
-	const images = [
-		'/site/illustrations/collaboration.svg',
-		'/site/illustrations/knowledge.svg',
-		'/site/branding/ColearnSpace-full.png',
-		'/site/branding/ColearnSpace-text.png'
-	];
-
-	let image = $state(getRandomItem(images));
-
-	onMount(() => {
-		const interval = setInterval(() => {
-			image = getRandomItem(images);
-		}, 30000);
-		return () => clearInterval(interval);
-	});
+	const image = '/site/illustrations/collaboration.svg';
 </script>
 
 <svelte:head>
@@ -44,8 +32,8 @@
 			: 'border-gray-100'}"
 	>
 		<!-- Branding, hidden for now -->
-		<div class=" absolute -z-30 flex min-h-screen w-full items-center justify-center">
-			<img class="w-full" src={image} alt="Sharing Knowledge" />
+		<div class=" absolute -z-30 flex min-h-screen w-full items-center justify-center blur-sm">
+			<img class="w-full rounded-xl" src={image} alt="Sharing Knowledge" />
 		</div>
 
 		<div class="flex min-h-screen w-screen flex-col items-center justify-center">
@@ -57,15 +45,16 @@
 			</h1>
 
 			<!-- Subheading -->
-			<p class="relative z-10 mb-10 max-w-2xl text-lg md:text-xl">
-				<b>ColearnSpace</b> is your digital skill-building hub — crafted for curious minds. Skip the
-				chaos of YouTube playlists and dive into structured, community-powered courses designed for growth,
-				support, and learning at your pace.
+			<p class="relative z-10 mb-10 max-w-2xl px-5 text-lg md:text-xl">
+				<b>ColearnSpace</b> is your digital skill building and showcasing hub — crafted for curious,
+				creative and innovative minds. Skip the chaos of YouTube playlists and dive into structured,
+				community-powered courses designed for growth, support, and learning at your pace, or build and
+				post projects to showcase your skills.
 			</p>
 
 			<div class="flex items-center gap-4">
 				<!-- CTA Buttons -->
-				<a href="/auth/register" class="btn btn-primary btn-lg"> 🚀 Get Started</a>
+				<a href="/auth/register" class="btn btn-primary btn-lg"> Create an account</a>
 				<a href="/portal" class="btn btn-lg btn-outline text-primary"> Explore More</a>
 			</div>
 		</div>
@@ -76,9 +65,13 @@
 <!-- FEATURES SECTION -->
 
 <LandingPageFeatures />
+<LandingPageChallenges />
+
+<LandingPageShowcases />
+
+<!--Leaderboard-->
+<!-- COURSE PREVIEW SECTION -->
+<LandingPageCoursePreview />
 
 <!-- TESTIMONIALS SECTION -->
 <Testimonials />
-
-<!-- COURSE PREVIEW SECTION -->
-<LandingPageCoursePreview />

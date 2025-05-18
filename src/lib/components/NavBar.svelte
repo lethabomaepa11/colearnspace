@@ -7,6 +7,7 @@
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import Modal from './Modal.svelte';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 	let { user } = $props();
 	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
 	let localCourse = $state();
@@ -19,7 +20,7 @@
 
 <main
 	transition:slide
-	class="flex w-full {page.url.pathname == '/' ? 'items-center justify-center p-10' : ''}"
+	class="flex w-full {page.url.pathname == '/' ? 'items-center justify-center pt-10' : ''}"
 >
 	<div
 		class="navbar bg-base-100 fixed z-10 border-b backdrop-blur {theme.darkTheme
@@ -138,15 +139,30 @@
 					>
 				{/if}
 			{/if}
-			<button class="btn btn-ghost btn-circle lg:hidden" onclick={courseSearch.toggleMobileSearch}
-				><Search /></button
+			<button
+				class="btn btn-ghost btn-circle {page.url.pathname.includes('/portal') ? 'lg:hidden' : ''} "
+				onclick={() => {
+					//display this search bar icon everywhere except portal when on desktop
+					//
+					if (page.url.pathname.includes('/portal')) {
+						courseSearch.toggleMobileSearch();
+					} else {
+						//on mobile and in /portal, when this button is clicked, show the mobile search bar, otherwise do nothing
+						//if not in /portal, navigate to portal, and show the mobile search bar if on mobile
+						if (screen.availWidth < 768) {
+							courseSearch.toggleMobileSearch();
+						}
+						//navigating to portal
+						goto('/portal/');
+					}
+				}}><Search /></button
 			>
 			<label class="swap swap-rotate">
 				<input
 					type="checkbox"
 					onclick={theme.toggleTheme}
 					bind:checked={theme.darkTheme}
-					value="dim"
+					value="dark"
 					class="theme-controller hidden"
 				/>
 				{#if theme.darkTheme}
