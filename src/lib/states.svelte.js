@@ -5,6 +5,7 @@ import { supabase } from "./supabaseClient";
  * These are the shared logic across the app
  */
 export let theme = $state({
+	//the app initial theme state is light
     darkTheme: false,
     toggleTheme: () => {
 		theme.darkTheme = !theme.darkTheme;

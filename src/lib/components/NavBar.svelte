@@ -20,12 +20,14 @@
 
 <main
 	transition:slide
-	class="flex w-full {page.url.pathname == '/' ? 'items-center justify-center pt-10' : ''}"
+	class="fixed z-50 flex w-full {page.url.pathname == '/'
+		? 'items-center justify-center pt-10'
+		: ''}"
 >
 	<div
 		class="navbar bg-base-100 fixed z-10 border-b backdrop-blur {theme.darkTheme
 			? 'border-gray-700'
-			: 'border-gray-100'}  {page.url.pathname == '/' ? 'mt-10 w-[80svw] rounded-2xl border' : ''}"
+			: 'border-gray-100'}  {page.url.pathname == '/' ? 'mt-10 w-[90svw] rounded-2xl border' : ''}"
 	>
 		<div class="navbar-start">
 			<div class="dropdown">

@@ -7,7 +7,10 @@
 		Home,
 		LucideBook,
 		PlusCircle,
-		Trophy
+		Store,
+		Swords,
+		Trophy,
+		Users
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -97,8 +100,36 @@
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<Trophy size={20} />
+				<Store size={20} />
 				<span class={!sideBar.open && 'text-xs'}>Showcase</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/portal/challenges"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/portal/challenges'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<Swords size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Challenges</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/portal/leaderboard"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/portal/leaderboard'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<Trophy size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Leaderboard</span>
 			</a>
 		</li>
 		<li class="px-4">
@@ -111,7 +142,7 @@
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<Building size={20} />
+				<Users size={20} />
 				<span class={!sideBar.open && 'text-xs'}>Organizations</span>
 			</a>
 		</li>

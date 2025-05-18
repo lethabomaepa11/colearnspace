@@ -25,7 +25,7 @@
 </svelte:head>
 
 <!-- HERO SECTION -->
-<main transition:fade class="flex">
+<main transition:fade class="bg-primary flex">
 	<section
 		class="relative isolate flex h-screen w-full flex-col items-center justify-center overflow-hidden px-6 text-center text-black {theme.darkTheme
 			? 'border-gray-700'
@@ -39,7 +39,7 @@
 		<div class="flex min-h-screen w-screen flex-col items-center justify-center">
 			<!-- Headline -->
 			<h1
-				class="font-poetsen text-primary relative z-10 mb-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-tight md:text-6xl"
+				class="font-poetsen relative z-10 mb-4 max-w-3xl text-4xl leading-tight font-extrabold tracking-tight md:text-6xl"
 			>
 				Learn. Connect. Grow.
 			</h1>
@@ -55,7 +55,7 @@
 			<div class="flex items-center gap-4">
 				<!-- CTA Buttons -->
 				<a href="/auth/register" class="btn btn-primary btn-lg"> Create an account</a>
-				<a href="/portal" class="btn btn-lg btn-outline text-primary"> Explore More</a>
+				<a href="/portal" class="btn btn-lg btn-outline"> Explore More</a>
 			</div>
 		</div>
 
