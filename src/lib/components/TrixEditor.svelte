@@ -77,7 +77,7 @@
 	}
 
 	trix-editor :global(pre) {
-		@apply rounded bg-gray-100 p-2 font-mono text-sm;
+		@apply rounded p-2 font-mono text-sm;
 	}
 
 	trix-editor :global(a) {

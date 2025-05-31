@@ -147,16 +147,4 @@
 			</a>
 		</li>
 	</ul>
-	{#if sideBar.open}
-		<li>
-			<details open>
-				<summary> <h2 class="menu-title text-neutral-content">Categories</h2></summary>
-				<ul>
-					{#each categories as category}
-						<li><a>{category}</a></li>
-					{/each}
-				</ul>
-			</details>
-		</li>
-	{/if}
 </ul>

@@ -2,39 +2,39 @@
 	let { content } = $props();
 </script>
 
-<main>
+<article class="prose prose-lg mx-auto w-full rounded-lg p-6 lg:shadow-md">
 	{@html content}
-</main>
+</article>
 
 <style>
 	@import 'tailwindcss';
-	main {
+	article {
 		border: 1px solid #ddd;
 		border-radius: 0.5rem;
 		padding: 1rem;
 	}
 
-	main :global(h1) {
+	article :global(h1) {
 		@apply mb-2 text-2xl font-bold;
 	}
 
-	main :global(blockquote) {
+	article :global(blockquote) {
 		@apply border-l-4 border-gray-300 pl-4 text-gray-600 italic;
 	}
 
-	main :global(pre) {
-		@apply rounded bg-gray-100 p-2 font-mono text-sm;
+	article :global(pre) {
+		@apply rounded p-2 font-mono text-sm;
 	}
 
-	main :global(a) {
+	article :global(a) {
 		@apply text-blue-600 underline;
 	}
 
-	main :global(ul) {
+	article :global(ul) {
 		@apply list-inside list-disc;
 	}
 
-	main :global(ol) {
+	article :global(ol) {
 		@apply list-inside list-decimal;
 	}
 </style>
