@@ -1,8 +1,16 @@
 <script>
+	import { theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 
-	let { value = $bindable(), id } = $props();
+	let { value = $bindable(), id, colors } = $props();
+	let display = $state({});
+	if (!colors) {
+		display.light = '#FC6519';
+		display.dark = '#FC6519';
+	} else {
+		display = colors;
+	}
 
 	const handleEditorValueChange = () => {
 		value = document.getElementById(id).value;
@@ -50,17 +58,21 @@
 	});
 </script>
 
-<!-- The rest of your component remains the same -->
-
 <main>
 	<trix-toolbar class="text-primary" id="{id}Toolbar"></trix-toolbar>
 	<input {id} type="hidden" name={id} bind:value />
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<trix-editor onkeyup={handleEditorValueChange} toolbar="{id}Toolbar" input={id}></trix-editor>
+	<trix-editor
+		onkeyup={handleEditorValueChange}
+		toolbar="{id}Toolbar"
+		input={id}
+		style="--primary-color: {theme.darkTheme ? display.dark : display.light}"
+	></trix-editor>
 </main>
 
 <style>
 	@import 'tailwindcss';
+
 	trix-editor {
 		min-height: 200px;
 		border: 1px solid #ddd;
@@ -73,15 +85,20 @@
 	}
 
 	trix-editor :global(blockquote) {
-		@apply border-l-4 border-gray-300 pl-4 text-gray-600 italic;
+		@apply border-l-4 pl-4 italic;
+		border-color: var(--primary-color); /* user color for left border */
+		color: #555; /* keep text readable */
 	}
 
 	trix-editor :global(pre) {
 		@apply rounded p-2 font-mono text-sm;
+		border: 1px solid var(--primary-color); /* subtle color accent */
+		color: #333; /* avoid coloring all code text */
 	}
 
 	trix-editor :global(a) {
-		@apply text-blue-600 underline;
+		@apply underline;
+		color: var(--primary-color); /* user color for links */
 	}
 
 	trix-editor :global(ul) {
@@ -90,5 +107,10 @@
 
 	trix-editor :global(ol) {
 		@apply list-inside list-decimal;
+	}
+
+	trix-editor :global(ul li::marker),
+	trix-editor :global(ol li::marker) {
+		color: var(--primary-color); /* user color for bullets/numbers */
 	}
 </style>

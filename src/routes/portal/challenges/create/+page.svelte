@@ -1,6 +1,8 @@
 <script>
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
+	import { theme } from '$lib/states.svelte';
+	import { onMount } from 'svelte';
 	let challenge = $state({
 		title: '',
 		content:
@@ -11,9 +13,13 @@
 		voting: 'Public',
 		image: '',
 		startDate: '',
-		endDate: ''
+		endDate: '',
+		colors: {
+			light: '#000',
+			dark: '#000'
+		}
 	});
-
+	let sameColors = $state(true);
 	const generateUniqueCode = () => {
 		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		let code = '';
@@ -95,6 +101,52 @@
 		<section class="w-full">
 			<fieldset class="fieldset border-base-300 rounded-box border p-4">
 				<legend class="fieldset-legend">Extra Settings</legend>
+				<label class="label" for="code">Colors & Theme</label>
+				<span
+					id="code"
+					type="text"
+					class="input w-full p-0"
+					placeholder="Create an 8 character code"
+				>
+					<span type="button" class="btn rounded-none">Color in light mode</span>
+					<input
+						type="color"
+						bind:value={challenge.colors.light}
+						onchange={() => {
+							if (sameColors) {
+								challenge.colors.dark = challenge.colors.light;
+							}
+						}}
+					/>
+				</span>
+				<div class="join flex items-center gap-3">
+					<span class="join-item">Same Colors for dark and light mode?</span>
+					<input
+						class="join-item btn {sameColors ? 'bg-primary' : ''}"
+						type="radio"
+						onclick={() => (sameColors = true)}
+						name="options"
+						aria-label="Yes"
+					/>
+					<input
+						class="join-item btn {!sameColors ? 'bg-primary' : ''}"
+						type="radio"
+						name="options"
+						aria-label="No"
+						onclick={() => (sameColors = false)}
+					/>
+				</div>
+				{#if !sameColors}
+					<span
+						id="code"
+						type="text"
+						class="input w-full p-0"
+						placeholder="Create an 8 character code"
+					>
+						<span type="button" class="btn rounded-none">Color in dark mode</span>
+						<input type="color" bind:value={challenge.colors.dark} />
+					</span>
+				{/if}
 				<label class="label" for="participation">Who can participate?</label>
 				<select
 					id="participation"
@@ -149,7 +201,7 @@
 				</p></span
 			>
 		</label>
-		<TrixEditor id="content" bind:value={challenge.content} />
+		<TrixEditor id="content" bind:value={challenge.content} colors={challenge.colors} />
 	</div>
 
 	<button type="submit" class="btn btn-primary">Create Challenge</button>
