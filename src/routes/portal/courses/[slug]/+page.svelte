@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import Loading from '$lib/components/Loading.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { ArrowLeft, Youtube } from '@lucide/svelte';
@@ -48,13 +49,7 @@
 	<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
 		<div class="mx-auto max-w-6xl">
 			<div class="mb-10">
-				<div class="flex items-center gap-1">
-					<button
-						onclick={() => window.history.back()}
-						class="btn btn-outline btn-circle text-black"><ArrowLeft /></button
-					>
-					<h1 class="text-primary mb-2 text-4xl font-bold">{course.title}</h1>
-				</div>
+				<BackButtonHeader title={course.title} />
 				<div class="mt-2 flex flex-wrap items-center text-sm text-gray-500">
 					📂 <a href="/portal/courses#{course.category}" class="link link-hover"
 						>{course.category}</a
@@ -69,27 +64,16 @@
 				</div>
 			</div>
 			<main class="flex w-full flex-col items-start justify-between gap-3 md:flex-row">
-				<div class="md:w-[80svw]">
-					<div
-						style="position: relative; width: 100%; max-width: 560px; aspect-ratio: 16 / 9; background-color: #000; cursor: pointer;"
-					>
-						<img
-							src={thumbnail}
-							alt="{course.title} Thumbnail"
-							style="width: 100%; height: 100%; object-fit: cover;"
-						/>
-					</div>
-				</div>
 				<!-- Video & Lesson Layout -->
-
+				<TrixDisplay content={course.description} />
 				<div class="grid w-full gap-10">
 					<!-- Module List -->
-					<div class="bg-base-200 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
+					<div class="bg-base-100 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
 						<span class="mb-4 flex items-center justify-between">
-							<h3 class="text-lg font-bold text-gray-700">Modules</h3>
+							<h3 class="text-lg font-bold">Modules</h3>
 							<a
 								href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
-								class="link link-primary">Start Course</a
+								class="btn btn-primary">Start Course</a
 							>
 						</span>
 						<ul class="space-y-3">
@@ -117,7 +101,7 @@
 			</main>
 		</div>
 		<div class="mt-5"></div>
-		<TrixDisplay content={course.description} />
+
 		<a
 			href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
 			class="btn btn-primary mt-5">Start course</a

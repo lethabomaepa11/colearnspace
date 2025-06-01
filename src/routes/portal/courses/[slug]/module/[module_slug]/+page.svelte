@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/state';
+	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { ArrowLeft, Youtube } from '@lucide/svelte';
 	import { onMount } from 'svelte';
@@ -55,12 +56,7 @@
 <section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
 	<div class="mx-auto max-w-6xl">
 		<div class="mb-10">
-			<div class="flex items-center gap-1">
-				<button onclick={() => window.history.back()} class="btn btn-outline btn-circle text-black"
-					><ArrowLeft /></button
-				>
-				<h1 class="text-primary mb-2 text-4xl font-bold">{thisModule.title}</h1>
-			</div>
+			<BackButtonHeader title={thisModule.title} />
 			<div class="mt-2 flex items-center gap-1 text-sm text-gray-500">
 				<Youtube />
 				{thisModule.module_videos.length} video{thisModule.module_videos.length == 1 ? '' : 's'}

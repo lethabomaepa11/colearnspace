@@ -1,4 +1,5 @@
 <script>
+	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
@@ -37,15 +38,8 @@
 		//document.getElementById('infoModal').showModal();
 		isLoading = false;
 	});
-	async function addModule(index) {
-		const fakeData = await fetch('https://fakerapi.it/api/v1/texts?_quantity=1&_characters=20');
-		let title = await fakeData.json();
-
-		if (title.status.toLowerCase() === 'ok') {
-			title = title.data[0].title;
-		} else {
-			title = `Module ${modules.length - 1}`;
-		}
+	function addModule(index) {
+		let title = `Module ${modules.length + 1}`;
 
 		modules.push({
 			title,
@@ -154,7 +148,11 @@
 
 		//add slug
 		modules.map((mod) => {
-			mod.slug = mod.title.replace(/\s+/g, '-').toLowerCase();
+			mod.slug = mod.title.replace(/\s|\\|\/+/g, '-').toLowerCase(); //Create a slug by replacing spaces and / \ characters
+			if (mod.slug === 'create') {
+				//deal with the possibility of having a mod called "create", by adding a random string
+				mod.slug = 'create-' + Date.now().toString().substring(0, 5);
+			}
 		});
 		// Save to localStorage for preview
 		localStorage.setItem('modules', JSON.stringify(modules));
@@ -200,14 +198,7 @@
 	</main>
 {:else}
 	<main transition:slide class="py-20">
-		<span class="mb-2 flex items-center justify-between text-4xl font-bold">
-			<h1>
-				<a href="/portal/courses/create" class="btn btn-outline btn-circle text-black"
-					><ArrowLeft /></a
-				>
-				{course.title}
-			</h1>
-		</span>
+		<BackButtonHeader title={course.title} />
 		<section class="space-y-5 p-3">
 			{#each modules as mod, i}
 				<div
@@ -231,7 +222,7 @@
 						<input type="text" bind:value={mod.title} class="input input-bordered z-[5] w-full" />
 					</div>
 					<div class="collapse-content text-sm">
-						<TrixEditor id={mod.title} bind:value={mod.description} />
+						<TrixEditor colors={course.colors} id={mod.title} bind:value={mod.description} />
 						<!-- Video Links -->
 						<div>
 							<label class="label font-bold">YouTube module_videos (for this module)</label>

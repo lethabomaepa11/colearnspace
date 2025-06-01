@@ -15,8 +15,8 @@
 		startDate: '',
 		endDate: '',
 		colors: {
-			light: '#000',
-			dark: '#000'
+			light: '#FC6519',
+			dark: '#FC6519'
 		}
 	});
 	let sameColors = $state(true);
@@ -29,14 +29,15 @@
 		challenge.code = code;
 	};
 
-	const submitChallenge = () => {
+	const submitChallenge = (e) => {
+		e.preventDefault();
 		localStorage.setItem('challenge', JSON.stringify(challenge));
 	};
 </script>
 
 <BackButtonHeader title="Create a Challenge" />
 
-<form class="space-y-4">
+<form class="space-y-4" onsubmit={submitChallenge}>
 	<span class="flex w-full flex-col items-start justify-between gap-5 lg:flex-row">
 		<section class="w-full">
 			<div class="form-control flex w-full flex-col">
@@ -51,13 +52,19 @@
 					required
 					minlength="5"
 					bind:value={challenge.title}
-					onchange={() => (challenge.slug = challenge.title.replace(/\s+/g, '-').toLowerCase())}
+					onchange={() => {
+						challenge.slug = challenge.title.replace(/\s|\\|\/+/g, '-').toLowerCase(); //Create a slug by replacing spaces and / \ characters
+						if (challenge.slug === 'create') {
+							//deal with the possibility of having a challenge called "create", by adding a random string
+							challenge.slug = 'create-' + Date.now().toString().substring(0, 5);
+						}
+					}}
 				/>
 			</div>
 			<!-- Display the url of the challenge onchange of the title, use the title to create a slug-->
 			{#if challenge.slug}
-				<p class="text-sm">Your challenge link will be as follows:</p>
-				<p class="link link-primary text-sm">
+				<p class="my-2 text-sm">Your challenge link will be as follows:</p>
+				<p class="link link-primary my-2 text-sm">
 					https://colearnspace.netlify.app/portal/challenges/{challenge.slug}
 				</p>
 			{/if}
@@ -81,6 +88,7 @@
 					type="datetime-local"
 					placeholder="Challenge Start Date"
 					class="input input-bordered w-full"
+					required
 					bind:value={challenge.startDate}
 				/>
 			</div>
@@ -93,6 +101,7 @@
 					type="datetime-local"
 					placeholder="Challenge End Date"
 					class="input input-bordered w-full"
+					required
 					bind:value={challenge.endDate}
 				/>
 			</div>
@@ -159,6 +168,7 @@
 					<option>Private - Use a private code to join</option>
 					<option disabled>Organization Members - Coming soon</option>
 				</select>
+				<!--If the challenge is private in which the creator prefers participants to join using a private code-->
 				{#if challenge.participation === 'Private - Use a private code to join'}
 					<label class="label" for="code">Private code</label>
 					<span
@@ -171,6 +181,8 @@
 							type="text"
 							placeholder="Create a 6 character code"
 							bind:value={challenge.code}
+							required
+							length="8"
 						/>
 						<button type="button" class="btn rounded-none" onclick={generateUniqueCode}
 							>Generate</button
@@ -194,9 +206,9 @@
 	<!-- Trix Editor for challenge page content-->
 	<div class="form-control flex flex-col">
 		<label class="label" for="content">
-			<span class="label-text"
+			<span class="label-text w-full"
 				>Content
-				<p class="text-sm">
+				<p class="text-sm text-wrap">
 					This will be displayed on the challenge page, customize as you see fit
 				</p></span
 			>
