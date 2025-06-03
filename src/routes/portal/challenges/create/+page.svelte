@@ -102,7 +102,7 @@
 			return;
 		}
 		//check file type if its of type image, if not return
-		if (!e.target.files[0].type.include('image/')) {
+		if (!e.target.files[0].type.includes('image/')) {
 			e.target.value = null;
 			error.title = 'Invalid File Type';
 			error.message =
