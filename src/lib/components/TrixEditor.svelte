@@ -18,7 +18,7 @@
 
 	const uploadImage = async (file) => {
 		try {
-			const fileName = `files/${id}/${Date.now()}-${file.name}`;
+			const fileName = `images/${id}/${Date.now()}-${file.name}`;
 			const { error } = await supabase.storage.from('files').upload(fileName, file);
 
 			if (error) throw error;

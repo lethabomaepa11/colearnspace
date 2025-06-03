@@ -38,7 +38,7 @@
 	};
 	const uploadImage = async (file) => {
 		try {
-			const fileName = `files/challenge_cover/${Date.now()}-${file.name}`;
+			const fileName = `images/challenges/${Date.now()}-${file.name}`;
 			const { error } = await supabase.storage.from('files').upload(fileName, file);
 
 			if (error) throw error;
@@ -56,8 +56,6 @@
 
 	const submitChallenge = async (e) => {
 		isLoading = true;
-
-		//upload image in frontend, then deal with the rest in backend
 		e.preventDefault();
 		localStorage.setItem('challenge', JSON.stringify(challenge)); //later features to autosave automatically
 
@@ -68,18 +66,15 @@
 			isLoading = false;
 			return;
 		}
-
-		const coverImage = document.getElementById('coverImage').files[0];
-		if (coverImage) {
-			challenge.image = await uploadImage(coverImage);
-		}
-
+		//check if the cover image was uploaded successfully, if not, do not proceed
 		if (!challenge.image) {
 			error.title = 'Error Occured';
-			error.message =
-				'Failed to upload your image, please make sure the file is less than 50mb, and try again.';
+			error.message = 'Please make sure that your cover image is uploaded first before proceeding';
 			document.getElementById('errorModal').show();
+			isLoading = false;
+			return;
 		}
+		//call the api
 		const res = await fetch('/api/challenge', {
 			method: 'POST',
 			body: JSON.stringify({ challenge })
@@ -96,21 +91,34 @@
 		isLoading = false;
 	};
 
-	const checkImageSize = (e) => {
+	const onFileChange = async (e) => {
+		//check file size, return if it exceeds 50mb
 		if (e.target.files[0].size > 50000000) {
 			e.target.value = null;
-			error.title = 'Max Size Exceeded';
+			error.title = 'Max File Size Exceeded';
 			error.message =
 				'Failed to upload your image, please make sure the file is less than 50mb, and try again.';
 			document.getElementById('errorModal').show();
+			return;
 		}
-
-		if (e.target.files[0].type !== 'image/jpeg' && e.target.files[0].type !== 'image/png') {
+		//check file type if its of type image, if not return
+		if (!e.target.files[0].type.include('image/')) {
 			e.target.value = null;
 			error.title = 'Invalid File Type';
 			error.message =
 				'Failed to upload your image, please make sure the file is an image, and try again.';
 			document.getElementById('errorModal').show();
+			return;
+		}
+		const coverImage = document.getElementById('coverImage').files[0];
+
+		//upload the file if the challenge.image is empty, else update the image
+		if (!challenge.image) {
+			//insert new image
+			if (coverImage) {
+				challenge.image = await uploadImage(coverImage);
+			}
+			//cannot update image yet
 		}
 	};
 
@@ -200,7 +208,7 @@
 						type="file"
 						placeholder="Cover Image"
 						class="file-input file-input-bordered w-full"
-						onchange={checkImageSize}
+						onchange={onFileChange}
 						accept="image/*"
 					/>
 				</div>
