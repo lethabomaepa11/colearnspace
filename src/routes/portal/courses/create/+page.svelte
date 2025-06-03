@@ -172,7 +172,7 @@
 								bind:value={course.colors.light}
 								onchange={() => {
 									if (sameColors) {
-										course.colors.dark = course.colors.light;
+										course.colors = { ...course.colors, dark: course.colors.light };
 									}
 								}}
 							/>

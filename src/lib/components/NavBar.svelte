@@ -116,12 +116,12 @@
 							tabindex="0"
 							class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
 						>
-							<summary class="menu-title"><h2>Course Creator</h2></summary>
-							<li><a href="/portal/courses/create" class="text-base">Continue Editing</a></li>
+							<summary class="menu-title"><h2>Click one option</h2></summary>
 							<li>
-								<button onclick={course.removeFromLocalStorage} class="text-error text-base"
-									>Create New Course</button
-								>
+								<a href="/portal/challenges/create" class="text-base">Create a challenge</a>
+							</li>
+							<li>
+								<a href="/portal/courses/create" class="text-base">Create a Course</a>
 							</li>
 						</ul>
 					{/if}

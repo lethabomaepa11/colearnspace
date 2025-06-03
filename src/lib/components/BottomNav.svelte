@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { course, currentUser } from '$lib/states.svelte';
-	import { Code, Home, LogIn, LucideBook, PlusCircle, User } from '@lucide/svelte';
+	import { Code, Home, LogIn, LucideBook, PlusCircle, Swords, User } from '@lucide/svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
@@ -29,52 +29,40 @@
 			<LucideBook />
 			<span class="dock-label">Courses</span>
 		</a>
-		{#if !localCourse}
-			<a
-				href="/portal/courses/create"
-				class="{page.url.pathname.includes('/portal/courses/create')
-					? 'dock-active text-primary'
-					: ''} dock-label"
-			>
-				<PlusCircle />
-				<span class="dock-label">Create</span>
-			</a>
-		{:else}
-			<div
-				class="{page.url.pathname === '/portal/courses/create'
-					? 'dock-active text-primary'
-					: ''} dock-label"
-			>
-				<div class="dropdown dropdown-top dropdown-center">
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">
-						<PlusCircle />
-						<span class="dock-label">Create</span>
-					</div>
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<ul
-						tabindex="0"
-						class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
-					>
-						<summary class="menu-title"><h2>Course Creator</h2></summary>
-						<li><a href="/portal/courses/create" class="text-base">Continue Editing</a></li>
-						<li>
-							<button onclick={course.removeFromLocalStorage} class="text-error text-base"
-								>Create New Course</button
-							>
-						</li>
-					</ul>
-				</div>
-			</div>
-		{/if}
-		<a
-			href="/portal/projects"
-			class="{page.url.pathname === '/portal/projects'
+		<div
+			class="{page.url.pathname === '/portal/courses/create'
 				? 'dock-active text-primary'
 				: ''} dock-label"
 		>
-			<Code />
-			<span class="dock-label">Projects</span>
+			<div class="dropdown dropdown-top dropdown-center">
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">
+					<PlusCircle />
+					<span class="dock-label">Create</span>
+				</div>
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<ul
+					tabindex="0"
+					class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
+				>
+					<summary class="menu-title"><h2>Click one option</h2></summary>
+					<li>
+						<a href="/portal/challenges/create" class="text-base">Create a challenge</a>
+					</li>
+					<li>
+						<a href="/portal/courses/create" class="text-base">Create a Course</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<a
+			href="/portal/challenges"
+			class="{page.url.pathname === '/portal/challenges'
+				? 'dock-active text-primary'
+				: ''} dock-label"
+		>
+			<Swords />
+			<span class="dock-label">Challenges</span>
 		</a>
 
 		{#if user?.isLoggedIn}

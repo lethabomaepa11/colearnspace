@@ -90,7 +90,7 @@
 				<span class={!sideBar.open && 'text-xs'}>Courses</span>
 			</a>
 		</li>
-		<li class="px-4">
+		<li class="hidden px-4">
 			<a
 				href="/portal/projects"
 				class="{sideBar.open
@@ -120,7 +120,7 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/portal/leaderboard"
+				href="#"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
@@ -132,7 +132,7 @@
 				<span class={!sideBar.open && 'text-xs'}>Leaderboard</span>
 			</a>
 		</li>
-		<li class="px-4">
+		<li class="hidden px-4">
 			<a
 				href="/org"
 				class="{sideBar.open

@@ -4,6 +4,15 @@ import { supabase } from "./supabaseClient";
 /**
  * These are the shared logic across the app
  */
+
+
+//I am downgrading the app to MVP, i will not remove some of the files yet, so im not going to render some
+export let appState = $state({
+	isMVP: true,
+	version: "0.0.2"
+})
+
+
 export let theme = $state({
 	//the app initial theme state is light
     darkTheme: false,
