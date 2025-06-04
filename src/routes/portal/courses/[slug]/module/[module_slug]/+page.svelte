@@ -28,6 +28,7 @@
 		console.log(currentVideo);
 	}
 	function handleNextModule() {
+		isLoading = true;
 		window.location.href = `/portal/courses/${page.params.slug}/module/${nextModule.slug}`;
 	}
 	onMount(() => {
@@ -55,7 +56,7 @@
 </svelte:head>
 {#if isLoading}
 	<main class="flex min-h-screen w-full items-center justify-center">
-		<Loading text="Loading Module {thisModule.title}" textClass="text-2xl font-bold" />
+		<Loading text="Loading Module" textClass="text-2xl font-bold" />
 	</main>
 {:else}
 	<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
