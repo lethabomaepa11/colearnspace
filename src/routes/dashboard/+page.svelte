@@ -1,9 +1,10 @@
 <script>
-	import { currentUser } from '$lib/states.svelte.js';
+	import { appState, currentUser } from '$lib/states.svelte.js';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { onMount } from 'svelte';
 	let { data } = $props();
 	let sessionUser = $state(data.user);
+	appState.setAppTitle('Dashboard');
 	onMount(async () => {
 		if (!sessionUser) {
 			const {

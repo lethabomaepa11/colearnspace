@@ -4,7 +4,7 @@
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
-	import { currentUser, theme } from '$lib/states.svelte';
+	import { appState, currentUser, theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { fly } from 'svelte/transition';
 	import Loading from '$lib/components/Loading.svelte';
@@ -21,7 +21,15 @@
 		}
 	};
 	onMount(async () => {
+		//get theme from localstorage
 		theme.darkTheme = localStorage.getItem('darkTheme') === 'true';
+		//check if the user is on mobile
+		console.log(screen.availWidth);
+		if (screen.availWidth < 768) {
+			appState.isMobile = true;
+			console.log(appState.isMobile);
+		}
+
 		if (!sessionUser) {
 			const {
 				data: { user }

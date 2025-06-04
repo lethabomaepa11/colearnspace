@@ -13,7 +13,7 @@
 	});
 </script>
 
-{#if page.url.pathname.includes('/portal')}
+{#if page.url.pathname.includes('/portal') || page.url.pathname.includes('/dashboard')}
 	<div class="dock md:hidden" transition:slide>
 		<a
 			href="/portal"

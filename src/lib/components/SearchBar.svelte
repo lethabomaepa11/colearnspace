@@ -2,7 +2,6 @@
 	import { page } from '$app/state';
 	import { courseSearch } from '$lib/states.svelte';
 	import { ArrowLeft, Mic, Plus, Search } from '@lucide/svelte';
-	import { Popover } from 'melt/builders';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 

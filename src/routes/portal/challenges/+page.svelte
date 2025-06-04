@@ -1,18 +1,31 @@
 <script>
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
+	import { appState } from '$lib/states.svelte.js';
 	import moment from 'moment';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	const challenges = data.challenges;
+	let isLoading = $state(true);
+
+	appState.setAppTitle('Challenges');
+
+	onMount(() => {
+		isLoading = false;
+	});
 </script>
 
 <svelte:head>
 	<title>Challenges | ColearnSpace</title>
 	<meta name="description" content="Explore a wide range of tech challenges on ColearnSpace" />
 </svelte:head>
-<main class="flex w-full flex-wrap gap-5">
-	<BackButtonHeader title="Challenges" />
-	<section class="grid w-full grid-cols-1 items-start justify-center gap-5 lg:grid-cols-3">
+<main class="flex w-full flex-wrap gap-5 overflow-hidden">
+	{#if !appState.isMobile}
+		<BackButtonHeader title="Challenges" />
+	{/if}
+	<section
+		class="grid max-h-[80svh] w-full grid-cols-1 items-start justify-center gap-5 overflow-auto lg:grid-cols-3"
+	>
 		{#each challenges as challenge}
 			<a
 				href="/portal/challenges/{challenge.slug}"

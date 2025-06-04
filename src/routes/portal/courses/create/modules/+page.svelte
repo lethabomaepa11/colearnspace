@@ -222,7 +222,11 @@
 						<input type="text" bind:value={mod.title} class="input input-bordered z-[5] w-full" />
 					</div>
 					<div class="collapse-content text-sm">
-						<TrixEditor colors={course.colors} id={mod.title} bind:value={mod.description} />
+						<TrixEditor
+							colors={course.colors}
+							id={course.slug + '-' + i}
+							bind:value={mod.description}
+						/>
 						<!-- Video Links -->
 						<div>
 							<label class="label font-bold">YouTube module_videos (for this module)</label>

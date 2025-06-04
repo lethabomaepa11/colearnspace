@@ -25,6 +25,7 @@
 		min-height: 200px;
 		border-radius: 0.5rem;
 		padding: 1rem;
+		@apply wrap-anywhere;
 	}
 
 	article :global(h1) {

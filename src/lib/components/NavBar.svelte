@@ -1,19 +1,26 @@
 <script>
 	import { page } from '$app/state';
-	import { course, courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
+	import { appState, course, courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
 	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User } from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import CoursesTopNav from './CoursesTopNav.svelte';
+	import SearchBar from './SearchBar.svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import Modal from './Modal.svelte';
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import BackButtonHeader from './BackButtonHeader.svelte';
 	let { user } = $props();
-	let infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
+	const infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
+	const mainPages = ['/portal', '/dashboard', '/portal/challenges', '/portal/courses']; //pages that do not need a back button on mobile
+
 	let localCourse = $state();
 	let pathname = $state(page.url.pathname);
+
 	onMount(() => {
 		localCourse = JSON.parse(localStorage.getItem('course'));
+		if (infoPages.includes(page.url.pathname)) {
+			appState.setAppTitle('logo');
+		}
 	});
 	let isPublishing = $state(false);
 </script>
@@ -31,9 +38,6 @@
 	>
 		<div class="navbar-start">
 			<div class="dropdown">
-				<div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-					<Menu />
-				</div>
 				<ul
 					transition:slide
 					class="menu menu-xl dropdown-content bg-base-100 rounded-box z-1 mt-3 w-[50svw] p-2 shadow-xl"
@@ -57,20 +61,38 @@
 				</ul>
 			</div>
 			<div class="m-0 flex h-full overflow-hidden p-0">
-				<button
-					onclick={() => sideBar.toggle(page.url.pathname)}
-					tabindex="0"
-					class="btn btn-ghost m-0 hidden rounded-full p-2 lg:flex"
-				>
-					<Menu />
-				</button>
-				<a href="/" class="btn btn-ghost">
-					<img
-						src="/site/branding/ColearnSpace-text{theme.darkTheme ? '-white' : ''}.png"
-						class="m-0 h-[80px] p-0"
-						alt="ColearnSpace logo"
+				{#if appState.appTitle == 'logo' || !appState.isMobile}
+					<button
+						onclick={() => sideBar.toggle(page.url.pathname)}
+						tabindex="0"
+						class="btn btn-ghost m-0 rounded-full p-2 lg:flex"
+					>
+						<Menu />
+					</button>
+					<a href="/" class="btn btn-ghost">
+						<img
+							src="/site/branding/ColearnSpace-text{theme.darkTheme ? '-white' : ''}.png"
+							class="m-0 h-[80px] p-0"
+							alt="ColearnSpace logo"
+						/>
+					</a>
+				{:else}
+					<!--This is the app header on mobile, main pages dont need a back button, but a menu button-->
+					{#if mainPages.includes(page.url.pathname)}
+						<button
+							onclick={() => sideBar.toggle(page.url.pathname)}
+							tabindex="0"
+							class="btn btn-ghost m-0 rounded-full p-2 lg:flex"
+						>
+							<Menu />
+						</button>
+					{/if}
+					<BackButtonHeader
+						title={appState.appTitle}
+						backButton={mainPages.includes(page.url.pathname) ? false : true}
+						isAppHeader
 					/>
-				</a>
+				{/if}
 			</div>
 		</div>
 		<!-- Visible on Desktop-->
@@ -96,7 +118,7 @@
 		</div>
 		<!-- Ends here-->
 		{#if page.url.pathname.includes('/portal')}
-			<CoursesTopNav />
+			<SearchBar />
 		{/if}
 
 		<div class="navbar-end flex items-center gap-4">
@@ -151,11 +173,11 @@
 					} else {
 						//on mobile and in /portal, when this button is clicked, show the mobile search bar, otherwise do nothing
 						//if not in /portal, navigate to portal, and show the mobile search bar if on mobile
-						if (screen.availWidth < 768) {
+						if (appState.isMobile) {
 							courseSearch.toggleMobileSearch();
 						}
 						//navigating to portal
-						goto('/portal/');
+						goto('/portal/search');
 					}
 				}}><Search /></button
 			>

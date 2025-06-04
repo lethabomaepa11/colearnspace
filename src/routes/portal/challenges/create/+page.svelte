@@ -8,6 +8,8 @@
 	import { supabase } from '$lib/supabaseClient';
 	import moment from 'moment';
 	import { onMount } from 'svelte';
+
+	appState.setAppTitle('Create');
 	let challenge = $state({
 		title: '',
 		content:
@@ -349,7 +351,7 @@
 					</p></span
 				>
 			</label>
-			<TrixEditor id="content" bind:value={challenge.content} colors={challenge.colors} />
+			<TrixEditor id="challenges" bind:value={challenge.content} colors={challenge.colors} />
 		</div>
 
 		<button type="submit" class="btn btn-primary mb-10 w-full">Create Challenge</button>

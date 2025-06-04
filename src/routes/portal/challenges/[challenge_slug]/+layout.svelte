@@ -9,15 +9,8 @@
 	const challenge = data.challenge;
 </script>
 
-<main class="flex w-full flex-col flex-wrap gap-2">
-	<BackButtonHeader title={challenge.title}>
-		<div class="stats">
-			<div class="stat">
-				<div class="stat-value">0</div>
-				<div class="stat-desc">Participants</div>
-			</div>
-		</div>
-	</BackButtonHeader>
+<main class="flex w-full flex-col gap-2">
+	<BackButtonHeader title={challenge.title} />
 	<p class="text-sm">
 		A challenge by <a
 			href="/{challenge.user.username}"
@@ -52,9 +45,11 @@
 				: ''}">Submissions</a
 		>
 	</div>
-	<figure class="relative flex w-full items-center justify-center overflow-hidden">
-		<img src={challenge.image} alt="Shoes" class="" />
-	</figure>
+	{#if page.url.pathname == '/portal/challenges/' + challenge.slug}
+		<figure class="relative flex w-full items-center justify-center overflow-hidden">
+			<img src={challenge.image} alt="Shoes" class="" />
+		</figure>
+	{/if}
 
 	{@render children()}
 </main>

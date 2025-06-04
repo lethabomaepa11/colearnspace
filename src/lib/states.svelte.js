@@ -9,7 +9,10 @@ import { supabase } from "./supabaseClient";
 //I am downgrading the app to MVP, i will not remove some of the files yet, so im not going to render some
 export let appState = $state({
 	isMVP: true,
-	version: "0.0.2"
+	version: "0.0.2",
+	appTitle: "logo",//the app header title, if not set, the default is the logo
+	setAppTitle: function(title){this.appTitle = title},//sets the app title in mobile
+	isMobile: false
 })
 
 

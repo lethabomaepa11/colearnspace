@@ -1,13 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
 	import SideBar from '$lib/components/SideBar.svelte';
-	import { courseSearch } from '$lib/states.svelte';
+	import { appState, courseSearch } from '$lib/states.svelte';
 	import { Youtube } from '@lucide/svelte';
 	import moment from 'moment';
 	import { slide } from 'svelte/transition';
 
 	let { data } = $props();
 	let courses = $state(data.courses);
+
+	//set the header of the app
+	appState.setAppTitle('Courses');
 
 	let selectedCategory = $state('All');
 	let filteredCourses = $state(courses);

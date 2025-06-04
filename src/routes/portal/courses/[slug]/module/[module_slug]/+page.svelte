@@ -1,20 +1,19 @@
 <script>
 	import { page } from '$app/state';
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
+	import Loading from '$lib/components/Loading.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { ArrowLeft, Youtube } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	let { data } = $props();
-	// Simulated module data for demo
+
+	let isLoading = $state(true);
 	let thisModule = $state({
-		title: 'Module 1: HTML Basics',
-		description: '<h1>HTML Basics</h1>',
-		module_videos: [
-			{ id: '_uQrJ0TkZlc&pp=ygUGY29kaW5n', title: 'Python Tutorial' },
-			{ id: 'yfoY53QXEnI', title: 'HTML Crash Course for Beginners' }
-		]
+		title: '',
+		description: '',
+		module_videos: []
 	});
 	let course = $state(data.course);
 	let currentIndex = $state(0);
@@ -46,6 +45,7 @@
 				switchVideo(0);
 			}
 		}
+		isLoading = false;
 	});
 </script>
 
@@ -53,63 +53,69 @@
 	<title>{thisModule.title} | ColearnSpace</title>
 	<meta name="description" content="Module of a course" />
 </svelte:head>
-<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
-	<div class="mx-auto max-w-6xl">
-		<div class="mb-10">
-			<BackButtonHeader title={thisModule.title} />
-			<div class="mt-2 flex items-center gap-1 text-sm text-gray-500">
-				<Youtube />
-				{thisModule.module_videos.length} video{thisModule.module_videos.length == 1 ? '' : 's'}
+{#if isLoading}
+	<main class="flex min-h-screen w-full items-center justify-center">
+		<Loading text="Loading Module {thisModule.title}" textClass="text-2xl font-bold" />
+	</main>
+{:else}
+	<section transition:slide class="bg-base-100 min-h-screen px-6 py-20">
+		<div class="mx-auto max-w-6xl">
+			<div class="mb-10">
+				<BackButtonHeader title={thisModule.title} />
+				<div class="mt-2 flex items-center gap-1 text-sm text-gray-500">
+					<Youtube />
+					{thisModule.module_videos.length} video{thisModule.module_videos.length == 1 ? '' : 's'}
+				</div>
 			</div>
-		</div>
-		{#if thisModule.module_videos.length > 0}
-			<!-- Video & Lesson Layout -->
-			<div class="grid gap-10 lg:grid-cols-3">
-				<!-- Video Player -->
-				<div class="lg:col-span-2">
-					<div class="mb-4 h-[300px] w-full overflow-hidden rounded-xl">
-						<iframe
-							class="h-full w-full rounded-xl"
-							src={`https://www.youtube.com/embed/${currentVideo.id}`}
-							title={currentVideo.title}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-						></iframe>
+			{#if thisModule.module_videos.length > 0}
+				<!-- Video & Lesson Layout -->
+				<div class="grid gap-10 lg:grid-cols-3">
+					<!-- Video Player -->
+					<div class="lg:col-span-2">
+						<div class="mb-4 h-[300px] w-full overflow-hidden rounded-xl">
+							<iframe
+								class="h-full w-full rounded-xl"
+								src={`https://www.youtube.com/embed/${currentVideo.id}`}
+								title={currentVideo.title}
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen
+							></iframe>
+						</div>
+						<h2 class="text-primary mb-2 text-2xl font-semibold">{currentVideo.title}</h2>
 					</div>
-					<h2 class="text-primary mb-2 text-2xl font-semibold">{currentVideo.title}</h2>
-				</div>
 
-				<!-- Lesson List -->
-				<div class="bg-base-200 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
-					<h3 class="mb-4 text-lg font-bold text-gray-700">📚 module_videos</h3>
-					<ul class="space-y-3">
-						{#each thisModule.module_videos as video, i}
-							<button
-								class="hover:bg-primary cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition hover:text-white
-                {i === currentIndex ? 'bg-primary text-white' : 'text-gray-700'}"
-								onclick={() => switchVideo(i)}
-							>
-								{i + 1}. {video.title}
-							</button>
-						{/each}
-					</ul>
+					<!-- Lesson List -->
+					<div class="sticky top-10 h-fit rounded-xl border p-5 shadow-lg">
+						<h3 class="mb-4 text-lg font-bold">Embedded Youtube Videos</h3>
+						<ul class="grid w-full space-y-3">
+							{#each thisModule.module_videos as video, i}
+								<button
+									class="hover:bg-primary flex w-full cursor-pointer items-center gap-2 rounded-md py-2 text-sm font-medium transition hover:text-white"
+									onclick={() => switchVideo(i)}
+								>
+									{i + 1}.
+									<p class=" text-left">{video.title}</p>
+								</button>
+							{/each}
+						</ul>
+					</div>
 				</div>
-			</div>
+			{/if}
+		</div>
+
+		<div class="mt-5"></div>
+		<TrixDisplay content={thisModule.description} />
+
+		{#if nextModule}
+			<button onclick={handleNextModule} class="btn btn-primary mt-5"
+				>Next Module: {nextModule.title}</button
+			>
+		{:else}
+			<button class="btn btn-primary mt-5">Complete Course</button>
 		{/if}
-	</div>
-
-	<div class="mt-5"></div>
-	<TrixDisplay content={thisModule.description} />
-
-	{#if nextModule}
-		<button onclick={handleNextModule} class="btn btn-primary mt-5"
-			>Next Module: {nextModule.title}</button
-		>
-	{:else}
-		<button class="btn btn-primary mt-5">Complete Course</button>
-	{/if}
-	{#if page.params.slug === 'preview'}
-		<button class="btn btn-primary mt-5">Publish Course</button>
-	{/if}
-</section>
+		{#if page.params.slug === 'preview'}
+			<button class="btn btn-primary mt-5">Publish Course</button>
+		{/if}
+	</section>
+{/if}

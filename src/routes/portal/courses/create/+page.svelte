@@ -3,12 +3,15 @@
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
+	import { appState } from '$lib/states.svelte.js';
 	import { Info } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
 
 	let { data } = $props();
 
+	appState.setAppTitle('Create');
+	/**Course object*/
 	let course = $state({
 		title: '',
 		category: '',
@@ -21,7 +24,7 @@
 			dark: '#FC6519'
 		}
 	});
-	let sameColors = $state(true);
+	let sameColors = $state(true); //track if the user would like to use same colors for both modes
 	//module object: {title: '', description: '', videos: []}
 	let isLoading = $state(false);
 
@@ -38,14 +41,21 @@
 		localStorage.setItem('course', JSON.stringify(course));
 
 		isLoading = false;
-		document.getElementById('courseInfoModal').showModal();
+		const modal: any | null = document.getElementById('courseInfoModal');
+
+		modal.showModal();
 	}
+	//show loading before it is mounted
+	isLoading = true;
 	onMount(() => {
 		//load from localstorage, if a course from local storage exists, autofill the form
-		isLoading = true;
+
 		let localCourse = JSON.parse(localStorage.getItem('course'));
 		if (localCourse) {
 			course = localCourse;
+			if (course.colors.light != course.colors.dark) {
+				sameColors = false;
+			}
 		}
 		isLoading = false;
 	});
@@ -57,7 +67,7 @@
 </svelte:head>
 <Modal title="Getting Started" id="infoModal">
 	<div class="collapse-arrow bg-base-100 border-base-300 collapse border">
-		<input type="radio" name="my-accordion-2" checked="checked" />
+		<input type="radio" name="my-accordion-2" checked />
 		<div class="collapse-title font-semibold">How do I create a course?</div>
 		<div class="collapse-content text-sm">
 			<ol class="list-decimal p-5">
@@ -205,7 +215,7 @@
 				<!-- Description -->
 				<div>
 					<label for="description" class="label font-bold">Course Description</label>
-					<TrixEditor colors={course.colors} id="description" bind:value={course.description} />
+					<TrixEditor colors={course.colors} id="courses" bind:value={course.description} />
 				</div>
 
 				<!-- Submit -->
