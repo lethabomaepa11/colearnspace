@@ -54,8 +54,8 @@
 
 			<div class="flex items-center gap-4">
 				<!-- CTA Buttons -->
-				<a href="/auth/register" class="btn btn-primary btn-lg"> Create an account</a>
-				<a href="/portal" class="btn btn-lg btn-outline"> Explore More</a>
+				<a href="/auth/register" class="btn btn-primary btn-lg"> Get Started</a>
+				<a href="/portal" class="btn btn-lg btn-outline"> Discover</a>
 			</div>
 		</div>
 

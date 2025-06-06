@@ -105,7 +105,7 @@
 							<summary class="text-base">Discover</summary>
 							<ul class="p-2">
 								<li><a class="text-base" href="/portal">Portal</a></li>
-								<li><a class="text-base" href="/portal/showcase">Showcase</a></li>
+								<li><a class="text-base" href="/portal/challenges">Challenges</a></li>
 								<li><a class="text-base" href="/portal/courses">Courses</a></li>
 							</ul>
 						</details>
