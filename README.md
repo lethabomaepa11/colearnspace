@@ -1,168 +1,139 @@
-# CoLearnSpace (CLS)
+
+# CoLearnSpace
+
+A modern web application built with [SvelteKit](https://kit.svelte.dev), Supabase, and a modular feature-first architecture. This app is designed to scale, with a strong focus on shared logic, clean data handling, and good developer experience😅😓.
+
+---
+## Features
+- Challenges: Create/host a tech challenge, have users battle it out to showcase their skills as they solve a problem you created💀I'm kidding... but for real
+- Courses: Create courses using videos under 50mb or use your youtube videos, can be embedded into your modules easily, just copy and paste the video link
+- Not sure if its a feature☠️ But you don't have to create an account to use the features here, "ghost" has got your back😅just don't abuse him🥺he's already working overtime.
+## What to expect as a Dev?
+
+- Feature-based folder structure (`/challenges`, `/courses`, etc.)
+- Shared business logic in `/lib/server/[feature]/`
+- API routes in `/routes/api/`
+- SSR-powered data fetching using `+page.server.ts`
+- Supabase for authentication, storage, and database
+- Supports both authenticated and anonymous users
 
 ---
 
-## 1. Introduction
+## 🗂️ Project Structure
 
-### 1.1 Project Overview
+```
 
-CoLearnSpace is a web-based community learning platform that allows users to create and take courses built around embedded YouTube videos. It focuses on peer-led skill development through public and private courses.
+/
+├── lib/
+│   └── server/
+│       └── challenges/
+│           ├── core.ts         # Main logic: fetching challenges, etc.
+│           ├── submissions.ts  # Submission logic
+│           └── community.ts    # Community topics logic
+│
+├── routes/
+│   ├── challenge/
+│   │   └── \[slug]/
+│   │       ├── +page.svelte
+│   │       ├── +page.server.ts  # Uses logic from lib/server/challenges
+│   │       └── community/
+│   │       └── submissions/
+│   └── api/
+│       └── challenge/
+│           ├── +server.ts            # POST: Create challenge
+│           └── \[slug]/
+│               ├── +server.ts        # GET: Fetch specific challenge
+│               └── submissions/
+│                   └── +server.ts    # GET: Submissions for a challenge
+│
+└── README.md
 
-### 1.2 Objectives
-
-- Enable anyone to create structured learning content using existing video resources.
-- Support both public learning and organization-based private learning spaces.
-- Empower tech and non-tech communities to share knowledge.
-
-### 1.3 Scope
-
-This system will include:
-
-- User authentication and authorization
-- Course creation and management
-- Role-based access (public, org member, admin)
-- Organization creation and invites
-- Learning progress tracking
-
----
-
-## 2. System Requirements
-
-### 2.1 Functional Requirements
-
-- Users can register and log in using password or OAuth.
-- Users can create public courses using embedded YouTube videos.
-- Organizations can create private courses for their members.
-- Users can join an organization via invite.
-- Courses are made of modules/lessons.
-- Users can mark modules as completed.
-- Users can browse, filter, and search courses.
-- Admins can moderate/report content.
-
-### 2.2 Non-Functional Requirements
-
-- Responsive design (mobile-first).
-- Fast load times and caching for performance.
-- Role-based security and data isolation.
-- Maintainable and scalable backend (Supabase).
-- Audit trail for moderation (optional for future).
+````
 
 ---
 
-## 3. System Architecture
+## 🧠 Data Layer Philosophy
 
-### 3.1 Architecture Diagram
+We use shared logic in `lib/server` to prevent code duplication. If a feature needs data fetching, validation, or transformation:
 
-Client (SvelteKit) ↔ Supabase Backend (Postgres + Auth + Storage)
-
-### 3.2 Technology Stack
-
-| Layer        | Technology                  |
-| ------------ | --------------------------- |
-| Frontend     | SvelteKit, Tailwind/DaisyUI |
-| Backend      | Supabase (Auth, RLS, DB)    |
-| Database     | PostgreSQL (via Supabase)   |
-| Storage      | Supabase Storage            |
-| Auth         | Supabase Auth (OAuth/email) |
-| Video Source | YouTube (embeds only)       |
+- Create a folder for it in `lib/server/[feature]`
+- Place all logic functions in meaningful files (`core.ts`, `submissions.ts`, etc.)
+- Reuse these functions in both:
+  - `+page.server.ts` (for SSR)
+  - `+server.ts` (for APIs)
 
 ---
 
-## 4. Database Design (High-Level)
+## 💡 Example: How to Fetch Challenge Submissions
 
-### 4.1 Tables
+```ts
+// lib/server/challenges/submissions.ts
+export async function getSubmissionsForChallenge(slug: string) {
+  // Supabase logic here
+}
 
-- **Users**  
-  `id`, `email`, `name`, `role`
+// routes/api/challenge/[slug]/submissions/+server.ts
+import { getSubmissionsForChallenge } from '$lib/server/challenges/submissions';
 
-- **Organizations**  
-  `id`, `name`, `slug`, `created_by`
-
-- **Organization_Members**  
-  `id`, `org_id`, `user_id`, `role`
-
-- **Courses**  
-  `id`, `title`, `description`, `org_id (nullable)`, `public (boolean)`, `created_by`
-
-- **Modules**  
-  `id`, `course_id`, `title`, `description`, `youtube_url`, `order`
-
-- **Course_Progress**  
-  `id`, `user_id`, `course_id`, `module_id`, `completed_at`
+export async function GET({ params }) {
+  const submissions = await getSubmissionsForChallenge(params.slug);
+  return json(submissions);
+}
+````
 
 ---
 
-## 5. Use Case Diagrams
+## Running Locally
+Lets get into business now
 
-| Actor     | Use Case                                    |
-| --------- | ------------------------------------------- |
-| Visitor   | Access public courses, Register             |
-| User      | Take courses, Track progress                |
-| Creator   | Create/edit/delete public courses           |
-| Org Admin | Create org, invite members, private courses |
-| Moderator | Review reports, moderate content            |
+### You just have to...
+```bash
+npm install
+npm run dev
+```
+### To spin up your backend, make sure you have Docker installed and running
+Run the following command
+```bash
+npx supabase start
+```
+
+It will download the supabase docker image for you to use locally
+When its done running, you will have to copy the supabase url and the anon key and create a .env file in the root of your project
+
+
+Then set up your `.env` with Supabase keys, for example:
+
+```env
+PUBLIC_SUPABASE_URL=...
+PUBLIC_SUPABASE_ANON_KEY=...
+```
+#### If you are having trouble with the previous step, go to this link https://supabase.com/docs/guides/local-development
+---
+
+## 🌱 Contributing
+
+If you're adding a new feature:
+
+* Create a new folder in `lib/server/[feature]`
+* Add functions for handling server logic there
+* Use those in `+server.ts` or `+page.server.ts` as needed
+* Keep your files short and single-responsibility
 
 ---
 
-## 6. User Roles
+## 🔐 Security Notes
 
-| Role           | Permissions                                       |
-| -------------- | ------------------------------------------------- |
-| Guest          | View public courses                               |
-| User           | Enroll in courses, track progress                 |
-| Course Creator | Create/edit/delete public courses                 |
-| Org Member     | Access org-specific private courses               |
-| Org Admin      | Create org, invite/remove members, create courses |
+We support both authenticated and anonymous access. For anonymous users, progress tracking is done using the client IP address (non-invasive, limited use). Avoid storing any sensitive data.
 
 ---
 
-## 7. User Interface Design (Brief)
+## 📦 Tech Stack
 
-### Pages:
+* SvelteKit
+* Docker
+* Supabase (PostgreSQL, Storage, Auth)
+* TypeScript
+* Lucide Icons (via `lucide-svelte`)
+* TailwindCSS 
 
-- `/` – Landing page
-- `/portal` – Home, discover courses and project showcases
-- `/portal/courses` – List of all courses
-- `/portal/courses/:id` – Course detail page
-- `/portal/courses/:id/module/:module_id` – Learning screen with embedded video
-- `/portal/courses/create` – Course/module creation
-- `/portal/org` – Organization dashboard
-- `/portal/org/:org_id` – Org profile, members, courses
-- `/auth/*` – Login/signup
-- `/dashboard` – User profile and progress
 
----
-
-## 8. System Flow (Example)
-
-1. User signs up
-2. Joins an existing org via invite link or creates a new org
-3. User creates a course and adds modules with YouTube URLs
-4. Other users enroll and mark progress
-5. Org admins view activity
-6. Users earn completions, badges (future feature)
-
----
-
-## 9. Security & Privacy
-
-- Only users in an organization can view private courses.
-- Supabase RLS ensures data access is secure.
-- No videos are hosted, only embedded (no copyright).
-- Private data (emails, orgs) is protected through RBAC.
-
----
-
-## 10. Future Enhancements
-
-- Certificate generation (PDF)
-- Quiz integration (Typeform, custom, or Google Forms)
-- API access for integrations
-- Gamification: badges, streaks, ranks
-- Notifications (email or in-app)
-
----
-
-## 11. Conclusion
-
-**CoLearnSpace** provides a scalable, community-focused LMS tailored for embedding YouTube learning. It empowers grassroots knowledge sharing while offering organizational structures for private group learning.
