@@ -46,7 +46,6 @@ A modern web application built with [SvelteKit](https://kit.svelte.dev), Supabas
 │               └── submissions/
 │                   └── +server.ts    # GET: Submissions for a challenge
 │
-├── types/                            # Shared types
 └── README.md
 
 ````
