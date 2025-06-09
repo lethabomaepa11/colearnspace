@@ -50,7 +50,19 @@
 	onMount(() => {
 		appState.loadingStates.portal = false;
 	});
+	const metaContent = `View ${submission.title} submission for ${data.challenge.title} challenge on ColearnSpace`;
 </script>
+
+<!--SEO-->
+<svelte:head>
+	<title>{submission.title} submission | ColearnSpace</title>
+	<meta name="description" content={metaContent} />
+	<meta property="og:description" content={metaContent} />
+	<meta name="twitter:title" content="{submission.title} submission | ColearnSpace" />
+	<meta name="twitter:description" content={metaContent} />
+	<!-- Open Graph Meta Tags for Link Previews -->
+	<meta property="og:title" content="{submission.title} submission | ColearnSpace" />
+</svelte:head>
 
 <main class="space-y-3">
 	<h2>{submission.title}</h2>

@@ -28,6 +28,9 @@
 		console.log(currentVideo);
 	}
 	function handleNextModule() {
+		if (page.params.slug !== 'preview') {
+			//track course progress
+		}
 		isLoading = true;
 		window.location.href = `/portal/courses/${page.params.slug}/module/${nextModule.slug}`;
 	}
@@ -51,8 +54,14 @@
 </script>
 
 <svelte:head>
-	<title>{thisModule.title} | ColearnSpace</title>
-	<meta name="description" content="Module of a course" />
+	<title>{thisModule.title}</title>
+	<meta name="description" content="{thisModule.title} module of {course.title} course" />
+	<meta property="og:image" content="/favicon.png" />
+	<meta property="og:description" content="{thisModule.title} module of {course.title} course" />
+	<meta property="og:title" content={thisModule.title} />
+	<meta name="twitter:title" content={thisModule.title} />
+	<meta name="twitter:description" content="{thisModule.title} module of {course.title} course" />
+	<meta name="twitter:image" content="/favicon.png" />
 </svelte:head>
 {#if isLoading}
 	<main class="flex min-h-screen w-full items-center justify-center">

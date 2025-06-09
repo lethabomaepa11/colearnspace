@@ -2,14 +2,22 @@
 	import moment from 'moment';
 	import { slide } from 'svelte/transition';
 
-	const items = [];
-	for (let i = 0; i < 10; i++) {
-		items.push(i);
-	}
 	let { data } = $props();
 	const challenge = data.challenge;
 	const submissions = data.submissions.submissions;
+	const metaContent = `View ${data.challenge.title} challenge Submissions on ColearnSpace`;
 </script>
+
+<!--SEO-->
+<svelte:head>
+	<title>{data.challenge.title} Submissions | ColearnSpace</title>
+	<meta name="description" content={metaContent} />
+	<meta property="og:description" content={metaContent} />
+	<meta name="twitter:title" content="{data.challenge.title} Submissions | ColearnSpace" />
+	<meta name="twitter:description" content={metaContent} />
+	<!-- Open Graph Meta Tags for Link Previews -->
+	<meta property="og:title" content="{data.challenge.title} Submissions | ColearnSpace" />
+</svelte:head>
 
 {#if moment(challenge.start_date).isAfter(moment())}
 	<h1 class="text-xl font-bold">Submissions will open {moment(challenge.start_date).fromNow()}</h1>
@@ -31,7 +39,10 @@
 				>
 					<div class="card-body">
 						<h4 class="">{submission.title}</h4>
-						<p class="text-xs">By ghost {moment(submission.created_at).fromNow()}</p>
+						<p class="text-xs">
+							By {submission.user.name}
+							{moment(submission.created_at).fromNow()}
+						</p>
 					</div>
 				</a>
 			{/each}

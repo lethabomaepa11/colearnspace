@@ -10,6 +10,14 @@
 	const challenge = data.challenge;
 </script>
 
+<svelte:head>
+	<meta property="og:image" content={data.challenge.image} />
+
+	<!-- Twitter Card (for better previews on Twitter) -->
+	<meta name="twitter:card" content="summary_large_image" />
+
+	<meta name="twitter:image" content={data.challenge.image} />
+</svelte:head>
 <main transition:fly class="flex w-full flex-col gap-2">
 	<BackButtonHeader title={challenge.title} />
 	<p class="text-sm">

@@ -10,6 +10,7 @@
 			'<blockquote>Add links, screenshots or anything to showcase your solution to the challenge</blockquote>',
 		cover_image: ''
 	});
+	const { data } = $props();
 
 	const handleSubmit = async () => {
 		appState.loadingStates.portal = true;
@@ -23,7 +24,19 @@
 			goto(`/portal/challenges/${page.params.challenge_slug}/submissions/${response.data.id}`);
 		}
 	};
+	const metaContent = `Create a submission for ${data.challenge.title} challenge on ColearnSpace`;
 </script>
+
+<!--SEO-->
+<svelte:head>
+	<title>Create a submission | ColearnSpace</title>
+	<meta name="description" content={metaContent} />
+	<meta property="og:description" content={metaContent} />
+	<meta name="twitter:title" content="Create a submission | ColearnSpace" />
+	<meta name="twitter:description" content={metaContent} />
+	<!-- Open Graph Meta Tags for Link Previews -->
+	<meta property="og:title" content="Create a submission | ColearnSpace" />
+</svelte:head>
 
 <form onsubmit={handleSubmit} class="space-y-4">
 	<h2>New Submission</h2>

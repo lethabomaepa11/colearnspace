@@ -22,6 +22,18 @@
 		name="description"
 		content="ColearnSpace is your digital skill-building hub — crafted for curious minds. Skip the chaos of YouTube playlists and dive into structured, community-powered courses designed for growth, support, and learning at your pace"
 	/>
+	<meta property="og:image" content="/favicon.png" />
+	<meta
+		property="og:description"
+		content="ColearnSpace is your digital skill-building hub — crafted for curious minds. Skip the chaos of YouTube playlists and dive into structured, community-powered courses designed for growth, support, and learning at your pace"
+	/>
+	<meta property="og:title" content="ColearnSpace" />
+	<meta name="twitter:title" content="ColearnSpace" />
+	<meta
+		name="twitter:description"
+		content="ColearnSpace is your digital skill-building hub — crafted for curious minds. Skip the chaos of YouTube playlists and dive into structured, community-powered courses designed for growth, support, and learning at your pace"
+	/>
+	<meta name="twitter:image" content="/favicon.png" />
 </svelte:head>
 
 <!-- HERO SECTION -->

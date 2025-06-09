@@ -5,36 +5,39 @@ import { getChallengeId } from "./main";
 
 
 
-//get all submissions for a particular challenge given the slug of the challenge
-export const getSubmissions = async(challengeSlug:string, supabase: unknown) => {
+//get all topics for a particular challenge given the slug of the challenge
+export const getTopics = async(challengeSlug:string, supabase: SupabaseClient) => {
     const challengeId = await getChallengeId(challengeSlug,supabase);
-    const {data: submissions, error} = await supabase.from("challenge_submission").select("*,user(name,username)").eq('challenge_id', challengeId).order('created_at', { ascending: false });
+    const {data: topics, error} = await supabase.from("challenge_topics").select("*,user(name,username)").eq('challenge_id', challengeId).order('created_at', { ascending: false });
     if (error) {
         console.log(error);
     }
-    return {submissions}
+    return {topics} //return an array
 }
 
-//get a particular submission by its ID
-export const getSubmission = async(id,supabase: SupabaseClient) => {
-    const {data: submission, error} = await supabase.from("challenge_submission").select("*,user(name,username)").eq('id', id);
+//get a particular topic by its ID
+export const getTopic = async(id:string,supabase: SupabaseClient) => {
+    const {data: topic, error} = await supabase.from("challenge_topics").select("*,user(name,username)").eq('id', id);
     if (error) {
         console.log(error);
     }
-    return {submission}
+    return {topic: topic[0]} //return a single object
 }
+type topicData = {
+    title: string;
+    content: string;
+}
+//create a topic for a particular challenge given a slug of the challenge
 
-//create a submission for a particular challenge given a slug of the challenge
-
-export const createSubmission = async(challengeSlug:string, supabase: SupabaseClient, submissionData) => {
+export const createTopic = async(challengeSlug:string, supabase: SupabaseClient, topicData: topicData) => {
     const challenge_id = await getChallengeId(challengeSlug,supabase);
 
     const user_id = await getUserIdOrGhost(supabase);
 
-    const {data: submission, error} = await supabase.from("challenge_submission").insert({
+    const {data: topic, error} = await supabase.from("challenge_topics").insert({
         challenge_id: challenge_id,
-        title: submissionData.title,
-        content: submissionData.content,
+        title: topicData.title,
+        content: topicData.content,
         user_id: user_id,
     })
     .select("*,user(name,username)").single();
@@ -42,5 +45,5 @@ export const createSubmission = async(challengeSlug:string, supabase: SupabaseCl
         console.log(error);
     }
 
-    return {submission}
+    return {topic}//return a single object
 }

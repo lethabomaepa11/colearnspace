@@ -135,7 +135,19 @@
 			.replace(/[^\w ]+/g, '')
 			.replace(/ +/g, '-');
 	};
+	const metaContent = `Create a new challenge on ColearnSpace`;
 </script>
+
+<!--SEO-->
+<svelte:head>
+	<title>Create challenge | ColearnSpace</title>
+	<meta name="description" content={metaContent} />
+	<meta property="og:description" content={metaContent} />
+	<meta name="twitter:title" content="Create challenge | ColearnSpace" />
+	<meta name="twitter:description" content={metaContent} />
+	<!-- Open Graph Meta Tags for Link Previews -->
+	<meta property="og:title" content="Create challenge | ColearnSpace" />
+</svelte:head>
 
 <Modal title={error.title} id="errorModal">
 	<p class=" text-error">{error.message}</p>

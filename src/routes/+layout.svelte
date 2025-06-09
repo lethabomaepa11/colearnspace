@@ -70,14 +70,9 @@
 </script>
 
 <svelte:head>
-	<title>ColearnSpace</title>
-	<meta
-		name="description"
-		content="ColearnSpace is your digital skill building and showcasing hub — crafted for curious,
-				creative and innovative minds. Skip the chaos of YouTube playlists and dive into structured,
-				community-powered courses designed for growth, support, and learning at your pace, or build and
-				post projects to showcase your skills."
-	/>
+	<meta property="og:url" content={page.url.href} />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 {#if isLoading}
 	<main class="flex min-h-screen items-center justify-center">

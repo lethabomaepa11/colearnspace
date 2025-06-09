@@ -12,7 +12,9 @@
 	let isLoading = $state(false);
 	let course = $state(data.course);
 	let totalVideos = $state(0);
-	let thumbnail = $state('https://colearnspace.netlify.app/site/branding/ColearnSpace-icon2.png'); //default
+	let thumbnail = $state(
+		'https://{course.title} | ColearnSpace.netlify.app/site/branding/{course.title} | ColearnSpace-icon2.png'
+	); //default
 	onMount(() => {
 		isLoading = true;
 		let localCourse = JSON.parse(localStorage.getItem('course'));
@@ -36,11 +38,21 @@
 		}
 		isLoading = false;
 	});
+
+	const startCourse = () => {
+		goto(`/portal/courses/${course.slug}/module/${course.module[0].slug}`);
+	};
 </script>
 
 <svelte:head>
-	<title>Course | ColearnSpace</title>
-	<meta name="description" content="Course" />
+	<title>{course.title} | ColearnSpace</title>
+	<meta name="description" content="{course.title} course on ColearnSpace" />
+	<meta property="og:image" content="/favicon.png" />
+	<meta property="og:description" content="{course.title} course on ColearnSpace" />
+	<meta property="og:title" content="{course.title} | ColearnSpace" />
+	<meta name="twitter:title" content="{course.title} | ColearnSpace" />
+	<meta name="twitter:description" content="{course.title} course on ColearnSpace" />
+	<meta name="twitter:image" content="/favicon.png" />
 </svelte:head>
 
 {#if isLoading}
@@ -71,10 +83,7 @@
 					<div class="bg-base-100 sticky top-10 h-fit rounded-xl p-5 shadow-lg">
 						<span class="mb-4 flex items-center justify-between">
 							<h3 class="text-lg font-bold">Modules</h3>
-							<a
-								href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
-								class="btn btn-primary">Start Course</a
-							>
+							<button class="btn btn-primary" onclick={startCourse}>Start Course</button>
 						</span>
 						<ul class="space-y-3">
 							{#each course.module as mod, i}
@@ -82,17 +91,9 @@
 									class="hover:bg-primary cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition hover:text-white
                 "
 								>
-									{#if i === 0}
-										<a
-											href="/portal/courses/{page.params.slug}/module/{mod.slug}"
-											class="link link-hover"
-											title="{course.title}/module/{mod.title}">{i + 1}. {mod.title}</a
-										>
-									{:else}
-										<button class="link link-hover" title="{course.title}/module/{mod.title}"
-											>{i + 1}. {mod.title}</button
-										>
-									{/if}
+									<button class="link link-hover" title="{course.title}/module/{mod.title}"
+										>{i + 1}. {mod.title}</button
+									>
 								</li>
 							{/each}
 						</ul>
@@ -102,10 +103,7 @@
 		</div>
 		<div class="mt-5"></div>
 
-		<a
-			href="/portal/courses/{page.params.slug}/module/{course.module[0].slug}"
-			class="btn btn-primary mt-5">Start course</a
-		>
+		<button class="btn btn-primary mt-5" onclick={startCourse}>Start course</button>
 		{#if page.params.slug === 'preview'}
 			<button class="btn btn-primary mt-5">Publish Course</button>
 		{/if}
