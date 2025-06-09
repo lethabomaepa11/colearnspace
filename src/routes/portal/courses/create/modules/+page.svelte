@@ -16,7 +16,8 @@
 			title: 'Module 1',
 			description: '<h1>Module 1 description</h1>',
 			module_videos: [],
-			slug: ''
+			slug: '',
+			order: 0
 		}
 	]);
 	onMount(() => {
@@ -44,7 +45,8 @@
 		modules.push({
 			title,
 			description: `<h1>${title} description</h1>`,
-			module_videos: []
+			module_videos: [],
+			order: modules.length
 		});
 	}
 	function addVideo(index) {
@@ -69,6 +71,10 @@
 	}
 	function removeModule(modIndex) {
 		modules.splice(modIndex, 1);
+		//reset order
+		for (let i = 0; i < modules.length; i++) {
+			modules[i].order = i;
+		}
 	}
 	async function processmodule_videos(module_videos) {
 		return await Promise.all(

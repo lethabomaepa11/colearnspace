@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
-	import { ArrowLeft } from '@lucide/svelte';
+	import { ArrowLeft, Clock } from '@lucide/svelte';
 	import moment from 'moment';
 	import { fly, slide } from 'svelte/transition';
 
@@ -23,6 +23,20 @@
 		>
 		created {moment(challenge.created_at).fromNow()}
 	</p>
+	<span class="flex items-center gap-2">
+		<Clock />
+		<p class="text-xs font-bold">
+			{#if moment(challenge.start_date).isAfter(moment())}
+				Challenge will start on {moment(challenge.start_date).format('DD MMM YYYY [at] HH:mm')}
+			{:else if moment(challenge.end_date).isAfter(moment())}
+				Challenge started on {moment(challenge.start_date).format('DD MMM YYYY [at] HH:mm')}
+				<br />
+				Ends {moment(challenge.end_date).fromNow()}
+			{:else}
+				Challenge ended {moment(challenge.end_date).fromNow()}
+			{/if}
+		</p>
+	</span>
 
 	<div role="tablist" class="tabs tabs-box">
 		<a

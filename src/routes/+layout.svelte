@@ -20,16 +20,17 @@
 			return false; //the user is most likely offline (not connected to the internet)
 		}
 	};
+	let isLoading = $state(true);
 	onMount(async () => {
+		isLoading = false;
 		//get theme from localstorage
-		theme.darkTheme = localStorage.getItem('darkTheme') === 'true';
+		theme.darkTheme = localStorage.getItem('darkTheme') === 'true'; //if it is true, set the theme to dark
 		//check if the user is on mobile
-		console.log(screen.availWidth);
 		if (screen.availWidth < 768) {
 			appState.isMobile = true;
-			console.log(appState.isMobile);
 		}
 
+		//if the user is not in session, get the user from supabase auth and store them in the session
 		if (!sessionUser) {
 			const {
 				data: { user }
@@ -55,6 +56,13 @@
 				});
 			}
 		}
+		if (!sessionUser) {
+			//if the user is not logged in, create a uuid for this user and store it in localstorage as an anonymous user
+			const anon_user = localStorage.getItem('anon_user');
+			if (!anon_user) {
+				localStorage.setItem('anon_user', crypto.randomUUID());
+			}
+		}
 		setInterval(async () => {
 			isUserOnline = await checkOnlineStatus();
 		}, 30000);
@@ -71,20 +79,26 @@
 				post projects to showcase your skills."
 	/>
 </svelte:head>
-<main class="">
-	{#if !isUserOnline}
-		<div transition:fly={{ y: 20, duration: 300 }} class="toast toast-bottom z-50">
-			<!-- Keep your existing DaisyUI markup unchanged -->
-			<div
-				class="notification alert alert-error mb-2 flex items-center gap-3 rounded-lg p-4 text-sm font-medium shadow-lg"
-			>
-				Connection Lost <br />
-				<Loading text="Reconnecting..." textClass="text-md" />
+{#if isLoading}
+	<main class="flex min-h-screen items-center justify-center">
+		<Loading />
+	</main>
+{:else}
+	<main class="">
+		{#if !isUserOnline}
+			<div transition:fly={{ y: 20, duration: 300 }} class="toast toast-bottom z-50">
+				<!-- Keep your existing DaisyUI markup unchanged -->
+				<div
+					class="notification alert alert-error mb-2 flex items-center gap-3 rounded-lg p-4 text-sm font-medium shadow-lg"
+				>
+					Connection Lost <br />
+					<Loading text="Reconnecting..." textClass="text-md" />
+				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
 
-	<NavBar user={sessionUser} />
-	{@render children()}
-	<BottomNav user={sessionUser} />
-</main>
+		<NavBar user={sessionUser} />
+		{@render children()}
+		<BottomNav user={sessionUser} />
+	</main>
+{/if}

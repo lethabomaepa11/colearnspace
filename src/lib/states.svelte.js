@@ -6,13 +6,19 @@ import { supabase } from "./supabaseClient";
  */
 
 
-//I am downgrading the app to MVP, i will not remove some of the files yet, so im not going to render some
+//The app state, loading states and all
 export let appState = $state({
 	isMVP: true,
 	version: "0.0.2",
 	appTitle: "logo",//the app header title, if not set, the default is the logo
 	setAppTitle: function(title){this.appTitle = title},//sets the app title in mobile
-	isMobile: false
+	isMobile: false,
+	loadingStates: {
+		//loading states, to avoid adding the loading state to every page
+		root: false,//root layout
+		portal: false,//portal layout
+		dashboard: false//dashboard layout
+	}
 })
 
 
@@ -61,6 +67,12 @@ export let githubAuth = $state({
 export let course = $state({
 
 	publish : async(user) => {
+		if(!user){
+			//ghost will make the course
+			const {data: ghostUser, error} = await supabase.from("user").select("id").eq("username", "ghost").limit(1);
+			user = ghostUser[0];
+		}
+		//Make use of the api in the future, refactor this code.
 		let localCourse = JSON.parse(localStorage.getItem('course'));
 		let localModules = JSON.parse(localStorage.getItem('modules'));
 		
@@ -70,7 +82,8 @@ export let course = $state({
 			category: localCourse.category,
 			description: localCourse.description,
 			user_id: user.id,
-			slug: localCourse.slug
+			slug: localCourse.slug,
+			order: localCourse.order
 		}).select();
 		// all modules of that course
 		if(!courseError && courses.length > 0) {

@@ -90,27 +90,14 @@
 				<span class={!sideBar.open && 'text-xs'}>Courses</span>
 			</a>
 		</li>
-		<li class="hidden px-4">
-			<a
-				href="/portal/projects"
-				class="{sideBar.open
-					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/portal/projects'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<Store size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Projects</span>
-			</a>
-		</li>
 		<li class="px-4">
 			<a
 				href="/portal/challenges"
 				class="{sideBar.open
 					? 'flex-row'
-					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/portal/challenges'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+					'/portal/challenges'
+				)
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>

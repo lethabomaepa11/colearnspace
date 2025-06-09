@@ -4,10 +4,7 @@
 
 	appState.setAppTitle('Community');
 	let { data } = $props();
-	let topic = $state({
-		title: '',
-		content: '<p>You can ask anything regarding this challenge, add links, images and more here</p>'
-	});
+
 	const items = [];
 	for (let i = 0; i < 10; i++) {
 		items.push(i);
@@ -15,16 +12,16 @@
 </script>
 
 <section class="flex w-full items-center justify-between">
-	<h1 class="text-2xl font-bold">Discussions</h1>
+	<h1 class="text-2xl font-bold">Discussion</h1>
 	<a href="/portal/challenges/{data.challenge.slug}/community/new" class="btn btn-primary"
-		>New Discussion</a
+		>New Topic</a
 	>
 </section>
-<main class="flex w-full flex-col gap-2">
+<main class="divide-base-300 flex w-full flex-col gap-2 divide-y">
 	{#each items as item}
 		<a
 			href="/portal/challenges/{data.challenge.slug}/community/{item}"
-			class="border-base-300 w-full space-y-4 border-b p-4 hover:scale-[0.99]"
+			class="hover:bg-base-200 flex w-full items-center justify-between space-y-4 p-4 hover:rounded-xl"
 		>
 			<h2>Ask Questions in here</h2>
 			<p class=" text-xs">By ghost at 12:45 on 2023-01-01</p>

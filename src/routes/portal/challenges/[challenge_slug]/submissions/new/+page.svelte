@@ -1,5 +1,8 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
+	import { appState } from '$lib/states.svelte';
 
 	let submission = $state({
 		title: '',
@@ -7,9 +10,22 @@
 			'<blockquote>Add links, screenshots or anything to showcase your solution to the challenge</blockquote>',
 		cover_image: ''
 	});
+
+	const handleSubmit = async () => {
+		appState.loadingStates.portal = true;
+		const res = await fetch(`/api/challenge/${page.params.challenge_slug}/submission`, {
+			method: 'POST',
+			body: JSON.stringify({ submission })
+		});
+		const response = await res.json();
+		if (response.success) {
+			appState.loadingStates.portal = false;
+			goto(`/portal/challenges/${page.params.challenge_slug}/submissions/${response.data.id}`);
+		}
+	};
 </script>
 
-<form class="space-y-4">
+<form onsubmit={handleSubmit} class="space-y-4">
 	<h2>New Submission</h2>
 	<span class="flex w-full flex-col items-start justify-between gap-5 lg:flex-row">
 		<section class="w-full space-y-4">
