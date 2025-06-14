@@ -124,23 +124,22 @@
 		<div class="navbar-end flex items-center gap-4">
 			{#if !infoPages.includes(page.url.pathname)}
 				<div class="dropdown" role="button">
-						<button class="btn btn-outline hidden items-center justify-center md:flex"
-							><Plus /> Create</button
-						>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-						<ul
-							tabindex="0"
-							class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
-						>
-							<summary class="menu-title"><h2>Click one option</h2></summary>
-							<li>
-								<a href="/portal/challenges/create" class="text-base">Create a challenge</a>
-							</li>
-							<li>
-								<a href="/portal/courses/create" class="text-base">Create a Course</a>
-							</li>
-						</ul>
-					{/if}
+					<button class="btn btn-outline hidden items-center justify-center md:flex"
+						><Plus /> Create</button
+					>
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<ul
+						tabindex="0"
+						class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 py-5 shadow-lg"
+					>
+						<summary class="menu-title"><h2>Click one option</h2></summary>
+						<li>
+							<a href="/portal/challenges/create" class="text-base">Create a challenge</a>
+						</li>
+						<li>
+							<a href="/portal/courses/create" class="text-base">Create a Course</a>
+						</li>
+					</ul>
 				</div>
 				{#if page.url.pathname == '/portal/courses/preview' || page.url.pathname.includes('/portal/courses/preview/')}
 					<button
