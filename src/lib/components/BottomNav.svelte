@@ -29,11 +29,7 @@
 			<LucideBook />
 			<span class="dock-label">Courses</span>
 		</a>
-		<div
-			class="{page.url.pathname === '/portal/courses/create'
-				? 'dock-active text-primary'
-				: ''} dock-label"
-		>
+		<div class="dock-label">
 			<div class="dropdown dropdown-top dropdown-center">
 				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 				<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">

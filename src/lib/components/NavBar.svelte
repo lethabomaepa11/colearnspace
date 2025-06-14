@@ -124,12 +124,6 @@
 		<div class="navbar-end flex items-center gap-4">
 			{#if !infoPages.includes(page.url.pathname)}
 				<div class="dropdown" role="button">
-					{#if !localCourse}
-						<a
-							href="/portal/courses/create"
-							class="btn btn-outline hidden items-center justify-center md:flex"><Plus /> Create</a
-						>
-					{:else}
 						<button class="btn btn-outline hidden items-center justify-center md:flex"
 							><Plus /> Create</button
 						>
