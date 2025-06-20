@@ -1,9 +1,16 @@
 //when the user's id is needed, if user not logged in, then retuen null
 export const getUserIdOrNull = async(supabase) => {
-    const {data: {user}} = await supabase.auth.getUser();
+    const res = await fetch("/api/user",{
+        method: "GET",
+    })
+    let user = await res.json();
+    user = user.user;
     if(user) return user.id
+    //try different approach, 
     return null;
 }
+
+
 
 //return the logged in user id or the ghost user id if the user is not logged in.
 export const getUserIdOrGhost = async(supabase) => {

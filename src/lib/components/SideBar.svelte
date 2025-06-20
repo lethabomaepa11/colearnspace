@@ -10,6 +10,7 @@
 		Store,
 		Swords,
 		Trophy,
+		CodeXml,
 		Users
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
@@ -72,6 +73,21 @@
 			>
 				<Home size={20} />
 				<span class={!sideBar.open && 'text-xs'}>Discover</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/portal/projects"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+					'/portal/projects'
+				)
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<CodeXml size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Projects</span>
 			</a>
 		</li>
 		<li class="px-4">

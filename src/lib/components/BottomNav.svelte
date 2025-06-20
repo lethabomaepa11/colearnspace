@@ -43,6 +43,9 @@
 				>
 					<summary class="menu-title"><h2>Click one option</h2></summary>
 					<li>
+						<a href="/portal/projects/create" class="text-base">Showcase a project</a>
+					</li>
+					<li>
 						<a href="/portal/challenges/create" class="text-base">Create a challenge</a>
 					</li>
 					<li>
