@@ -4,7 +4,7 @@
 
 <svelte:head>
 	<title>Documentation | ColearnSpace</title>
-	<meta name="description" content={project.description} />
+	<meta name="description" content="" />
 </svelte:head>
 
 <section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-20 md:w-[80svw]">
