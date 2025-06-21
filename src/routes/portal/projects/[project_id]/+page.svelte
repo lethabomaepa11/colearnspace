@@ -1,13 +1,14 @@
 <script>
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
+	import CommentInput from '$lib/components/CommentInput.svelte';
+	import Comments from '$lib/components/Comments.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { appState } from '$lib/states.svelte';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
 
 	const { data } = $props();
-	const { project } = data;
-	const { isLoggedIn } = data;
+	const { project, feature, comments, isLoggedIn } = data;
 	appState.setAppTitle('Project');
 </script>
 
@@ -61,15 +62,6 @@
 			</div>
 		</div>
 		<TrixDisplay content={project.content} />
-		<section id="comments" class="m-4">
-			<div class="textarea textarea-lg textarea-bordered flex w-full items-end gap-2 p-2">
-				<textarea placeholder="Write a comment..." class="w-full"></textarea>
-				{#if isLoggedIn}
-					<button class="btn btn-primary">Submit</button>
-				{:else}
-					<a class="btn btn-primary" href="/auth/login">Login to comment</a>
-				{/if}
-			</div>
-		</section>
+		<Comments {isLoggedIn} {feature} data={comments} />
 	</div>
 </section>

@@ -1,5 +1,7 @@
 <script>
 	import { page } from '$app/state';
+	import CommentInput from '$lib/components/CommentInput.svelte';
+	import Comments from '$lib/components/Comments.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { appState } from '$lib/states.svelte.js';
 	import {
@@ -14,7 +16,7 @@
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
-	const submission = data.submission;
+	const { isLoggedIn, submission } = data;
 	const items = [];
 	for (let i = 0; i < 10; i++) {
 		items.push(i);
@@ -46,7 +48,10 @@
 			vote.up = false;
 		}
 	};
-
+	const feature = {
+		id: data.challenge.id,
+		name: 'challenge_submission'
+	};
 	onMount(() => {
 		appState.loadingStates.portal = false;
 	});
@@ -84,23 +89,5 @@
 		>
 		<button class="btn btn-ghost text-xs"><MessageCircle /> 0</button>
 	</section>
-	<!--Comment section-->
-	<section id="comments">
-		<span class="flex items-center justify-between">
-			<h3>Comments</h3>
-			<button class="btn btn-primary text-xs" onclick={() => alert('Comments coming soon...')}
-				>Add a comment</button
-			>
-		</span>
-		{#each items as i}
-			<div class="border-base-200 border-b p-4">
-				<p class="flex items-center justify-between text-xs">
-					Lethabo Maepa <span class="text-gray-500"
-						>{i + Math.floor(Math.random() * 30)} minutes ago</span
-					>
-				</p>
-				<p>You might wanna use such and such</p>
-			</div>
-		{/each}
-	</section>
+	<Comments {isLoggedIn} {feature} />
 </main>
