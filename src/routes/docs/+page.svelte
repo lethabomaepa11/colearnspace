@@ -1,3 +1,7 @@
+<script>
+	import { slide } from 'svelte/transition';
+</script>
+
 <svelte:head>
 	<title>Documentation | ColearnSpace</title>
 	<meta name="description" content={project.description} />
