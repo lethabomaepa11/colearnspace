@@ -11,7 +11,9 @@
 		Swords,
 		Trophy,
 		CodeXml,
-		Users
+		Users,
+		Book,
+		BookOpenText
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -135,18 +137,18 @@
 				<span class={!sideBar.open && 'text-xs'}>Leaderboard</span>
 			</a>
 		</li>
-		<li class="hidden px-4">
+		<li class="px-4">
 			<a
 				href="/org"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/org'
+					.pathname === '/docs'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<Users size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Organizations</span>
+				<BookOpenText size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Documentation</span>
 			</a>
 		</li>
 	</ul>
