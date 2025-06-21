@@ -12,7 +12,7 @@
 </script>
 
 <article
-	class="prose prose-lg mx-auto w-full rounded-lg p-6 lg:shadow-md"
+	class="prose prose-lg w-full rounded-lg"
 	style="--primary-color: {theme.darkTheme ? display.dark : display.light}"
 >
 	{@html content}

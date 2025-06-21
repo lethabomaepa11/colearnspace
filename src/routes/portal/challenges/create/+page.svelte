@@ -4,6 +4,7 @@
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
+	import { uploadImage } from '$lib/server/projects/main';
 	import { appState, theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import moment from 'moment';
@@ -37,23 +38,6 @@
 			code += characters.charAt(Math.floor(Math.random() * characters.length));
 		}
 		challenge.code = code;
-	};
-	const uploadImage = async (file) => {
-		try {
-			const fileName = `images/challenges/${Date.now()}-${file.name}`;
-			const { error } = await supabase.storage.from('files').upload(fileName, file);
-
-			if (error) throw error;
-
-			const {
-				data: { publicUrl }
-			} = supabase.storage.from('files').getPublicUrl(fileName);
-
-			return publicUrl;
-		} catch (error) {
-			console.error('Upload error:', error);
-			return null;
-		}
 	};
 
 	const submitChallenge = async (e) => {
@@ -118,7 +102,7 @@
 		if (!challenge.image) {
 			//insert new image
 			if (coverImage) {
-				challenge.image = await uploadImage(coverImage);
+				challenge.image = await uploadImage(coverImage, 'challenges', supabase);
 			}
 			//cannot update image yet
 		}

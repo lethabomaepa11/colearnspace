@@ -1,4 +1,5 @@
 <script>
+	import { uploadImage } from '$lib/server/projects/main';
 	import { theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
@@ -16,24 +17,6 @@
 		value = document.getElementById(id).value;
 	};
 
-	const uploadImage = async (file) => {
-		try {
-			const fileName = `images/${id}/${Date.now()}-${file.name}`;
-			const { error } = await supabase.storage.from('files').upload(fileName, file);
-
-			if (error) throw error;
-
-			const {
-				data: { publicUrl }
-			} = supabase.storage.from('files').getPublicUrl(fileName);
-
-			return publicUrl;
-		} catch (error) {
-			console.error('Upload error:', error);
-			return null;
-		}
-	};
-
 	onMount(() => {
 		handleEditorValueChange();
 
@@ -41,7 +24,7 @@
 			const attachment = event.attachment;
 			if (attachment.file) {
 				event.preventDefault();
-				const url = await uploadImage(attachment.file);
+				const url = await uploadImage(attachment.file, id, supabase);
 
 				if (url) {
 					attachment.setAttributes({

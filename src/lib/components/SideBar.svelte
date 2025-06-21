@@ -10,7 +10,10 @@
 		Store,
 		Swords,
 		Trophy,
-		Users
+		CodeXml,
+		Users,
+		Book,
+		BookOpenText
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -76,6 +79,21 @@
 		</li>
 		<li class="px-4">
 			<a
+				href="/portal/projects"
+				class="{sideBar.open
+					? 'flex-row'
+					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+					'/portal/projects'
+				)
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<CodeXml size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Projects</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
 				href="/portal/courses"
 				class="{sideBar.open
 					? 'flex-row'
@@ -119,18 +137,18 @@
 				<span class={!sideBar.open && 'text-xs'}>Leaderboard</span>
 			</a>
 		</li>
-		<li class="hidden px-4">
+		<li class="px-4">
 			<a
-				href="/org"
+				href="/docs"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/org'
+					.pathname === '/docs'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
-				<Users size={20} />
-				<span class={!sideBar.open && 'text-xs'}>Organizations</span>
+				<BookOpenText size={20} />
+				<span class={!sideBar.open && 'text-xs'}>Documentation</span>
 			</a>
 		</li>
 	</ul>
