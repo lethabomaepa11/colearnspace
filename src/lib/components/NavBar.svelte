@@ -11,7 +11,15 @@
 	import BackButtonHeader from './BackButtonHeader.svelte';
 	let { user } = $props();
 	const infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
-	const mainPages = ['/portal', '/dashboard', '/portal/challenges', '/portal/courses']; //pages that do not need a back button on mobile
+	const mainPages = [
+		'/portal',
+		'/dashboard',
+		'/portal/challenges',
+		'/portal/courses',
+		'/portal/leaderboard',
+		'/portal/search',
+		'/portal/projects'
+	]; //pages that do not need a back button on mobile
 
 	let localCourse = $state();
 	let pathname = $state(page.url.pathname);
@@ -194,7 +202,7 @@
 
 			{#if user?.isLoggedIn}
 				<div class="dropdown dropdown-left" role="button">
-					<button class="btn btn-primary btn-circle hidden text-base text-white md:flex">
+					<button class="btn btn-primary btn-circle flex text-base text-white">
 						{#if user?.user_metadata?.avatar_url}
 							<img
 								src={user.user_metadata.avatar_url}
@@ -210,7 +218,7 @@
 			{:else}
 				<a
 					href="/auth/login?goto={page.url.pathname}"
-					class="btn btn-primary btn-circle hidden text-base text-white md:flex"><LogIn /></a
+					class="btn btn-primary btn-circle flex text-base text-white"><LogIn /></a
 				>
 			{/if}
 		</div>

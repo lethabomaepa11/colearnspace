@@ -6,7 +6,7 @@ import { getUserIdOrGhost, getUserIdOrNull } from "../user";
 
 //get all projects
 export const getProjects = async(supabase: SupabaseClient) => {
-    const {data: projects, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links").order('created_at', { ascending: false });
+    const {data: projects, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links, created_at").order('created_at', { ascending: false });
     if (error) {
         console.log(error);
     }
@@ -25,7 +25,7 @@ export const getProjectsByUserId = async(user_id: string,supabase: SupabaseClien
 
 //get a project by its ID
 export const getProject = async(id:string,supabase: SupabaseClient) => {
-    const {data: project, error} = await supabase.from("project").select("*,user(name,username)").eq('id', id);
+    const {data: project, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links,user(name,username),created_at").eq('id', id);
     if (error) {
         console.log(error);
     }

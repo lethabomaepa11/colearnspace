@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { course, currentUser } from '$lib/states.svelte';
-	import { Code, Home, LogIn, LucideBook, PlusCircle, Swords, User } from '@lucide/svelte';
+	import { Code, CodeXml, Home, LogIn, LucideBook, PlusCircle, Swords, User } from '@lucide/svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
@@ -22,12 +22,15 @@
 			<Home />
 			<span class="dock-label">Discover</span>
 		</a>
+
 		<a
-			href="/portal/courses"
-			class="{page.url.pathname === '/portal/courses' ? 'dock-active text-primary' : ''} dock-label"
+			href="/portal/projects"
+			class="{page.url.pathname.includes('/portal/projects')
+				? 'dock-active text-primary'
+				: ''} dock-label"
 		>
-			<LucideBook />
-			<span class="dock-label">Courses</span>
+			<CodeXml />
+			<span class="dock-label">Projects</span>
 		</a>
 		<div class="dock-label">
 			<div class="dropdown dropdown-top dropdown-center">
@@ -55,42 +58,22 @@
 			</div>
 		</div>
 		<a
+			href="/portal/courses"
+			class="{page.url.pathname.includes('/portal/courses')
+				? 'dock-active text-primary'
+				: ''} dock-label"
+		>
+			<LucideBook />
+			<span class="dock-label">Courses</span>
+		</a>
+		<a
 			href="/portal/challenges"
-			class="{page.url.pathname === '/portal/challenges'
+			class="{page.url.pathname.includes('/portal/challenges')
 				? 'dock-active text-primary'
 				: ''} dock-label"
 		>
 			<Swords />
 			<span class="dock-label">Challenges</span>
 		</a>
-
-		{#if user?.isLoggedIn}
-			<div
-				class="{page.url.pathname === '/dashboard' ? 'dock-active text-primary' : ''} dock-label"
-			>
-				<div class="dropdown dropdown-top dropdown-center">
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<div tabindex="0" class="flex cursor-pointer flex-col items-center gap-2">
-						{#if user?.user_metadata?.avatar_url}
-							<img
-								src={user.user_metadata.avatar_url}
-								alt="user avatar"
-								class="h-8 w-8 rounded-full object-cover"
-							/>
-						{:else}
-							<User />
-						{/if}
-						<span class="dock-label">You</span>
-					</div>
-					<AvatarDropDown {user} />
-				</div>
-			</div>
-		{:else}
-			<a
-				href="/auth/login?goto={page.url.pathname}"
-				class="{page.url.pathname === '/auth/login' ? 'dock-active text-primary' : ''} dock-label"
-				><LogIn /> <span class="dock-label">Login</span></a
-			>
-		{/if}
 	</div>
 {/if}

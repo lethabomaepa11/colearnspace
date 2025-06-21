@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { appState } from '$lib/states.svelte';
-	import { ArrowBigUp, MessageCircleDashed } from '@lucide/svelte';
+	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
 
 	//set the header of the app
@@ -29,7 +29,11 @@
 					class="hover:bg-base-200/60 flex w-full flex-col items-center gap-3 rounded-2xl p-3 lg:flex-row lg:justify-between"
 				>
 					<article class="flex items-center gap-3">
-						<img src={project.image} alt="logo" class="aspect-square h-full max-h-36 rounded-2xl" />
+						<img
+							src={project.image}
+							alt="logo"
+							class="aspect-square h-full max-h-[64px] rounded-2xl"
+						/>
 						<span class="space-y-2">
 							<h2>{project.title}</h2>
 							<p class="text-sm">
@@ -50,7 +54,7 @@
 								goto('/portal/projects/{1}#comments');
 							}}
 						>
-							<MessageCircleDashed /> 12
+							<MessageCircle /> 12
 						</button>
 						<button
 							class="btn btn-md btn-outline"
