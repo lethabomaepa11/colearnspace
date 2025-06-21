@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
-	const { isLoggedIn, submission } = data;
+	const { isLoggedIn, submission, comments, feature } = data;
 	const items = [];
 	for (let i = 0; i < 10; i++) {
 		items.push(i);
@@ -48,10 +48,7 @@
 			vote.up = false;
 		}
 	};
-	const feature = {
-		id: data.challenge.id,
-		name: 'challenge_submission'
-	};
+
 	onMount(() => {
 		appState.loadingStates.portal = false;
 	});
@@ -87,7 +84,7 @@
 			id="downvote"
 			class="btn {vote.down ? 'btn-primary' : 'btn-ghost'} text-xs"><ArrowBigDown /> 0</button
 		>
-		<button class="btn btn-ghost text-xs"><MessageCircle /> 0</button>
+		<button class="btn btn-ghost text-xs"><MessageCircle /> {comments.length}</button>
 	</section>
-	<Comments {isLoggedIn} {feature} />
+	<Comments {isLoggedIn} {feature} data={comments} />
 </main>

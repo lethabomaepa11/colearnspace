@@ -3,13 +3,21 @@
 	import CommentInput from '$lib/components/CommentInput.svelte';
 	import Comments from '$lib/components/Comments.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
+	import { toggleUpVote } from '$lib/server/upvotes/main.js';
 	import { appState } from '$lib/states.svelte';
+	import { supabase } from '$lib/supabaseClient.js';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
 
 	const { data } = $props();
-	const { project, feature, comments, isLoggedIn } = data;
+	const { feature, comments, isLoggedIn } = data;
+	let project = $state(data.project);
 	appState.setAppTitle('Project');
+	const handleUpVote = async () => {
+		const data = await toggleUpVote(feature, supabase);
+		project.userHasVoted = !project.userHasVoted;
+		project.upvote_count = project.upvote_count + (project.userHasVoted ? 1 : -1);
+	};
 </script>
 
 <svelte:head>
@@ -40,23 +48,19 @@
 					</span>
 				</article>
 				<section class="flex w-full gap-1 lg:w-fit">
+					<a href="#comments" class="btn btn-md btn-outline">
+						<MessageCircle />
+						{comments.length}
+					</a>
 					<button
-						class="btn btn-md btn-outline"
+						class="btn btn-md {project.userHasVoted ? 'btn-primary' : 'btn-outline'}"
 						onclick={(e) => {
 							e.preventDefault();
-							goto('/portal/projects/{1}#comments');
+							handleUpVote();
 						}}
 					>
-						<MessageCircle /> 12
-					</button>
-					<button
-						class="btn btn-md btn-outline"
-						onclick={(e) => {
-							e.preventDefault();
-							alert('Voting not yet available');
-						}}
-					>
-						<ArrowBigUp /> 12
+						<ArrowBigUp />
+						{project.upvote_count}
 					</button>
 				</section>
 			</div>

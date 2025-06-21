@@ -8,7 +8,6 @@
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		const data = await submitComment(comment, parentId, feature, supabase);
-		console.log(data);
 	};
 </script>
 

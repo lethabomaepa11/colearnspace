@@ -9,7 +9,6 @@ export const load = async({params, locals: {supabase}}) => {
         };
     //fetch comments for this project
     const comments = await getCommentsForFeature(feature, supabase);
-    console.log(comments)
     
     return {project: project.project,feature, comments: comments.comments};
 }

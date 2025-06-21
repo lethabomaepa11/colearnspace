@@ -10,7 +10,6 @@
 		replyId = id;
 		showReplyInput = true;
 	};
-	console.log(data);
 </script>
 
 <div class=" block space-y-3">
