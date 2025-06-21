@@ -2,13 +2,19 @@
 export const getUserIdOrNull = async(supabase) => {
     let {data: {user}} = await supabase.auth.getUser();
     if(user) return user.id
-    //try different approach, usually when this is called from client side instead of server
+    try{
     const res = await fetch("/api/user",{
-        method: "GET",
-    })
-    user = await res.json();
-    user = user.user;
-    if(user) return user.id
+            method: "GET",
+        })
+        user = await res.json();
+        user = user.user;
+        if(user) return user.id
+    }catch(e){
+        return null;
+    }
+    
+    //try different approach, usually when this is called from client side instead of server
+    
     
     return null;
 }

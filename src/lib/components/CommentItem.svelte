@@ -12,7 +12,7 @@
 	};
 </script>
 
-<div class=" block space-y-3">
+<div class=" block space-y-3" transition:slide>
 	<div class="flex items-center gap-2">
 		<div class="avatar">
 			<div class="w-10 rounded-full">

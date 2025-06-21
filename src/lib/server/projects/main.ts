@@ -19,8 +19,13 @@ export const getProjects = async(supabase: SupabaseClient) => {
         upvotes = await getUpvotesForFeature({ id: projects[i].id, name: "project" }, supabase);
 
         upvoteUserIds = new Set(upvotes.data?.map((upvote) => upvote.user.id));
-
-        projects[i].userHasVoted = upvoteUserIds.has(await getUserIdOrNull(supabase));
+        const user_id = await getUserIdOrNull(supabase);
+        if(user_id){
+            projects[i].userHasVoted = upvoteUserIds.has(user_id);
+        }
+        else{
+            projects[i].userHasVoted = false
+        }
         projects[i].upvote_count = upvotes.data?.length;
         projects[i].comment_count = comments.comments?.length;
 
