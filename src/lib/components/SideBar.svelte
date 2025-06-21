@@ -139,7 +139,7 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/org"
+				href="/docs"
 				class="{sideBar.open
 					? 'flex-row'
 					: 'flex-col'} flex items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
