@@ -4,7 +4,7 @@
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
-	import { uploadImage } from '$lib/server/projects/main';
+	import { uploadImage } from '$lib';
 	import { appState, theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import moment from 'moment';

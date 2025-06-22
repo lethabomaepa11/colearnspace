@@ -1,5 +1,4 @@
 <script>
-	import { submitComment } from '$lib/server/comments/main';
 	import { supabase } from '$lib/supabaseClient';
 	import Loading from './Loading.svelte';
 
@@ -10,7 +9,12 @@
 	const onSubmit = async (e) => {
 		isLoading = true;
 		e.preventDefault();
-		const data = await submitComment(comment, parentId, feature, supabase);
+		const res = await fetch(`/api/projects/comments?name=${feature.name}&id=${feature.id}`, {
+			method: 'POST',
+			body: JSON.stringify({ comment, parentId })
+		});
+		const data = await res.json();
+
 		if (!data.error) {
 			isLoading = false;
 			comment = '';

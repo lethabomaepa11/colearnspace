@@ -1,6 +1,5 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { toggleUpVote } from '$lib/server/upvotes/main.js';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
@@ -13,7 +12,8 @@
 	let projects = $state(data.projects);
 	const handleUpVote = async (id, index) => {
 		const feature = { id, name: 'project' };
-		const data = await toggleUpVote(feature, supabase);
+		const res = await fetch('/api/projects/upvotes?name=project&id=' + id, { method: 'POST' });
+		const response = await res.json();
 		projects[index].userHasVoted = !projects[index].userHasVoted;
 		projects[index].upvote_count =
 			projects[index].upvote_count + (projects[index].userHasVoted ? 1 : -1);
