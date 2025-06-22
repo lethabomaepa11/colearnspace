@@ -7,10 +7,7 @@ export const POST = async ({locals: {supabase}, request}) => {
     const data = await createproject(supabase, project);
     return json({success: true, data: data.project})
 }
-export type UserProjects = {
-    api_key: string;
-    num_projects: number;
-}
+
 export const GET = async({locals: {supabase}, url}) => {
     //get a number of projects
 }
