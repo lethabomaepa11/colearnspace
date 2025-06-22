@@ -61,29 +61,13 @@ export const getProject = async(id:string,supabase: SupabaseClient) => {
     return {project: project[0]}
 }
 
-export const uploadImage = async (file: File,folder: string, supabase: SupabaseClient) => {
-		try {
-			const fileName = `images/${folder}/${Date.now()}-${file.name}`;
-			const { error } = await supabase.storage.from('files').upload(fileName, file);
 
-			if (error) throw error;
-
-			const {
-				data: { publicUrl }
-			} = supabase.storage.from('files').getPublicUrl(fileName);
-
-			return publicUrl;
-		} catch (error) {
-			console.error('Upload error:', error);
-			return null;
-		}
-	};
 
 export type projectData = {
     title: string;
     description: string;
     content: string;
-    image: File;
+    image: string;
     technologies: string[];
     links: string[];
 }
@@ -96,25 +80,21 @@ export const createproject = async(supabase: SupabaseClient, projectData: projec
     if(!user_id){//sometimes it is not null but might be invalid
         return {error: "User not logged in"};
     }
-    //upload the image first then proceed with the rest
-    const image_url = await uploadImage(projectData.image,"user_project_logo",supabase);
-    if(!image_url){
-        return {error: "Failed to upload image"};
-    }
+
     const {data: project, error} = await supabase.from("project").insert({
         title: projectData.title,
         content: projectData.content,
         description: projectData.description,
         technologies: projectData.technologies,
         links: projectData.links,
-        image: image_url,
+        image: projectData.image,
         user_id: user_id,
     })
     .select("*,user(name,username)").single();
     if (error) {
-        return {error};
+        return {error, success: false};
     }
 
     //returns a single object
-    return {project}
+    return {project, success: true}
 }

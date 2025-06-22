@@ -1,6 +1,6 @@
 <script>
+	import { uploadImage } from '$lib';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
-	import { createproject } from '$lib/server/projects/main';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Link, X } from '@lucide/svelte';
@@ -32,8 +32,22 @@
 	const publishProject = async (e) => {
 		e.preventDefault();
 		project.technologies = project.technologies.split(',');
-		const data = await createproject(supabase, project);
-		console.log(data);
+		//upload the image from client side
+		//upload the image first then proceed with the rest
+		const image_url = await uploadImage(project.image, 'user_project_logo', supabase);
+		if (!image_url) {
+			return { error: 'Failed to upload image' };
+		}
+		project.image = image_url;
+		const res = await fetch('/api/projects', {
+			method: 'POST',
+			body: JSON.stringify({ project })
+		});
+		const data = await res.json();
+		if (data.success) {
+			alert('Project created successfully');
+		}
+		//console.log(data);
 	};
 </script>
 

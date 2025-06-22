@@ -3,8 +3,6 @@
 	import CommentInput from '$lib/components/CommentInput.svelte';
 	import Comments from '$lib/components/Comments.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
-	import { getCommentsForFeature } from '$lib/server/comments/main.js';
-	import { getUpvotesForFeature, toggleUpVote } from '$lib/server/upvotes/main.js';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
@@ -16,24 +14,33 @@
 	let project = $state(data.project);
 	appState.setAppTitle('Project');
 	const handleUpVote = async () => {
-		const data = await toggleUpVote(feature, supabase);
+		const res = await fetch('/api/projects/upvotes?name=project&id=' + feature.id, {
+			method: 'POST'
+		});
+		const response = await res.json();
 		project.userHasVoted = !project.userHasVoted;
 		project.upvote_count = project.upvote_count + (project.userHasVoted ? 1 : -1);
 	};
 
 	export const commentSubscription = supabase
-		.channel('room1')
+		.channel('commentsRoom')
 		.on('postgres_changes', { event: '*', schema: 'public', table: 'comment' }, async (payload) => {
 			//comments.push(payload.new);
-			comments = await getCommentsForFeature(feature, supabase);
+			const res = await fetch('/api/projects/comments?name=project&id=' + feature.id, {
+				method: 'GET'
+			});
+			comments = await res.json();
 			comments = comments.comments;
 		})
 		.subscribe();
 	export const upvoteSubscription = supabase
-		.channel('room2')
+		.channel('upVotesRoom')
 		.on('postgres_changes', { event: '*', schema: 'public', table: 'upvote' }, async (payload) => {
 			//comments.push(payload.new);
-			project.upvote_count = await getUpvotesForFeature(feature, supabase);
+			const res = await fetch('/api/projects/upvotes?name=project&id=' + feature.id, {
+				method: 'GET'
+			});
+			project.upvote_count = await res.json();
 			project.upvote_count = project.upvote_count.data.length;
 		})
 		.subscribe();

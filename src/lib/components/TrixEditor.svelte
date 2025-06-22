@@ -1,5 +1,5 @@
 <script>
-	import { uploadImage } from '$lib/server/projects/main';
+	import { uploadImage } from '$lib';
 	import { theme } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
