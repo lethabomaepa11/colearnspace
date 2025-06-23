@@ -2,10 +2,12 @@
 	import BackButtonHeader from '$lib/components/BackButtonHeader.svelte';
 	import CommentInput from '$lib/components/CommentInput.svelte';
 	import Comments from '$lib/components/Comments.svelte';
+	import Loading from '$lib/components/Loading.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	const { data } = $props();
@@ -22,18 +24,7 @@
 		project.upvote_count = project.upvote_count + (project.userHasVoted ? 1 : -1);
 	};
 
-	export const commentSubscription = supabase
-		.channel('commentsRoom')
-		.on('postgres_changes', { event: '*', schema: 'public', table: 'comment' }, async (payload) => {
-			//comments.push(payload.new);
-			const res = await fetch('/api/projects/comments?name=project&id=' + feature.id, {
-				method: 'GET'
-			});
-			comments = await res.json();
-			comments = comments.comments;
-		})
-		.subscribe();
-	export const upvoteSubscription = supabase
+	const upvoteSubscription = supabase
 		.channel('upVotesRoom')
 		.on('postgres_changes', { event: '*', schema: 'public', table: 'upvote' }, async (payload) => {
 			//comments.push(payload.new);
@@ -42,8 +33,33 @@
 			});
 			project.upvote_count = await res.json();
 			project.upvote_count = project.upvote_count.data.length;
-		})
-		.subscribe();
+		});
+	const loadMoreRequest = async (offset) => {
+		const res = await fetch(
+			`/api/projects/comments?limit=10&offset=${offset}&name=project&id=${feature.id}`,
+			{
+				method: 'GET'
+			}
+		);
+		return res;
+	};
+	onMount(async () => {
+		const res = await fetch('/api/projects/comments?limit=4&name=project&id=' + feature.id, {
+			method: 'GET'
+		});
+		comments = await res.json();
+		comments = comments.comments;
+		const res2 = await fetch('/api/projects/comments?count=true&name=project&id=' + feature.id, {
+			method: 'GET'
+		});
+		const data = await res2.json();
+		comments.count = data.count;
+
+		upvoteSubscription.subscribe();
+	});
+	onDestroy(() => {
+		upvoteSubscription.unsubscribe();
+	});
 </script>
 
 <svelte:head>
@@ -90,8 +106,13 @@
 					<span>
 						<a href="#comments" class="btn btn-md btn-outline">
 							<MessageCircle />
-							{comments.length}
+							{#if comments}
+								{comments?.count}
+							{:else}
+								<div class="loading loading-spinner"></div>
+							{/if}
 						</a>
+
 						<button
 							transition:slide
 							class="btn btn-md {project.userHasVoted ? 'btn-primary' : 'btn-outline'}"
@@ -125,6 +146,10 @@
 			{/each}
 		</div>
 		<TrixDisplay content={project.content} />
-		<Comments {isLoggedIn} {feature} data={comments} />
+		{#if !comments}
+			<Loading text="Loading comments..." />
+		{:else}
+			<Comments {isLoggedIn} {feature} data={comments} {loadMoreRequest} />
+		{/if}
 	</div>
 </section>

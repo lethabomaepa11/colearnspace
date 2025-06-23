@@ -7,8 +7,7 @@ export const load = async({params, locals: {supabase}}) => {
             id: project.project.id,
             name: 'project'
         };
-    //fetch comments for this project
-    const comments = await getCommentsForFeature(feature, supabase);
+    //fetch comments for this project from the client side, use lazy loading there
     
-    return {project: project.project,feature, comments: comments.comments};
+    return {project: project.project,feature};
 }

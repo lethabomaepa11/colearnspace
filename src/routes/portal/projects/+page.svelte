@@ -1,8 +1,10 @@
 <script>
 	import { goto } from '$app/navigation';
+	import Loading from '$lib/components/Loading.svelte';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	//set the header of the app
@@ -10,6 +12,8 @@
 
 	const { data } = $props();
 	let projects = $state(data.projects);
+	let isLoadingMore = $state(false);
+	let allProjectsLoaded = $state(false);
 	const handleUpVote = async (id, index) => {
 		const feature = { id, name: 'project' };
 		const res = await fetch('/api/projects/upvotes?name=project&id=' + id, { method: 'POST' });
@@ -17,6 +21,76 @@
 		projects[index].userHasVoted = !projects[index].userHasVoted;
 		projects[index].upvote_count =
 			projects[index].upvote_count + (projects[index].userHasVoted ? 1 : -1);
+	};
+
+	//upvoteSubscription
+	//commentcount subscription
+	const upvoteSubscription = supabase
+		.channel('projectUpvotes')
+		.on(
+			'postgres_changes',
+			{
+				event: 'INSERT',
+				schema: 'public',
+				table: 'upvote'
+			},
+			(payload) => {
+				const { feature_id } = payload.new;
+				const project = projects.find((p) => p.id === feature_id);
+				if (project) project.upvote_count++;
+			}
+		)
+		.on(
+			'postgres_changes',
+			{
+				event: 'DELETE',
+				schema: 'public',
+				table: 'upvote'
+			},
+			(payload) => {
+				const { feature_id } = payload.old;
+				const project = projects.find((p) => p.id === feature_id);
+				if (project && project.upvote_count > 0) project.upvote_count--;
+			}
+		);
+	const commentCountSubscription = supabase.channel('projectComments').on(
+		'postgres_changes',
+		{
+			event: 'INSERT',
+			schema: 'public',
+			table: 'comment',
+			filter: 'is_reply=eq.false' // only top-level comments
+		},
+		(payload) => {
+			const { feature_id } = payload.new;
+			const project = projects.find((p) => p.id === feature_id);
+			if (project) project.comment_count++;
+		}
+	);
+
+	//subscribe to the realtime channels onMount and unsubscribe onDestroy
+	onMount(() => {
+		commentCountSubscription.subscribe();
+		upvoteSubscription.subscribe();
+	});
+	onDestroy(() => {
+		commentCountSubscription.unsubscribe();
+		upvoteSubscription.unsubscribe();
+	});
+
+	const loadMore = async () => {
+		isLoadingMore = true;
+		const offset = projects.length;
+		const res = await fetch(`/api/projects?limit=10&offset=${offset}&name=project&`, {
+			method: 'GET'
+		});
+		let newProjects = await res.json();
+		console.log(newProjects);
+		if (newProjects.data.length < 10) {
+			allProjectsLoaded = true;
+		}
+		projects = [...projects, ...newProjects.data];
+		isLoadingMore = false;
 	};
 </script>
 
@@ -60,7 +134,7 @@
 							class="btn btn-md btn-outline"
 							onclick={(e) => {
 								e.preventDefault();
-								goto('/portal/projects/{1}#comments');
+								goto(`/portal/projects/${project.id}#comments`);
 							}}
 						>
 							<MessageCircle />
@@ -79,6 +153,13 @@
 					</section>
 				</a>
 			{/each}
+			{#if isLoadingMore}
+				<Loading text="Loading more projects..." />
+			{:else if allProjectsLoaded}
+				<p class="text-center text-xs">No more projects to display...</p>
+			{:else}
+				<button class="btn btn-ghost w-full" onclick={loadMore}>Load more</button>
+			{/if}
 		</div>
 	</div>
 </section>

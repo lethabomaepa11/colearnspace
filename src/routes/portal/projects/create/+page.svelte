@@ -1,15 +1,23 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { uploadImage } from '$lib';
+	import Modal from '$lib/components/Modal.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Link, X } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 
 	const metaContent = 'Showcase your project on ColearnSpace';
 	const MAX_NUM_LINKS = 3;
+	let error = $state({ title: '', message: '' });
+	let progress = $state({ title: '', message: '' });
+	let { data } = $props();
+	const { isLoggedIn } = data;
+	let hasAutoSaved = $state(false);
 	//set the header of the app
 	appState.setAppTitle('Create');
-	const project = $state({
+	let project = $state({
 		title: '',
 		description: '',
 		content:
@@ -31,24 +39,81 @@
 	};
 	const publishProject = async (e) => {
 		e.preventDefault();
+		if (!isLoggedIn) {
+			error.title = 'You need to login to create a project';
+			error.message = `Click on the orange login button on the top right corner to login<br/>
+				Your project has been saved in localstorage, you can still edit it.
+		`;
+			document.getElementById('errorModal').show();
+			localStorage.setItem('project', JSON.stringify(project));
+			return;
+		}
+		progress.title = 'Submitting Project';
+		progress.message = 'Please wait...';
+		document.getElementById('progressModal').show();
+		//split the technologies into an array
 		project.technologies = project.technologies.split(',');
 		//upload the image from client side
 		//upload the image first then proceed with the rest
+		progress.message = 'Uploading your image...';
 		const image_url = await uploadImage(project.image, 'user_project_logo', supabase);
+
 		if (!image_url) {
-			return { error: 'Failed to upload image' };
+			document.getElementById('progressModal').close();
+			error.title = 'Failed to upload your image';
+			error.message =
+				'Failed to upload your image, please make sure the file is less than 5mb, and try again.';
+			document.getElementById('errorModal').show();
+			return;
 		}
 		project.image = image_url;
+		progress.message = 'Finishing up...';
 		const res = await fetch('/api/projects', {
 			method: 'POST',
 			body: JSON.stringify({ project })
 		});
 		const data = await res.json();
 		if (data.success) {
-			alert('Project created successfully');
+			progress.message = 'Project created successfully...';
+			progress.title = 'Project Created, Redirecting...';
+			document.getElementById('progressModal').close();
+			localStorage.removeItem('project'); //remove any locally saved project
+			goto(`/portal/projects/${data.data.id}`);
+		} else {
+			errorMessage = data.message;
+			document.getElementById('errorModal').show();
 		}
 		//console.log(data);
 	};
+	const fileLimitError = () => {
+		error.title = 'Max File Size Exceeded';
+		error.message =
+			'Failed to upload your image, please make sure the file is less than 5mb, and try again.';
+		document.getElementById('errorModal').show();
+	};
+	const fileTypeError = () => {
+		error.title = 'Invalid File Type';
+		error.message =
+			'Failed to upload your image, please make sure the file is an image, and try again.';
+		document.getElementById('errorModal').show();
+	};
+	const autoSave = () => {
+		localStorage.setItem('project', JSON.stringify(project));
+		hasAutoSaved = true;
+		setTimeout(clearHasAutoSaved, 2000);
+	};
+	const clearHasAutoSaved = () => {
+		hasAutoSaved = false;
+	};
+
+	onMount(() => {
+		if (localStorage.getItem('project')) {
+			project = JSON.parse(localStorage.getItem('project'));
+			progress.title = 'Welcome Back!';
+			progress.message = 'Your project was saved on your localstorage, you can still edit it.';
+			document.getElementById('progressModal').show();
+		}
+	});
 </script>
 
 <!--SEO-->
@@ -61,8 +126,23 @@
 	<!-- Open Graph Meta Tags for Link Previews -->
 	<meta property="og:title" content="Showcase a project  | ColearnSpace" />
 </svelte:head>
-
-<form onsubmit={publishProject} class="space-y-4 p-5 py-20">
+<Modal title={progress.title} id="progressModal">
+	<p class="text-info">{progress.message}</p>
+</Modal>
+<Modal title={error.title} id="errorModal">
+	<p class=" text-error">{@html error.message ? error.message : 'Something went wrong'}</p>
+	<button
+		class="btn btn-primary w-full"
+		onclick={() => document.getElementById('errorModal').close()}>Close</button
+	>
+</Modal>
+{#if hasAutoSaved}
+	<div role="alert" class="alert alert-info alert-soft fixed right-0 bottom-0 z-50">
+		<span>Project Auto Saved</span>
+		<span class="loading loading-infinity"></span>
+	</div>
+{/if}
+<form onchange={autoSave} onsubmit={publishProject} class="space-y-4 p-5 py-20">
 	<div class="from-accent to-primary w-full rounded-2xl bg-gradient-to-br p-5">
 		<h2 class="text-2xl">Showcase your project</h2>
 		<code class="font-mono text-xs"
@@ -129,6 +209,16 @@
 					minlength="5"
 					onchange={(e) => {
 						project.image = e.target.files[0];
+						if (project.image.size > 5000000) {
+							e.target.value = null;
+							project.image = null;
+							fileLimitError();
+						}
+						if (!project.image.type.includes('image/')) {
+							e.target.value = null;
+							project.image = null;
+							fileTypeError();
+						}
 					}}
 				/>
 			</div>
