@@ -2,6 +2,10 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+export type QueryOptions = {
+    limit: number,
+    offset: number,
+}
 export const getFeature = (url: URL) => {
     return {
         name: url.searchParams.get('name'),
