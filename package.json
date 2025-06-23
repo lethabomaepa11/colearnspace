@@ -44,6 +44,7 @@
 		"@sentry/sveltekit": "^9.19.0",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.49.4",
+		"marked": "^15.0.12",
 		"melt": "^0.29.3",
 		"moment": "^2.30.1"
 	}
