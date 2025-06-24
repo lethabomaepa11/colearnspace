@@ -1,4 +1,5 @@
 import { getFeature } from '$lib';
+import { recalculateRanks } from '$lib/server/projects/reCalculateRanks.js';
 import { getUpvotesForFeature, toggleUpVote } from '$lib/server/upvotes/main.js';
 import { json } from '@sveltejs/kit';
 

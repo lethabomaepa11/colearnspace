@@ -13,7 +13,7 @@
 	const metaContent = 'Showcase your project on ColearnSpace';
 	const MAX_NUM_LINKS = 3; //Maximum number of allowed links
 	let error = $state({ title: '', message: '' }); //error object
-	let progress = $state({ title: '', message: '' }); //progress object, display info about something or progress
+	let progress = $state({ title: '', message: '', active: false }); //progress object, display info about something or progress
 	let { data } = $props(); //data from props
 	const { isLoggedIn } = data; //logged_in state
 	let hasAutoSaved = $state(false); //tracks if the project has been autosaved
@@ -81,7 +81,6 @@
 			displayError('Invalid github repo url', 'Please enter a valid github repo url');
 			return;
 		}
-		progress.message = 'Valid github repo...';
 
 		const [owner, repo] = [match[1], match[2]];
 		const base = `https://api.github.com/repos/${owner}/${repo}`;
@@ -124,6 +123,7 @@
 			projectCreation.github = false;
 			projectCreation.new = false;
 			document.getElementById('progressModal').close();
+			autoSave();
 		} catch (e) {
 			error.title = 'Error fetching GitHub data';
 			displayError(error.title, e.message);
@@ -155,9 +155,11 @@
 		autoSave();
 	};
 	const publishProject = async (e) => {
+		progress.active = true;
 		e.preventDefault();
 		//Check if the user is logged in, if not, show an error
 		if (!isLoggedIn) {
+			progress.active = false;
 			error.title = 'You need to login to create a project';
 			error.message = `Click on the orange login button on the top right corner to login<br/>
 				Your project has been saved in localstorage, you can still edit it.
@@ -180,6 +182,7 @@
 
 		//If image is not uploaded, close the progress modal and show an error
 		if (!image_url) {
+			progress.active = false;
 			document.getElementById('progressModal').close();
 			error.title = 'Failed to upload your image';
 			error.message =
@@ -206,6 +209,7 @@
 			goto(`/portal/projects/${data.data.id}`); //redirect to the project page
 		} else {
 			//close the progress modal and show an error if the project was not created successfully
+			progress.active = false;
 			document.getElementById('progressModal').close();
 			error.title = 'Error creating project...';
 			errorMessage = data.message;
@@ -349,7 +353,7 @@
 			</div>
 		{/if}
 	</article>
-{:else}
+{:else if !progress.active}
 	<form onchange={autoSave} onsubmit={publishProject} class="flex flex-col items-center gap-4 p-5">
 		<div class="from-accent to-primary w-full rounded-2xl bg-gradient-to-br p-5 lg:w-2/3">
 			<h2 class="text-2xl">Showcase your project</h2>

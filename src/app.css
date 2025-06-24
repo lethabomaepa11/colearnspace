@@ -16,6 +16,7 @@
     default: true;
     --color-primary: #FC6519;
   }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: "Poetsen One", cursive;
     font-weight: 400;

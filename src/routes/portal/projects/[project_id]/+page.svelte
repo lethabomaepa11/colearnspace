@@ -16,7 +16,7 @@
 	let project = $state(data.project);
 	appState.setAppTitle('Project');
 	const handleUpVote = async () => {
-		const res = await fetch('/api/projects/upvotes?name=project&id=' + feature.id, {
+		const res = await fetch('/api/upvotes?name=project&id=' + feature.id, {
 			method: 'POST'
 		});
 		const response = await res.json();
@@ -28,28 +28,20 @@
 		.channel('upVotesRoom')
 		.on('postgres_changes', { event: '*', schema: 'public', table: 'upvote' }, async (payload) => {
 			//comments.push(payload.new);
-			const res = await fetch('/api/projects/upvotes?name=project&id=' + feature.id, {
+			const res = await fetch('/api/upvotes?name=project&id=' + feature.id, {
 				method: 'GET'
 			});
 			project.upvote_count = await res.json();
 			project.upvote_count = project.upvote_count.data.length;
 		});
-	const loadMoreRequest = async (offset) => {
-		const res = await fetch(
-			`/api/projects/comments?limit=10&offset=${offset}&name=project&id=${feature.id}`,
-			{
-				method: 'GET'
-			}
-		);
-		return res;
-	};
+
 	onMount(async () => {
-		const res = await fetch('/api/projects/comments?limit=4&name=project&id=' + feature.id, {
+		const res = await fetch('/api/comments?limit=4&name=project&id=' + feature.id, {
 			method: 'GET'
 		});
 		comments = await res.json();
 		comments = comments.comments;
-		const res2 = await fetch('/api/projects/comments?count=true&name=project&id=' + feature.id, {
+		const res2 = await fetch('/api/comments?count=true&name=project&id=' + feature.id, {
 			method: 'GET'
 		});
 		const data = await res2.json();
@@ -102,7 +94,7 @@
 				<section
 					class="flex w-full items-center justify-between gap-2 lg:w-fit lg:flex-col lg:justify-baseline"
 				>
-					<h2 class="text-2xl" transition:slide>Rank: #1</h2>
+					<h2 class="text-2xl" transition:slide>Rank: #{project.rank}</h2>
 					<span>
 						<a href="#comments" class="btn btn-md btn-outline">
 							<MessageCircle />
@@ -149,7 +141,7 @@
 		{#if !comments}
 			<Loading text="Loading comments..." />
 		{:else}
-			<Comments {isLoggedIn} {feature} data={comments} {loadMoreRequest} />
+			<Comments {isLoggedIn} {feature} bind:data={comments} />
 		{/if}
 	</div>
 </section>

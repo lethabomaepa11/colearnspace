@@ -35,13 +35,10 @@
 	article :global(blockquote) {
 		@apply border-l-4 pl-4 italic;
 		border-color: var(--primary-color); /* user color for left border */
-		color: #555; /* keep text readable */
 	}
 
 	article :global(pre) {
 		@apply rounded p-2 font-mono text-sm;
-		border: 1px solid var(--primary-color); /* subtle color accent */
-		color: #333; /* avoid coloring all code text */
 	}
 
 	article :global(a) {
