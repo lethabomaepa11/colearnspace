@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import Seo from '$lib/components/SEO.svelte';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
 	import { appState } from '$lib/states.svelte';
 
@@ -27,15 +28,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>Create a Topic | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="Create a Topic | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="Create a Topic | ColearnSpace" />
-</svelte:head>
+<Seo title="New Topic | ColearnSpace" desc={metaContent} />
 <form onsubmit={handleSubmit} method="POST" class="space-y-4">
 	<h2>New Topic</h2>
 	<span class="flex w-full flex-col items-start justify-between gap-5 lg:flex-row">

@@ -9,6 +9,7 @@
 	import { ArrowBigUp, MessageCircle } from '@lucide/svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	const { data } = $props();
 	const { feature, isLoggedIn } = data;
@@ -54,11 +55,10 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{project.title} by {project.user.name} {project.user.surname} | ColearnSpace</title>
-	<meta name="description" content={project.description} />
-</svelte:head>
-
+<Seo
+	title="{project.title} by {project.user.name} {project.user.surname} | ColearnSpace"
+	desc={project.description}
+/>
 <section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-20 md:w-[80svw]">
 	<div class="w-full">
 		<div class="flex flex-col">

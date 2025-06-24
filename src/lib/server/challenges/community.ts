@@ -19,7 +19,7 @@ export const getTopics = async(challengeSlug:string, supabase: SupabaseClient) =
 export const getTopic = async(id:string,supabase: SupabaseClient) => {
     const {data: topic, error} = await supabase.from("challenge_topics").select("*,user(name,username)").eq('id', id);
     if (error) {
-        return {error status: 500};
+        return {error, status: 500};
     }
     return {topic: topic[0]} //return a single object
 }

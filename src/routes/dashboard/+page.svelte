@@ -1,4 +1,5 @@
 <script>
+	import Seo from '$lib/components/SEO.svelte';
 	import { appState, currentUser } from '$lib/states.svelte.js';
 	import { supabase } from '$lib/supabaseClient.js';
 	import { onMount } from 'svelte';
@@ -23,10 +24,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Dashboard | ColearnSpace</title>
-	<meta name="description" content="CoLearnSpace user's dashboard page" />
-</svelte:head>
+<Seo title="Dashboard | ColearnSpace" desc="Dashboard" />
 
 <div class="p-5 py-20">
 	<h2>

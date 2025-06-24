@@ -1,3 +1,9 @@
+<script>
+	import Seo from '$lib/components/SEO.svelte';
+</script>
+
+<Seo title="404 | ColearnSpace" desc="404 | Page could not be found" />
+
 <div class="bg-gradient-to-r from-slate-200 to-gray-200 dark:from-gray-800">
 	<div class="flex min-h-screen items-center justify-center px-2">
 		<div class="text-center">

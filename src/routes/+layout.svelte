@@ -58,11 +58,6 @@
 	});
 </script>
 
-<svelte:head>
-	<meta property="og:url" content={page.url.href} />
-	<meta property="og:type" content="website" />
-	<meta name="twitter:card" content="summary_large_image" />
-</svelte:head>
 {#if isLoading}
 	<main class="flex min-h-screen items-center justify-center">
 		<Loading />

@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
 	import { appState } from '$lib/states.svelte';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let submission = $state({
 		title: '',
@@ -28,15 +29,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>Create a submission | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="Create a submission | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="Create a submission | ColearnSpace" />
-</svelte:head>
+<Seo title="Create a Submission | ColearnSpace" desc={metaContent} />
 
 <form onsubmit={handleSubmit} class="space-y-4">
 	<h2>New Submission</h2>

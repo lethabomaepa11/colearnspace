@@ -6,6 +6,7 @@
 	import { ArrowLeft, Youtube } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 
@@ -52,16 +53,10 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{thisModule.title}</title>
-	<meta name="description" content="{thisModule.title} module of {course.title} course" />
-	<meta property="og:image" content="/favicon.png" />
-	<meta property="og:description" content="{thisModule.title} module of {course.title} course" />
-	<meta property="og:title" content={thisModule.title} />
-	<meta name="twitter:title" content={thisModule.title} />
-	<meta name="twitter:description" content="{thisModule.title} module of {course.title} course" />
-	<meta name="twitter:image" content="/favicon.png" />
-</svelte:head>
+<Seo
+	title="{thisModule.title} | ColearnSpace"
+	desc="{thisModule.title} module of {course.title} course"
+/>
 {#if isLoading}
 	<main class="flex min-h-screen w-full items-center justify-center">
 		<Loading text="Loading Module" textClass="text-2xl font-bold" />

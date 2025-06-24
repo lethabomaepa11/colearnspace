@@ -5,19 +5,13 @@
 	import { ArrowLeft, Clock } from '@lucide/svelte';
 	import moment from 'moment';
 	import { fly, slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { children, data } = $props();
 	const challenge = data.challenge;
 </script>
 
-<svelte:head>
-	<meta property="og:image" content={data.challenge.image} />
-
-	<!-- Twitter Card (for better previews on Twitter) -->
-	<meta name="twitter:card" content="summary_large_image" />
-
-	<meta name="twitter:image" content={data.challenge.image} />
-</svelte:head>
+<Seo title="{challenge.title} | ColearnSpace" />
 <main transition:fly class="flex w-full flex-col gap-2">
 	<BackButtonHeader title={challenge.title} />
 	<p class="text-sm">
