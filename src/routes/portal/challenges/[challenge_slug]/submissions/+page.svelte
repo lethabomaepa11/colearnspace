@@ -1,6 +1,7 @@
 <script>
 	import moment from 'moment';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 	const challenge = data.challenge;
@@ -9,15 +10,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>{data.challenge.title} Submissions | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="{data.challenge.title} Submissions | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="{data.challenge.title} Submissions | ColearnSpace" />
-</svelte:head>
+<Seo title="{data.challenge.title} Submissions | ColearnSpace" desc={metaContent} />
 
 <main transition:slide>
 	{#if moment(challenge.start_date).isAfter(moment())}

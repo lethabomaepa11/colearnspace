@@ -3,7 +3,7 @@
 	import Project from '$lib/components/Project.svelte';
 	import { appState } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient.js';
-
+	import Seo from '$lib/components/SEO.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
@@ -86,10 +86,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>Projects | ColearnSpace</title>
-	<meta name="description" content="Explore a wide range of user projects on ColearnSpace" />
-</svelte:head>
+<Seo title="Projects | ColearnSpace" desc="Projects" />
 {#if isSyncingProjects}
 	<div
 		transition:slide

@@ -7,6 +7,7 @@
 	import { ArrowLeft, Youtube } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 	let isLoading = $state(false);
@@ -43,16 +44,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>{course.title} | ColearnSpace</title>
-	<meta name="description" content="{course.title} course on ColearnSpace" />
-	<meta property="og:image" content="/favicon.png" />
-	<meta property="og:description" content="{course.title} course on ColearnSpace" />
-	<meta property="og:title" content="{course.title} | ColearnSpace" />
-	<meta name="twitter:title" content="{course.title} | ColearnSpace" />
-	<meta name="twitter:description" content="{course.title} course on ColearnSpace" />
-	<meta name="twitter:image" content="/favicon.png" />
-</svelte:head>
+<Seo title="{course.title} | ColearnSpace" desc="{course.title} course on ColearnSpace" />
 
 {#if isLoading}
 	<Loading />

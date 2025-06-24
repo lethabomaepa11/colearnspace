@@ -9,6 +9,7 @@
 	import { onMount } from 'svelte';
 	import { marked } from 'marked';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	//VARIABLES
 	const metaContent = 'Showcase your project on ColearnSpace';
@@ -263,15 +264,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>Showcase a project | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="Showcase a project  | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="Showcase a project  | ColearnSpace" />
-</svelte:head>
+<Seo title="Create Project | ColearnSpace" desc="Create a new project on ColearnSpace" />
 <!--Modals-->
 <!--Progress Modal-->
 <Modal title={progress.title} id="progressModal">

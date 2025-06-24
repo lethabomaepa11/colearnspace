@@ -33,7 +33,7 @@
 </script>
 
 <svelte:head>
-	<title>{$formattedTitle}</title>
+	<title>{title}</title>
 	<meta name="description" content={desc} />
 
 	<meta name="twitter:card" content="summary_large_image" />

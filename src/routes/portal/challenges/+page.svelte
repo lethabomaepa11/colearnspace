@@ -3,6 +3,7 @@
 	import { appState } from '$lib/states.svelte.js';
 	import moment from 'moment';
 	import { onMount } from 'svelte';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 	const challenges = data.challenges;
@@ -15,10 +16,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Challenges | ColearnSpace</title>
-	<meta name="description" content="Explore a wide range of tech challenges on ColearnSpace" />
-</svelte:head>
+<Seo title="Challenges | ColearnSpace" desc="Challenges" />
 <main class="flex w-full flex-wrap gap-5 overflow-hidden">
 	{#if !appState.isMobile}
 		<BackButtonHeader title="Challenges" />

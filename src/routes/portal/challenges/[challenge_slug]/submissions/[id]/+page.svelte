@@ -4,6 +4,7 @@
 	import Comments from '$lib/components/Comments.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { appState } from '$lib/states.svelte.js';
+	import Seo from '$lib/components/SEO.svelte';
 	import {
 		ArrowBigDown,
 		ArrowBigUp,
@@ -56,15 +57,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>{submission.title} submission | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="{submission.title} submission | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="{submission.title} submission | ColearnSpace" />
-</svelte:head>
+<Seo title="{submission.title} | ColearnSpace" desc={metaContent} />
 
 <main class="space-y-3">
 	<h2>{submission.title}</h2>

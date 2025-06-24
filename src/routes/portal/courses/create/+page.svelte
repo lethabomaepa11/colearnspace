@@ -7,6 +7,7 @@
 	import { Info } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 
@@ -61,10 +62,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Create a Course | ColearnSpace</title>
-	<meta name="description" content="Create a course on ColearnSpace" />
-</svelte:head>
+<Seo title="Create a Course | ColearnSpace" desc="Create a course on ColearnSpace" />
 <Modal title="Getting Started" id="infoModal">
 	<div class="collapse-arrow bg-base-100 border-base-300 collapse border">
 		<input type="radio" name="my-accordion-2" checked />

@@ -9,6 +9,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import moment from 'moment';
 	import { onMount } from 'svelte';
+	import Seo from '$lib/components/SEO.svelte';
 
 	appState.setAppTitle('Create');
 	let challenge = $state({
@@ -123,15 +124,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>Create challenge | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="Create challenge | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="Create challenge | ColearnSpace" />
-</svelte:head>
+<Seo title="Create a Challenge | ColearnSpace" desc={metaContent} />
 
 <Modal title={error.title} id="errorModal">
 	<p class=" text-error">{error.message}</p>
