@@ -58,10 +58,9 @@
 
 	trix-editor {
 		min-height: 200px;
-		border: 1px solid #ddd;
 		border-radius: 0.5rem;
 		padding: 1rem;
-		@apply w-full;
+		@apply wrap-anywhere;
 	}
 
 	trix-editor :global(h1) {
@@ -71,13 +70,10 @@
 	trix-editor :global(blockquote) {
 		@apply border-l-4 pl-4 italic;
 		border-color: var(--primary-color); /* user color for left border */
-		color: #555; /* keep text readable */
 	}
 
 	trix-editor :global(pre) {
-		@apply rounded p-2 font-mono text-sm;
-		border: 1px solid var(--primary-color); /* subtle color accent */
-		color: #333; /* avoid coloring all code text */
+		@apply my-4 rounded bg-gray-800 p-2 font-mono text-sm text-white;
 	}
 
 	trix-editor :global(a) {

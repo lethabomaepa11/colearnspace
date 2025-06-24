@@ -1,6 +1,7 @@
 // place files you want to import through the `$lib` alias in this folder.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { feature } from "./server/comments/main";
 
 export type QueryOptions = {
     limit: number,
@@ -29,3 +30,13 @@ export const uploadImage = async (file: File,folder: string, supabase: SupabaseC
             return null;
         }
     };
+
+    export const loadMoreRequest = async (feature: feature,limit:number = 10,offset:number = 0) => {
+		const res = await fetch(
+			`/api/comments?limit=${limit}&offset=${offset}&name=${feature.name}&id=${feature.id}`,
+			{
+				method: 'GET'
+			}
+		);
+		return res;
+	};

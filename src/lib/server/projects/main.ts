@@ -3,13 +3,14 @@ import { getUserIdOrNull } from "../user";
 import {  getCountCommentsForFeature } from "../comments/main";
 import { getUpvotesForFeature } from "../upvotes/main";
 import type { QueryOptions } from "$lib";
+import { recalculateRanks } from "./reCalculateRanks";
 
 
 
 //get all projects
 export const getProjects = async(supabase: SupabaseClient, options:QueryOptions = {limit: 5, offset: 0}) => {
     const {data: projects, error} = await supabase.from("project")
-    .select("id,title, content, image, technologies, description,links, created_at")
+    .select("id,title, content, image, technologies, description,links, created_at, rank, score")
     .order('created_at', { ascending: false })
     .range(options.offset, options.offset + options.limit -1 );
     if (error) {
@@ -51,7 +52,7 @@ export const getProjectsByUserId = async(user_id: string,supabase: SupabaseClien
 
 //get a project by its ID
 export const getProject = async(id:string,supabase: SupabaseClient) => {
-    const {data: project, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links,user(name,username),created_at").eq('id', id);
+    const {data: project, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links,user(name,username),created_at, rank,score").eq('id', id);
     if (error) {
         console.log(error);
     }
@@ -101,6 +102,8 @@ export const createproject = async(supabase: SupabaseClient, projectData: projec
         return {error, success: false};
     }
 
+    //recalculate the project ranks
+    await recalculateRanks(supabase);
     //returns a single object
     return {project, success: true}
 }

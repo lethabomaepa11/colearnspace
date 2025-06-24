@@ -3,8 +3,9 @@
 	import CommentInput from './CommentInput.svelte';
 	import CommentItem from './CommentItem.svelte';
 	import Loading from './Loading.svelte';
+	import { loadMoreRequest } from '$lib';
 	/** @type {{ isLoggedIn: boolean; feature: {id: string, name: string}; data: comments[]; loadMoreRequest: Function;}}*/
-	let { isLoggedIn, feature, data, loadMoreRequest } = $props();
+	let { isLoggedIn, feature, data = $bindable() } = $props();
 	/**
 	 * @typedef loadMoreRequest(offset) : request an api that fetches comments for a feature in this function
 	 */
@@ -17,10 +18,12 @@
 	 */
 	let isLoadingMore = $state(false);
 	let allCommentsLoaded = $state(false);
-	const loadMore = async () => {
+	let parentId = $state(null); //shared prop between this component, CommentItem and CommentInput components
+
+	const loadMore = async (offset) => {
 		isLoadingMore = true;
-		const offset = data.length;
-		const res = await loadMoreRequest(offset);
+		offset = offset.length > 0 ? offset : data.length; //this method will be called from the loadmore btn and the comments input
+		const res = await loadMoreRequest(feature, 10, offset);
 		let comments = await res.json();
 		if (comments.comments.length < 10) {
 			allCommentsLoaded = true;
@@ -30,34 +33,48 @@
 	};
 </script>
 
-<CommentInput {isLoggedIn} {feature} />
+<CommentInput {isLoggedIn} {feature} {loadMore} bind:data bind:parentId />
 
 <!--Comment section-->
 <section id="comments">
 	<span class="flex items-center justify-between">
 		<h2 class="text-xl">Comments</h2>
 	</span>
-	<ul class="menu menu-md rounded-box w-full">
+	<ul class="menu menu-md rounded-box w-full space-y-5">
 		{#each data as comment}
 			{#if comment.comment.length > 0}
 				<li>
-					<details open>
-						<summary><CommentItem {isLoggedIn} {feature} data={comment} /> </summary>
-						<ul>
-							{#each comment.comment as reply}
-								<li><CommentItem {isLoggedIn} {feature} data={reply} /></li>
-							{/each}
-						</ul>
-					</details>
+					<summary class="w-full"
+						><CommentItem
+							{isLoggedIn}
+							{feature}
+							data={comment}
+							bind:comments={data}
+							bind:parentId
+						/>
+					</summary>
+					<ul class="w-full space-y-5">
+						{#each comment.comment as reply}
+							<li>
+								<CommentItem
+									{isLoggedIn}
+									{feature}
+									data={reply}
+									bind:comments={data}
+									bind:parentId
+								/>
+							</li>
+						{/each}
+					</ul>
 				</li>
 			{:else}
 				<li>
-					<CommentItem {isLoggedIn} {feature} data={comment} />
+					<CommentItem {isLoggedIn} {feature} data={comment} bind:comments={data} bind:parentId />
 				</li>
 			{/if}
 		{/each}
 		{#if isLoadingMore}
-			<Loading text="Loading more comments..." />
+			<Loading text="Loading comments..." />
 		{:else if allCommentsLoaded}
 			<p class="text-center text-xs">No more comments...</p>
 		{:else}

@@ -11,6 +11,7 @@ export type Upvote = {
 }
 
 export const toggleUpVote = async (feature: feature, supabase: SupabaseClient) => {
+    
     const user_id = await getUserIdOrNull(supabase);
     if(!user_id){
         return {error: "User not logged in"}

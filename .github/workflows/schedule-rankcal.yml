@@ -1,0 +1,15 @@
+name: Scheduled Rank Recalculation
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch: # allows manual run too
+
+jobs:
+  call-netlify-function:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Netlify Function
+        run: |
+          curl -X GET https://colearnspace.netlify.app/.netlify/functions/recalculateRanks

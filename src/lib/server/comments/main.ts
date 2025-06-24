@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getUserIdOrNull } from "../user";
 import type { QueryOptions } from "$lib";
+import { recalculateRanks } from "../projects/reCalculateRanks";
 
 /**
  * @description A feature can either be challenge_submission, or project
@@ -49,7 +50,7 @@ export const submitComment = async(comment: string, parentId:string, feature: fe
 export const getCommentsForFeature = async(feature: feature,supabase: SupabaseClient, options:QueryOptions = {limit: 15, offset: 0}) => {
     //fetch comments along with their replies, the limit passed on and the offset to determine the range
     const {data:comments, error} = await supabase.from("comment")
-    .select("*,user(name,username),comment(*,user(name,username))")
+    .select("*,user(name,username),comment(*,user(name,username)),created_at")
     .eq('feature_type', feature.name)
     .eq('feature_id', feature.id)
     .eq('is_reply', false)

@@ -11,15 +11,7 @@
 
 	let { children, data } = $props();
 	let sessionUser = $state(data.user);
-	let isUserOnline = $state(true);
-	const checkOnlineStatus = async () => {
-		try {
-			const response = await fetch('https://fakerapi.it/api/v1/texts?_quantity=1&_characters=20');
-			return response.status >= 200 && response.status < 300;
-		} catch (error) {
-			return false; //the user is most likely offline (not connected to the internet)
-		}
-	};
+
 	let isLoading = $state(true);
 	onMount(async () => {
 		isLoading = false;
@@ -63,9 +55,6 @@
 				localStorage.setItem('anon_user', crypto.randomUUID());
 			}
 		}
-		setInterval(async () => {
-			isUserOnline = await checkOnlineStatus();
-		}, 30000);
 	});
 </script>
 
@@ -80,18 +69,6 @@
 	</main>
 {:else}
 	<main class="">
-		{#if !isUserOnline}
-			<div transition:fly={{ y: 20, duration: 300 }} class="toast toast-bottom z-50">
-				<!-- Keep your existing DaisyUI markup unchanged -->
-				<div
-					class="notification alert alert-error mb-2 flex items-center gap-3 rounded-lg p-4 text-sm font-medium shadow-lg"
-				>
-					Connection Lost <br />
-					<Loading text="Reconnecting..." textClass="text-md" />
-				</div>
-			</div>
-		{/if}
-
 		<NavBar user={sessionUser} />
 		{@render children()}
 		<BottomNav user={sessionUser} />
