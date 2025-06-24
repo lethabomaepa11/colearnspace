@@ -25,7 +25,6 @@
 	function switchVideo(index) {
 		currentIndex = index;
 		currentVideo = thisModule.module_videos[index];
-		console.log(currentVideo);
 	}
 	function handleNextModule() {
 		if (page.params.slug !== 'preview') {
@@ -101,7 +100,9 @@
 						<ul class="grid w-full space-y-3">
 							{#each thisModule.module_videos as video, i}
 								<button
-									class="hover:bg-primary flex w-full cursor-pointer items-center gap-2 rounded-md py-2 text-sm font-medium transition hover:text-white"
+									class="hover:bg-primary {currentIndex === i
+										? 'bg-primary text-white'
+										: ''} flex w-full cursor-pointer items-center gap-2 rounded-md py-2 text-sm font-medium transition hover:text-white"
 									onclick={() => switchVideo(i)}
 								>
 									{i + 1}.

@@ -9,12 +9,13 @@ import { recalculateRanks } from "./reCalculateRanks";
 
 //get all projects
 export const getProjects = async(supabase: SupabaseClient, options:QueryOptions = {limit: 5, offset: 0}) => {
+    options.limit = options.limit ? options.limit : 5;
     const {data: projects, error} = await supabase.from("project")
-    .select("id,title, content, image, technologies, description,links, created_at, rank, score")
+    .select("id,title, image, technologies, description,links, created_at, rank, score")
     .order('created_at', { ascending: false })
     .range(options.offset, options.offset + options.limit -1 );
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
     //get comment count and upvote count for each project and return an array of projects with comment count
     let comments, upvotes, upvoteUserIds;
@@ -38,13 +39,13 @@ export const getProjects = async(supabase: SupabaseClient, options:QueryOptions 
     return {projects}
 }
 //get all projects by by a user_id
-export const getProjectsByUserId = async(user_id: string,supabase: SupabaseClient, options:QueryOptions = {limit: 20, offset: 0}) => {
-    const {data: projects, error} = await supabase.from("project").select("*").
-    eq('user_id', user_id)
-    .order('created_at', { ascending: false })
-    .range(options.offset, options.offset + options.limit -1 );
+export const getProjectsByUserId = async(user_id: string,supabase: SupabaseClient, options:QueryOptions) => {
+    let query = supabase.from("project").select("id,title,image,links,technologies,description,created_at, rank, score").eq('user_id', user_id).order('created_at', { ascending: false });
+    query = options.limit ? query.range(options.offset, options.offset + options.limit -1 ) : query;
+    const {data: projects, error} = await query;
+    
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
     //returns an array
     return {projects}
@@ -54,7 +55,7 @@ export const getProjectsByUserId = async(user_id: string,supabase: SupabaseClien
 export const getProject = async(id:string,supabase: SupabaseClient) => {
     const {data: project, error} = await supabase.from("project").select("id,title, content, image, technologies, description,links,user(name,username),created_at, rank,score").eq('id', id);
     if (error) {
-        console.log(error);
+        return {error: error.message, status: 500};
     }
     const comments = await getCountCommentsForFeature({ id: project[0].id, name: "project" }, supabase);
     const upvotes = await getUpvotesForFeature({ id: project[0].id, name: "project" }, supabase);
@@ -65,7 +66,7 @@ export const getProject = async(id:string,supabase: SupabaseClient) => {
     project[0].upvote_count = upvotes.data?.length
     project[0].comment_count = comments.count;
     //returns a single object
-    return {project: project[0]}
+    return {project: project[0], status: 200}
 }
 
 
@@ -83,7 +84,6 @@ export type projectData = {
 export const createproject = async(supabase: SupabaseClient, projectData: projectData) => {
 
     const user_id = await getUserIdOrNull(supabase);
-    console.log(user_id)
     if(!user_id){//sometimes it is not null but might be invalid
         return {error: "User not logged in"};
     }

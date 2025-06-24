@@ -7,7 +7,6 @@ export const POST = async ({ request,locals:{supabase} }) => {
             password: user.password,
           })
           if (error) {
-            console.log(error)
             return json({success:false, error: error.code });
           }
           return json({success:true});
