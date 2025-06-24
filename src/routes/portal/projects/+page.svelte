@@ -13,6 +13,7 @@
 	const { data } = $props();
 	let projects = $state(null);
 	let isLoadingMore = $state(false);
+	let isSyncingProjects = $state(false);
 	let allProjectsLoaded = $state(false);
 
 	//upvoteSubscription
@@ -39,11 +40,12 @@
 		if (localStorage.getItem('projects')) {
 			projects = JSON.parse(localStorage.getItem('projects'));
 			isLoadingMore = false;
+			isSyncingProjects = true;
 			//then proceed to fetch fresh data from the api in the background
 		}
 		commentCountSubscription.subscribe();
 		try {
-			const res = await fetch(`/api/projects`, {
+			const res = await fetch(`/api/projects?is_public=true`, {
 				method: 'GET'
 			});
 			let newProjects = await res.json();
@@ -51,7 +53,7 @@
 				allProjectsLoaded = true;
 			}
 			projects = newProjects.data;
-
+			isSyncingProjects = false;
 			//set the projects in the localstorage for next time incase the api is slow
 			localStorage.setItem('projects', JSON.stringify(projects));
 		} catch (error) {
@@ -67,9 +69,12 @@
 	const loadMore = async () => {
 		isLoadingMore = true;
 		const offset = projects.length;
-		const res = await fetch(`/api/projects?limit=10&offset=${offset}&name=project&`, {
-			method: 'GET'
-		});
+		const res = await fetch(
+			`/api/projects?is_public=true&limit=10&offset=${offset}&name=project&`,
+			{
+				method: 'GET'
+			}
+		);
 		let newProjects = await res.json();
 		if (newProjects.data.length < 10) {
 			allProjectsLoaded = true;
@@ -85,7 +90,16 @@
 	<title>Projects | ColearnSpace</title>
 	<meta name="description" content="Explore a wide range of user projects on ColearnSpace" />
 </svelte:head>
-
+{#if isSyncingProjects}
+	<div
+		transition:slide
+		role="alert"
+		class="alert alert-info alert-soft fixed right-0 bottom-0 z-50"
+	>
+		<span>Syncing projects...</span>
+		<span class="loading loading-infinity"></span>
+	</div>
+{/if}
 <section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-20 md:w-[80svw]">
 	<div class="mx-auto max-w-7xl">
 		<div class="from-accent to-primary mb-4 w-full rounded-2xl bg-gradient-to-l p-5">
@@ -100,7 +114,7 @@
 				<Loading text="Loading projects..." />
 			{:else if allProjectsLoaded}
 				<p class="text-center text-xs">No more projects to display...</p>
-			{:else}
+			{:else if !isSyncingProjects}
 				<button class="btn btn-outline mt-10 w-full" onclick={loadMore}>Load more</button>
 			{/if}
 		</div>

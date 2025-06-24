@@ -10,7 +10,7 @@ export const getTopics = async(challengeSlug:string, supabase: SupabaseClient) =
     const challengeId = await getChallengeId(challengeSlug,supabase);
     const {data: topics, error} = await supabase.from("challenge_topics").select("*,user(name,username)").eq('challenge_id', challengeId).order('created_at', { ascending: false });
     if (error) {
-        console.log(error);
+        return {error: error.message, status: 500};
     }
     return {topics} //return an array
 }
@@ -19,7 +19,7 @@ export const getTopics = async(challengeSlug:string, supabase: SupabaseClient) =
 export const getTopic = async(id:string,supabase: SupabaseClient) => {
     const {data: topic, error} = await supabase.from("challenge_topics").select("*,user(name,username)").eq('id', id);
     if (error) {
-        console.log(error);
+        return {error status: 500};
     }
     return {topic: topic[0]} //return a single object
 }
@@ -42,7 +42,7 @@ export const createTopic = async(challengeSlug:string, supabase: SupabaseClient,
     })
     .select("*,user(name,username)").single();
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
 
     return {topic}//return a single object

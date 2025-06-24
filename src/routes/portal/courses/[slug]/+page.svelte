@@ -34,7 +34,6 @@
 		if (totalVideos != 0) {
 			thumbnail = course.module.find((mod) => mod.module_videos.length > 0).module_videos[0].id;
 			thumbnail = `https://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`;
-			console.log(course);
 		}
 		isLoading = false;
 	});

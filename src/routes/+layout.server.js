@@ -4,7 +4,6 @@ export const load = async ({locals: {supabase}}) => {
         return {isLoggedIn: true, user};
     }
     else{
-        console.log(await supabase.auth.setUser);
         return {isLoggedIn: false, user: null};
     }
 }

@@ -12,10 +12,8 @@
 			} = await supabase.auth.getUser();
 
 			sessionUser = user;
-			console.log(sessionUser);
 		}
 		if (sessionUser) {
-			console.log(sessionUser);
 			sessionUser.isLoggedIn = true;
 			sessionUser.name =
 				sessionUser?.user_metadata?.first_name ??

@@ -17,40 +17,6 @@
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
-	let courses = [
-		{
-			title: 'HTML, CSS & JavaScript 101',
-			category: 'Web Development',
-			author: 'MusaTech',
-			videoId: 'dD2EISBDjWM',
-			slug: 'web-dev-basics'
-		},
-		{
-			title: 'UI Design Fundamentals',
-			category: 'UI/UX Design',
-			author: 'KeaLearn',
-			videoId: '3a4J2U8vHvg',
-			slug: 'ui-design-fundamentals'
-		},
-		{
-			title: 'Python for Beginners',
-			category: 'Programming',
-			author: 'CodeBro',
-			videoId: 'rfscVS0vtbw',
-			slug: 'python-data-basics'
-		},
-		{
-			title: 'Graphic Design Basics',
-			category: 'Design',
-			author: 'CreativeBae',
-			videoId: '8g3YzN6q7Zk',
-			slug: 'graphic-design-basics'
-		}
-	];
-	let categories = ['All', ...new Set(courses.map((c) => c.category))];
-	onMount(() => {
-		sideBar.open = localStorage.getItem('sbstate') === 'true';
-	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->

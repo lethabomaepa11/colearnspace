@@ -87,7 +87,6 @@ export let course = $state({
 		}).select();
 		// all modules of that course
 		if(!courseError && courses.length > 0) {
-			console.log(localModules)
 			localModules.forEach(async(mod) => {
 				const { data: modules, error: moduleError } = await supabase.from('module').insert({
 					title: mod.title,

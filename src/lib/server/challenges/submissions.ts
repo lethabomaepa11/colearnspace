@@ -10,7 +10,7 @@ export const getSubmissions = async(challengeSlug:string, supabase: SupabaseClie
     const challengeId = await getChallengeId(challengeSlug,supabase);
     const {data: submissions, error} = await supabase.from("challenge_submission").select("*,user(name,username)").eq('challenge_id', challengeId).order('created_at', { ascending: false });
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
     //returns an array
     return {submissions}
@@ -20,7 +20,7 @@ export const getSubmissions = async(challengeSlug:string, supabase: SupabaseClie
 export const getSubmission = async(id:string,supabase: SupabaseClient) => {
     const {data: submission, error} = await supabase.from("challenge_submission").select("*,user(name,username)").eq('id', id);
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
     //returns a single object
     return {submission: submission[0]}
@@ -47,7 +47,7 @@ export const createSubmission = async(challengeSlug:string, supabase: SupabaseCl
     })
     .select("*,user(name,username)").single();
     if (error) {
-        console.log(error);
+        return {error, status: 500};
     }
 
     //returns a single object

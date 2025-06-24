@@ -45,7 +45,13 @@
 	<div class="flex items-center justify-between px-4 text-xs">
 		<p>{project.upvote_count} Vote{project.upvote_count == 1 ? '' : 's'}</p>
 		<span class="flex items-center gap-3">
-			<p>{project.comment_count} Comment{project.comment_count == 1 ? '' : 's'}</p>
+			<button
+				class="link"
+				onclick={(e) => {
+					e.preventDefault();
+					goto(`/portal/projects/${project.id}#comments`);
+				}}>{project.comment_count} Comment{project.comment_count == 1 ? '' : 's'}</button
+			>
 			<p>Rank: #{project.rank}</p>
 		</span>
 	</div>

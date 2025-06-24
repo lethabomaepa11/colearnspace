@@ -8,6 +8,7 @@
 	import { ArrowLeft, Github, Link, X } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { marked } from 'marked';
+	import { slide } from 'svelte/transition';
 
 	//VARIABLES
 	const metaContent = 'Showcase your project on ColearnSpace';
@@ -288,7 +289,11 @@
 
 <!--Auto Save Notification-->
 {#if hasAutoSaved}
-	<div role="alert" class="alert alert-info alert-soft fixed right-0 bottom-0 z-50">
+	<div
+		transition:slide
+		role="alert"
+		class="alert alert-info alert-soft fixed right-0 bottom-0 z-50"
+	>
 		<span>Project Auto Saved</span>
 		<span class="loading loading-infinity"></span>
 	</div>
