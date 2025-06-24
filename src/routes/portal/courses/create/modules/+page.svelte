@@ -7,6 +7,7 @@
 	import { error } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import Seo from '$lib/components/SEO.svelte';
 	let course = $state('');
 	let isLoading = $state(false);
 	let errorMessage = $state('');
@@ -176,10 +177,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Add Modules | ColearnSpace</title>
-	<meta name="description" content="Add modules to your course" />
-</svelte:head>
+<Seo title="Create a Course | ColearnSpace" desc="Create a course on ColearnSpace" />
 <Modal title="Something Went Wrong😓" id="errorModal">
 	<p class=" text-error">{@html errorMessage ? errorMessage : 'Something went wrong'}</p>
 	<button

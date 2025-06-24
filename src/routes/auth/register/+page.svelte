@@ -1,5 +1,6 @@
 <script>
 	import Loading from '$lib/components/Loading.svelte';
+	import Seo from '$lib/components/SEO.svelte';
 	import { githubAuth } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Github } from '@lucide/svelte';
@@ -54,13 +55,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>Register | ColearnSpace</title>
-	<meta
-		name="description"
-		content="Register to join the ultimate collaborative learning community"
-	/>
-</svelte:head>
+<Seo title="Register | ColearnSpace" desc="Register to your account" />
 
 <main transition:slide class="flex min-h-screen w-screen flex-col items-center justify-center">
 	<div class="flex w-full flex-col items-center justify-center space-y-2 p-5 lg:w-[400px]">

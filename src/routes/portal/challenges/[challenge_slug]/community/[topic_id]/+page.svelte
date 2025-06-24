@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/state';
+	import Seo from '$lib/components/SEO.svelte';
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	const { data } = $props();
 	const topic = data.topic;
@@ -8,15 +9,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>{topic.title} | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="{topic.title} | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="{topic.title} | ColearnSpace" />
-</svelte:head>
+<Seo title="{topic.title} | ColearnSpace" desc={metaContent} />
 
 <main>
 	<h2>{topic.title}</h2>

@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
+	import Seo from '$lib/components/SEO.svelte';
 	import { githubAuth } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Github, XCircle } from '@lucide/svelte';
@@ -45,13 +46,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>Login | ColearnSpace</title>
-	<meta
-		name="description"
-		content="Login to experience the ultimate collaborative learning community"
-	/>
-</svelte:head>
+<Seo title="Login | ColearnSpace" desc="Login to your account" />
 <Modal title="Successfully logged in" id="successModal">
 	<Loading text="Redirecting you to {redirectTo}..." textClass="text-md" />
 </Modal>

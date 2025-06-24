@@ -2,6 +2,7 @@
 	import TrixEditor from '$lib/components/TrixEditor.svelte';
 	import { appState } from '$lib/states.svelte';
 	import moment from 'moment';
+	import Seo from '$lib/components/SEO.svelte';
 
 	appState.setAppTitle('Community');
 	let { data } = $props();
@@ -11,15 +12,7 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>{data.challenge.title} Community | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="{data.challenge.title} Community | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="{data.challenge.title} Community | ColearnSpace" />
-</svelte:head>
+<Seo title="{data.challenge.title} Community | ColearnSpace" desc={metaContent} />
 
 <section class="flex w-full items-center justify-between">
 	<h1 class="text-2xl font-bold">Discussion</h1>

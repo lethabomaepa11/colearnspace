@@ -4,6 +4,7 @@
 	import TrixDisplay from '$lib/components/TrixDisplay.svelte';
 	import { appState } from '$lib/states.svelte.js';
 	import { ArrowLeft } from '@lucide/svelte';
+	import Seo from '$lib/components/SEO.svelte';
 
 	let { data } = $props();
 	appState.setAppTitle('Challenge');
@@ -11,14 +12,6 @@
 </script>
 
 <!--SEO-->
-<svelte:head>
-	<title>{data.challenge.title} | ColearnSpace</title>
-	<meta name="description" content={metaContent} />
-	<meta property="og:description" content={metaContent} />
-	<meta name="twitter:title" content="{data.challenge.title} | ColearnSpace" />
-	<meta name="twitter:description" content={metaContent} />
-	<!-- Open Graph Meta Tags for Link Previews -->
-	<meta property="og:title" content="{data.challenge.title} | ColearnSpace" />
-</svelte:head>
+<Seo title="{data.challenge.title} | ColearnSpace" desc={metaContent} />
 
 <TrixDisplay content={data.challenge.content} />
