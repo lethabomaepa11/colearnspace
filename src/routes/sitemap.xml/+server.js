@@ -1,20 +1,7 @@
 import { error } from '@sveltejs/kit';
 import * as sitemap from 'super-sitemap';
 
-const processPath = (entry) => {
-	const updatedEntry = {
-		...entry,
-		path: entry.path === '/' ? entry.path : `${entry.path}/`,
-	};
 
-	if (updatedEntry.alternates) {
-		updatedEntry.alternates = updatedEntry.alternates.map((alt) => ({
-			...alt,
-			path: alt.path === '/' ? alt.path : `${alt.path}/`,
-		}));
-	}
-	return updatedEntry;
-};
 
 export const GET = async({ locals: { supabase } }) =>{
 	const origin = 'https://colearnspace.netlify.app';
