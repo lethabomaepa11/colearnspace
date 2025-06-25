@@ -12,6 +12,6 @@
 </script>
 
 <!--SEO-->
-<Seo title="{data.challenge.title} | ColearnSpace" desc={metaContent} />
+<Seo img={data.challenge.image} title="{data.challenge.title} | ColearnSpace" desc={metaContent} />
 
 <TrixDisplay content={data.challenge.content} />

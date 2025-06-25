@@ -58,6 +58,7 @@
 <Seo
 	title="{project.title} by {project.user.name} {project.user.surname} | ColearnSpace"
 	desc={project.description}
+	img={project.image}
 />
 <section transition:slide class="bg-base-100 min-h-screen w-full px-6 py-20 md:w-[80svw]">
 	<div class="w-full">
