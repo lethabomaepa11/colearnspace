@@ -1,11 +1,10 @@
 <script>
 	import { page } from '$app/state';
-	import { course, currentUser } from '$lib/states.svelte';
+	import { course, session } from '$lib/states.svelte';
 	import { Code, CodeXml, Home, LogIn, LucideBook, PlusCircle, Swords, User } from '@lucide/svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
 	import { onMount } from 'svelte';
 	import { fly, slide } from 'svelte/transition';
-	let { user } = $props();
 	let localCourse = $state();
 
 	onMount(() => {

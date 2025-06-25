@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { appState, course, courseSearch, currentUser, sideBar, theme } from '$lib/states.svelte';
+	import { appState, course, courseSearch, session, sideBar, theme } from '$lib/states.svelte';
 	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import SearchBar from './SearchBar.svelte';
@@ -9,7 +9,7 @@
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import BackButtonHeader from './BackButtonHeader.svelte';
-	let { user } = $props();
+	let { isLoggedIn, user } = $props();
 	const infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
 	const mainPages = [
 		'/portal',
@@ -200,13 +200,13 @@
 				{/if}
 			</label>
 
-			{#if user?.isLoggedIn}
+			{#if isLoggedIn}
 				<div class="dropdown dropdown-left" role="button">
-					<button class="btn btn-primary btn-circle flex text-base text-white">
-						{#if user?.user_metadata?.avatar_url}
+					<button class="btn btn-circle flex p-0 text-base text-white">
+						{#if user.avatar}
 							<img
-								src={user.user_metadata.avatar_url}
-								alt="user avatar"
+								src={user.avatar}
+								alt="{user.name} avatar"
 								class="h-8 w-8 rounded-full object-cover"
 							/>
 						{:else}
