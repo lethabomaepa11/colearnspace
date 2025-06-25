@@ -1,70 +1,91 @@
-// src/routes/sitemap.xml/+server.ts
+import { error } from '@sveltejs/kit';
+import * as sitemap from 'super-sitemap';
 
-import { getProjects } from '$lib/server/projects/main';
+const processPath = (entry) => {
+	const updatedEntry = {
+		...entry,
+		path: entry.path === '/' ? entry.path : `${entry.path}/`,
+	};
 
-export async function GET() {
-	const baseUrl = 'https://colearnspace.netlify.app';
+	if (updatedEntry.alternates) {
+		updatedEntry.alternates = updatedEntry.alternates.map((alt) => ({
+			...alt,
+			path: alt.path === '/' ? alt.path : `${alt.path}/`,
+		}));
+	}
+	return updatedEntry;
+};
 
-	// Static Routes
-	const staticRoutes = [
-		'/',
-		'/about',
-		'/contact',
-        '/portal',
-        '/portal/search',
-		'/portal/projects',
-        '/portal/projects/create',
-        '/portal/courses',
-        '/portal/courses/create',
-        '/portal/challenges',
-        '/portal/challenges/create',
-        '/portal/dashboard',
+export const GET = async({ locals: { supabase } }) =>{
+	const origin = 'https://colearnspace.netlify.app';
 
-	];
+	const data = {
+		projectIds: [],
+		courseSlugs: [],
+		moduleSlugs: [],
+		courseModulePairs: [],
+		challengeSlugs: [],
+		submissionIds: [],
+		challengeSubmissionPairs: [],
+		topicIds: [],
+		challengeTopicPairs: [],
+	};
 
-	const staticUrls = staticRoutes
-		.map(
-			(path) => `
-		<url>
-			<loc>${baseUrl}${path}</loc>
-			<changefreq>weekly</changefreq>
-			<priority>0.8</priority>
-		</url>`
-		)
-		.join('');
+	const { data: projects, error: projError } = await supabase
+		.from('project')
+		.select('id')
+		.order('created_at', { ascending: false });
+	if (projError) return error(500, projError.message);
 
-	// Dynamic Routes (e.g. Projects)
-	const projects = await getProjects(); 
-	const dynamicUrls = projects
-		.map(
-			(p) => `
-		<url>
-			<loc>${baseUrl}/portal/projects/${p.id}</loc>
-			<changefreq>monthly</changefreq>
-			<priority>0.6</priority>
-		</url>`
-		)
-		.join('');
+	const { data: challenges, error: chalError } = await supabase
+		.from('challenges')
+		.select('slug, challenge_submission(id), challenge_topics(id)')
+		.order('created_at', { ascending: false });
+	if (chalError) return error(500, chalError.message);
 
-	// Combine and Wrap in XML
-	const xml = `
-<?xml version="1.0" encoding="UTF-8" ?>
-<urlset
-	xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
-	xmlns:xhtml="https://www.w3.org/1999/xhtml"
-	xmlns:mobile="https://www.google.com/schemas/sitemap-mobile/1.0"
-	xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
-	xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
-	xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
->
-	${staticUrls}
-	${dynamicUrls}
-</urlset>
-`.trim();
+	const { data: courses, error: courseError } = await supabase
+		.from('course')
+		.select('slug, module(slug)')
+		.order('created_at', { ascending: false });
+	if (courseError) return error(500, courseError.message);
 
-	return new Response(xml, {
-		headers: {
-			'Content-Type': 'application/xml'
-		}
+	data.projectIds = projects?.map((entry) => entry.id);
+
+	courses?.forEach((course) => {
+		data.courseSlugs.push(course.slug);
+		course?.module?.forEach((module) => {
+			data.moduleSlugs.push(module.slug);
+			data.courseModulePairs.push([course.slug, module.slug]);
+		});
+	});
+
+	challenges?.forEach((challenge) => {
+		data.challengeSlugs.push(challenge.slug);
+
+		challenge.challenge_submission?.forEach((submission) => {
+			data.submissionIds.push(submission.id);
+			data.challengeSubmissionPairs.push([challenge.slug, submission.id]);
+		});
+
+		challenge.challenge_topics?.forEach((topic) => {
+			data.topicIds.push(topic.id);
+			data.challengeTopicPairs.push([challenge.slug, topic.id]);
+		});
+	});
+
+	return await sitemap.response({
+		origin,
+		paramValues: {
+			'/portal/projects/[project_id]': data.projectIds,
+			'/portal/courses/[slug]': data.courseSlugs,
+			'/portal/courses/[slug]/module/[module_slug]': data.courseModulePairs,
+			'/portal/challenges/[challenge_slug]': data.challengeSlugs,
+			'/portal/challenges/[challenge_slug]/submissions': data.challengeSlugs,
+			'/portal/challenges/[challenge_slug]/submissions/new': data.challengeSlugs,
+			'/portal/challenges/[challenge_slug]/submissions/[id]': data.challengeSubmissionPairs,
+			'/portal/challenges/[challenge_slug]/community': data.challengeSlugs,
+			'/portal/challenges/[challenge_slug]/community/new': data.challengeSlugs,
+			'/portal/challenges/[challenge_slug]/community/[topic_id]': data.challengeTopicPairs,
+		},
 	});
 }
