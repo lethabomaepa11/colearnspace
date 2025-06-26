@@ -32,14 +32,6 @@
 	});
 </script>
 
-{#if isLoading}
-	<main class="flex min-h-screen items-center justify-center">
-		<Loading />
-	</main>
-{:else}
-	<main class="">
-		<NavBar {isLoggedIn} {user} />
-		{@render children()}
-		<BottomNav />
-	</main>
-{/if}
+<NavBar {isLoggedIn} {user} />
+{@render children()}
+<BottomNav />
