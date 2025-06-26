@@ -5,10 +5,7 @@ import { sequence } from '@sveltejs/kit/hooks'
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 
-Sentry.init({
-    dsn: "https://05b628c60f79bff3996ebacdbb27e1f3@o4509340724363264.ingest.de.sentry.io/4509340726657104",
-    tracesSampleRate: 1
-})
+
 
 const supabase = async ({ event, resolve }) => {
   /**

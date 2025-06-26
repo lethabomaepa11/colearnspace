@@ -1,9 +1,9 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Loading from '$lib/components/Loading.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import Seo from '$lib/components/SEO.svelte';
-	import { githubAuth } from '$lib/states.svelte';
 	import { supabase } from '$lib/supabaseClient';
 	import { Github, XCircle } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
@@ -14,7 +14,7 @@
 	const login = async (withGithub = false) => {
 		isLoading = true;
 		if (withGithub) {
-			githubAuth.default();
+			location.href = '/auth/github';
 			return;
 		}
 		form.emailError = '';

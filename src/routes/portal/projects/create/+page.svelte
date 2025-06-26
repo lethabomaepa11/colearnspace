@@ -296,6 +296,7 @@
 <div class="join px-5 pt-20">
 	{#if projectCreation.prevState}
 		<button
+			transition:slide
 			class="btn btn-ghost text-error"
 			onclick={() => setProjectCreation(projectCreation.prevState)}
 			><ArrowLeft /> Reset Project</button
@@ -309,7 +310,7 @@
 	>
 		<h2 class="text-2xl">Create a new project</h2>
 		{#if projectCreation.github}
-			<div class="w-full space-y-4 lg:w-2/4">
+			<div transition:slide class="w-full space-y-4 lg:w-2/4">
 				<p>This only works for public github repos</p>
 				<div class="form-control flex w-full flex-col">
 					<label class="label" for="title">
@@ -332,7 +333,7 @@
 			</div>
 		{:else}
 			<p>How do you want to create your project?</p>
-			<div class="flex items-center gap-5">
+			<div transition:slide class="flex items-center gap-5">
 				<button
 					title="Fill in data manually"
 					class="btn btn-primary"
@@ -352,7 +353,12 @@
 		{/if}
 	</article>
 {:else if !progress.active}
-	<form onchange={autoSave} onsubmit={publishProject} class="flex flex-col items-center gap-4 p-5">
+	<form
+		transition:slide
+		onchange={autoSave}
+		onsubmit={publishProject}
+		class="flex flex-col items-center gap-4 p-5"
+	>
 		<div class="from-accent to-primary w-full rounded-2xl bg-gradient-to-br p-5 lg:w-2/3">
 			<h2 class="text-2xl">Showcase your project</h2>
 			<code class="font-mono text-xs"

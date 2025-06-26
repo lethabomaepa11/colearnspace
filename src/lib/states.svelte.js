@@ -51,18 +51,7 @@ export let sideBar = $state({
 	}
 });	
 
-/**This is for github auth */
-export let githubAuth = $state({
-	default:async() => {
-		await supabase.auth.signInWithOAuth({
-		provider: 'github',
-		options: {
-			redirectTo: 'https://colearnspace.netlify.app/dashboard'
-		  }
-		});
-		return;
-}
-})
+
 
 export let course = $state({
 
@@ -119,6 +108,6 @@ export let course = $state({
 
 	})
 
-export let currentUser = $state({
+export let session = $state({
 	user: {isLoggedIn: false},
 });

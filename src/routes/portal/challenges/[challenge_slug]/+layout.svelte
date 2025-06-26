@@ -11,7 +11,11 @@
 	const challenge = data.challenge;
 </script>
 
-<Seo title="{challenge.title} | ColearnSpace" />
+<Seo
+	img={challenge.image}
+	title="{challenge.title} | ColearnSpace"
+	desc="{challenge.title} challenge on ColearnSpace"
+/>
 <main transition:fly class="flex w-full flex-col gap-2">
 	<BackButtonHeader title={challenge.title} />
 	<p class="text-sm">
