@@ -13,7 +13,9 @@
 		CloudCog,
 		Home,
 		LayoutDashboard,
+		Link,
 		LucideBook,
+		NotebookTabs,
 		PlusCircle,
 		Settings,
 		UserCog
@@ -31,16 +33,6 @@
 		 transition {theme.darkTheme ? ' border-gray-700' : ' border-gray-100'}  space-y-2 md:flex"
 >
 	<ul class="space-y-2">
-		<li class="px-4">
-			<a
-				href="/portal"
-				class="hover:bg-base-200 flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors"
-			>
-				<Home size={20} />
-
-				<span>Portal</span>
-			</a>
-		</li>
 		<li class="px-4">
 			<a
 				href="/dashboard"
@@ -69,9 +61,9 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/dashboard"
+				href="/dashboard/profile"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses'
+					.pathname === '/dashboard/profile'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
@@ -80,46 +72,75 @@
 				<span>Profile</span>
 			</a>
 		</li>
-		<li class="px-4">
-			<a
-				href="/dashboard/api"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/api'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<CloudCog size={20} />
 
-				<span>My Projects</span>
-			</a>
+		<li class="px-4">
+			<details open class="space-y-2">
+				<summary><NotebookTabs size={20} /> My Content</summary>
+
+				<ul>
+					<li class="">
+						<a
+							href="/dashboard/projects"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+								'/dashboard/projects'
+							)
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<CloudCog size={20} />
+
+							<span>Projects</span>
+						</a>
+					</li>
+					<li class="">
+						<a
+							href="/dashboard/courses"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+								'/dashboard/courses'
+							)
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<BookKey size={20} />
+
+							<span>Courses</span>
+						</a>
+					</li>
+				</ul>
+			</details>
 		</li>
 		<li class="px-4">
-			<a
-				href="/dashboard/api"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/api'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<BookKey size={20} />
+			<details class="space-y-2">
+				<summary><Link size={20} /> Pages</summary>
 
-				<span>Courses</span>
-			</a>
-		</li>
-		<li class="px-4">
-			<a
-				href="/dashboard/badges"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/badges'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<Award size={20} />
+				<ul>
+					<li class="">
+						<a
+							href="/portal"
+							class="hover:bg-base-200 flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+						>
+							<Home size={20} />
 
-				<span>Badges</span>
-			</a>
+							<span>Portal</span>
+						</a>
+					</li>
+					<li class="">
+						<a
+							href="/docs"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page
+								.url.pathname === '/docs'
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<BookOpenText size={20} />
+							<span>Documentation</span>
+						</a>
+					</li>
+				</ul>
+			</details>
 		</li>
-		<li class="px-4">
+
+		<li class="fixed bottom-5 w-[200px] px-4">
 			<a
 				href="/dashboard/settings"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
@@ -130,18 +151,6 @@
 				<Settings size={20} />
 
 				<span>Settings</span>
-			</a>
-		</li>
-		<li class="px-4">
-			<a
-				href="/docs"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/docs'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<BookOpenText size={20} />
-				<span>Documentation</span>
 			</a>
 		</li>
 	</ul>
