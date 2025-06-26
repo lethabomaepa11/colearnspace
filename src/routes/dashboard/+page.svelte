@@ -10,11 +10,11 @@
 
 <Seo title="Dashboard | ColearnSpace" desc="Dashboard" />
 
-<div>
-	<h2>
-		{isLoggedIn ? 'Welcome to your dashboard ' + userData.name : 'You are not logged in'}
+<div class="flex w-full flex-col items-center">
+	<h2 class="text-xl">
+		Hello {userData.name}
 	</h2>
-	<div class="stats shadow">
+	<div class="stats stats-vertical lg:stats-horizontal shadow">
 		<div class="stat">
 			<div class="stat-figure text-primary">
 				<svg

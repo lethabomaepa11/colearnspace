@@ -4,19 +4,24 @@
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
-	import { appState, session, theme } from '$lib/states.svelte';
-	import { supabase } from '$lib/supabaseClient';
-	import { fly } from 'svelte/transition';
-	import Loading from '$lib/components/Loading.svelte';
+	import { appState, sideBar, theme } from '$lib/states.svelte';
+	import { beforeNavigate } from '$app/navigation';
 
 	let { children, data } = $props();
 	let { isLoggedIn, user } = data;
 
-	let isLoading = $state(true);
-	onMount(async () => {
-		isLoading = false;
+	beforeNavigate(({ from, to }) => {
+		//clear states that need to be cleared on every navigation
+
+		//clearing the mobile sidebars that might be open
+		sideBar.dashboardSideBar = false;
+		sideBar.docsSideBar = false;
+	});
+
+	onMount(() => {
 		//get theme from localstorage
 		theme.darkTheme = localStorage.getItem('darkTheme') === 'true'; //if it is true, set the theme to dark
+
 		//check if the user is on mobile
 		if (screen.availWidth < 768) {
 			appState.isMobile = true;

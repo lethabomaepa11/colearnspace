@@ -7,7 +7,6 @@ export const load = async ({locals: {supabase}}) => {
     if(!user){
         redirect(307,"/portal")
     }
-
     const {userData} = await getUserData(supabase);
     return {userData};
 }

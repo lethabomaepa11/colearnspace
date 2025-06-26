@@ -22,6 +22,7 @@ export let appState = $state({
 })
 
 
+
 export let theme = $state({
 	//the app initial theme state is light
     darkTheme: false,
@@ -41,13 +42,29 @@ export let courseSearch = $state({
 	}
 });
 
+
 /*This is for the desktop sidebar, toggle minimizes the sidebar */
 export let sideBar = $state({
 	open: true,
+	docsSideBar: false,//sidebar for the docs on mobile
+	dashboardSideBar: false,//sidebar for the dashboard on mobile
 	toggle: (pathname) => {
-		if(!pathname.includes('/portal')) return;//only toggle the sidebar if it is visible, its in the layout of /portal/...
-		sideBar.open = !sideBar.open;
-		localStorage.setItem('sbstate', sideBar.open);
+		//the sidebar on desktop in the /portal routes can be expanded
+		if(pathname.includes('/portal') && !appState.isMobile){
+			sideBar.open = !sideBar.open;
+			localStorage.setItem('sbstate', sideBar.open);
+			return;
+		}
+		//sidebar on mobile can be in selected pages, currently docs and dashboard
+		if(pathname.includes('/docs') && appState.isMobile) {
+			sideBar.docsSideBar = !sideBar.docsSideBar;
+			return;
+		}
+		if(pathname.includes('/dashboard') && appState.isMobile) {
+			sideBar.dashboardSideBar = !sideBar.dashboardSideBar;
+			return;
+		}
+		return;
 	}
 });	
 

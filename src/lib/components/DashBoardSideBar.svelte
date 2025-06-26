@@ -18,13 +18,15 @@
 		UserCog
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { slide } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <ul
 	transition:slide
-	class="menu bg-base-100 fixed top-0 left-0 mt-20 hidden h-screen w-[250px] border-r
+	class="menu bg-base-100 fixed top-0 left-0 mt-20 {sideBar.dashboardSideBar
+		? 'fixed z-50 flex'
+		: 'hidden'}  h-screen w-[250px] border-r
 		 transition {theme.darkTheme ? ' border-gray-700' : ' border-gray-100'}  space-y-2 md:flex"
 >
 	<ul class="space-y-2">
@@ -87,7 +89,33 @@
 			>
 				<CloudCog size={20} />
 
-				<span>API Keys</span>
+				<span>My Projects</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/dashboard/api"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/dashboard/api'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<BookKey size={20} />
+
+				<span>Courses</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/dashboard/badges"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/dashboard/badges'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<Award size={20} />
+
+				<span>Badges</span>
 			</a>
 		</li>
 		<li class="px-4">
@@ -101,20 +129,6 @@
 				<Settings size={20} />
 
 				<span>Settings</span>
-			</a>
-		</li>
-
-		<li class="px-4">
-			<a
-				href="/dashboard/badges"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/badges'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<Award size={20} />
-
-				<span>Badges</span>
 			</a>
 		</li>
 	</ul>

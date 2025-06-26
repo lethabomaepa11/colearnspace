@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { appState, course, courseSearch, session, sideBar, theme } from '$lib/states.svelte';
-	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User } from '@lucide/svelte';
+	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User, X } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import SearchBar from './SearchBar.svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
@@ -92,7 +92,11 @@
 							tabindex="0"
 							class="btn btn-ghost m-0 rounded-full p-2 lg:flex"
 						>
-							<Menu />
+							{#if appState.isMobile && (sideBar.dashboardSideBar || sideBar.docsSideBar)}
+								<X />
+							{:else}
+								<Menu />
+							{/if}
 						</button>
 					{/if}
 					<BackButtonHeader
