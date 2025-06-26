@@ -40,3 +40,5 @@ export const uploadImage = async (file: File,folder: string, supabase: SupabaseC
 		);
 		return res;
 	};
+
+export const temp_avatar = '/temp/avatar.jpeg';

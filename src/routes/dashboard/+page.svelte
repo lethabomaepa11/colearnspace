@@ -14,7 +14,7 @@
 	<h2 class="text-xl">
 		Hello {userData.name}
 	</h2>
-	<div class="stats stats-vertical lg:stats-horizontal shadow">
+	<div class="stats stats-vertical lg:stats-horizontal w-full shadow">
 		<div class="stat">
 			<div class="stat-figure text-primary">
 				<svg

@@ -7,6 +7,7 @@
 		Award,
 		BellDot,
 		BookKey,
+		BookOpenText,
 		Building,
 		ChartBarIncreasing,
 		CloudCog,
@@ -129,6 +130,18 @@
 				<Settings size={20} />
 
 				<span>Settings</span>
+			</a>
+		</li>
+		<li class="px-4">
+			<a
+				href="/docs"
+				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
+					.pathname === '/docs'
+					? 'bg-primary text-white shadow'
+					: 'hover:bg-base-200'}"
+			>
+				<BookOpenText size={20} />
+				<span>Documentation</span>
 			</a>
 		</li>
 	</ul>
