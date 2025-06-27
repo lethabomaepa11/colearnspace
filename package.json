@@ -49,6 +49,7 @@
 		"@upstash/redis": "^1.35.0",
 		"marked": "^15.0.12",
 		"melt": "^0.29.3",
-		"moment": "^2.30.1"
+		"moment": "^2.30.1",
+		"nprogress": "^0.2.0"
 	}
 }

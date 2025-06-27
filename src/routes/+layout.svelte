@@ -1,34 +1,37 @@
-<script lang="ts">
+<script>
 	import { page } from '$app/state';
 	import BottomNav from '$lib/components/BottomNav.svelte';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { appState, sideBar, theme } from '$lib/states.svelte';
-	import { beforeNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { slide } from 'svelte/transition';
+	import NProgress from 'nprogress';
+	import 'nprogress/nprogress.css';
 
 	let { children, data } = $props();
 	let { isLoggedIn, user } = data;
 
-	beforeNavigate(({ from, to }) => {
-		//clear states that need to be cleared on every navigation
-
-		//clearing the mobile sidebars that might be open
+	beforeNavigate(({ to }) => {
 		sideBar.dashboardSideBar = false;
 		sideBar.docsSideBar = false;
+
+		NProgress.start();
+	});
+
+	afterNavigate(() => {
+		NProgress.done();
 	});
 
 	onMount(() => {
-		//get theme from localstorage
-		theme.darkTheme = localStorage.getItem('darkTheme') === 'true'; //if it is true, set the theme to dark
+		theme.darkTheme = localStorage.getItem('darkTheme') === 'true';
 
-		//check if the user is on mobile
 		if (screen.availWidth < 768) {
 			appState.isMobile = true;
 		}
 
 		if (!isLoggedIn) {
-			//if the user is not logged in, create a uuid for this user and store it in localstorage as an anonymous user
 			const anon_user = localStorage.getItem('anon_user');
 			if (!anon_user) {
 				localStorage.setItem('anon_user', crypto.randomUUID());

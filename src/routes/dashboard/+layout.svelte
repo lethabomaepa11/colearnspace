@@ -6,7 +6,8 @@
 	import { onMount } from 'svelte';
 
 	let { children, data } = $props();
-	let { isLoggedIn } = data;
+	let { isLoggedIn, userData } = data;
+	console.log(userData);
 </script>
 
 <main class="h-screen w-screen md:grid md:grid-cols-[250px_1fr]">
