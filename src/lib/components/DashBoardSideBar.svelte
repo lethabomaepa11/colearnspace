@@ -7,37 +7,32 @@
 		Award,
 		BellDot,
 		BookKey,
+		BookOpenText,
 		Building,
 		ChartBarIncreasing,
 		CloudCog,
 		Home,
 		LayoutDashboard,
+		Link,
 		LucideBook,
+		NotebookTabs,
 		PlusCircle,
 		Settings,
 		UserCog
 	} from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { slide } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <ul
 	transition:slide
-	class="menu bg-base-100 fixed top-0 left-0 mt-20 hidden h-screen w-[250px] border-r
+	class="menu bg-base-100 fixed top-0 left-0 mt-20 {sideBar.dashboardSideBar
+		? 'fixed z-50 flex'
+		: 'hidden'}  h-screen w-[250px] border-r
 		 transition {theme.darkTheme ? ' border-gray-700' : ' border-gray-100'}  space-y-2 md:flex"
 >
 	<ul class="space-y-2">
-		<li class="px-4">
-			<a
-				href="/portal"
-				class="hover:bg-base-200 flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors"
-			>
-				<Home size={20} />
-
-				<span>Portal</span>
-			</a>
-		</li>
 		<li class="px-4">
 			<a
 				href="/dashboard"
@@ -53,22 +48,9 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/dashboard/notifications"
+				href="/dashboard/profile"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/notifications'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<BellDot size={20} />
-
-				<span>Notifications</span>
-			</a>
-		</li>
-		<li class="px-4">
-			<a
-				href="/dashboard"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/courses'
+					.pathname === '/dashboard/profile'
 					? 'bg-primary text-white shadow'
 					: 'hover:bg-base-200'}"
 			>
@@ -77,20 +59,75 @@
 				<span>Profile</span>
 			</a>
 		</li>
-		<li class="px-4">
-			<a
-				href="/dashboard/api"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/api'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<CloudCog size={20} />
 
-				<span>API Keys</span>
-			</a>
+		<li class="px-4">
+			<details open class="space-y-2">
+				<summary><NotebookTabs size={20} /> My Content</summary>
+
+				<ul>
+					<li class="">
+						<a
+							href="/dashboard/projects"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+								'/dashboard/projects'
+							)
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<CloudCog size={20} />
+
+							<span>Projects</span>
+						</a>
+					</li>
+					<li class="">
+						<a
+							href="/dashboard/courses"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url.pathname.includes(
+								'/dashboard/courses'
+							)
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<BookKey size={20} />
+
+							<span>Courses</span>
+						</a>
+					</li>
+				</ul>
+			</details>
 		</li>
 		<li class="px-4">
+			<details class="space-y-2">
+				<summary><Link size={20} /> Pages</summary>
+
+				<ul>
+					<li class="">
+						<a
+							href="/portal"
+							class="hover:bg-base-200 flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+						>
+							<Home size={20} />
+
+							<span>Portal</span>
+						</a>
+					</li>
+					<li class="">
+						<a
+							href="/docs"
+							class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page
+								.url.pathname === '/docs'
+								? 'bg-primary text-white shadow'
+								: 'hover:bg-base-200'}"
+						>
+							<BookOpenText size={20} />
+							<span>Documentation</span>
+						</a>
+					</li>
+				</ul>
+			</details>
+		</li>
+
+		<li class="fixed bottom-5 w-[200px] px-4">
 			<a
 				href="/dashboard/settings"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
@@ -101,20 +138,6 @@
 				<Settings size={20} />
 
 				<span>Settings</span>
-			</a>
-		</li>
-
-		<li class="px-4">
-			<a
-				href="/dashboard/badges"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/badges'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<Award size={20} />
-
-				<span>Badges</span>
 			</a>
 		</li>
 	</ul>

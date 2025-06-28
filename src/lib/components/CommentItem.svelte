@@ -3,6 +3,7 @@
 	import CommentInput from './CommentInput.svelte';
 	import { slide } from 'svelte/transition';
 	import moment from 'moment';
+	import { temp_avatar } from '$lib';
 
 	let { isLoggedIn, feature, data, comments = $bindable(), parentId = $bindable() } = $props();
 	const handleReply = () => {
@@ -19,7 +20,10 @@
 	<div class="flex items-center gap-2">
 		<div class="avatar">
 			<div class="w-10 rounded-full">
-				<img alt="Tailwind CSS chat bubble component" src="/site/branding/ColearnSpace-icon2.png" />
+				<img
+					alt="Tailwind CSS chat bubble component"
+					src={data.user.avatar ? data.user.avatar : temp_avatar}
+				/>
 			</div>
 		</div>
 		<span class="w-full">

@@ -91,19 +91,7 @@ export const GET = async ({ locals: { supabase }, url, getClientAddress, request
 					'Cache-Control': cacheHeader,
 				}
 				});
-			}
-			
-			
-		
-			//return the data 
-			return new Response(JSON.stringify({data: data.projects}), {
-			status: 200,
-			headers: {
-				'Content-Type': 'application/json',
-				'Cache-Control': cacheHeader,
-			}
-			});
-			
+			}		
 		}
 		return json({success: false, message: "Unauthorized Access, Invalid API Key",status: 401});
 		

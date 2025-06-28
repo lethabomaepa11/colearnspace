@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getUserIdOrNull } from "../user"
+import { use } from "marked";
 
 
 export const getUserData = async (supabase: SupabaseClient) => {
@@ -20,4 +21,18 @@ export const getUserData = async (supabase: SupabaseClient) => {
     delete userData.id;
     return {userData};
 
+}
+export const editUserData = async (supabase: SupabaseClient, data: any) => {
+    const user_id = await getUserIdOrNull(supabase);
+    if(!user_id){
+        return {error: "User not authenticated.", status: 401}
+    }
+    const {data: userData, error} = await supabase.from("user").update({
+        name: data.name,
+        username: data.username,
+    }).eq("id", user_id).single();
+    if(error){
+        return {error, status: 500}
+    }
+    return {userData}
 }

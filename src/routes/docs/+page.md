@@ -1,6 +1,12 @@
+<script>
+    
+</script>
+
 ---
+
 title: ColearnSpace API Docs
 description: Learn how to use the ColearnSpace API to fetch your projects securely.
+
 ---
 
 # 📘 ColearnSpace API Documentation

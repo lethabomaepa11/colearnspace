@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
 	import { appState, course, courseSearch, session, sideBar, theme } from '$lib/states.svelte';
-	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User } from '@lucide/svelte';
+	import { LogIn, Menu, Moon, Plus, Search, Sun, UploadCloud, User, X } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import SearchBar from './SearchBar.svelte';
 	import AvatarDropDown from './AvatarDropDown.svelte';
@@ -9,6 +9,7 @@
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import BackButtonHeader from './BackButtonHeader.svelte';
+	import { temp_avatar } from '$lib';
 	let { isLoggedIn, user } = $props();
 	const infoPages = ['/about', '/contact', '/faq', '/', '/auth/login', '/auth/register'];
 	const mainPages = [
@@ -18,9 +19,9 @@
 		'/portal/courses',
 		'/portal/leaderboard',
 		'/portal/search',
-		'/portal/projects'
+		'/portal/projects',
+		'/docs'
 	]; //pages that do not need a back button on mobile
-
 	let localCourse = $state();
 	let pathname = $state(page.url.pathname);
 
@@ -92,7 +93,11 @@
 							tabindex="0"
 							class="btn btn-ghost m-0 rounded-full p-2 lg:flex"
 						>
-							<Menu />
+							{#if appState.isMobile && (sideBar.dashboardSideBar || sideBar.docsSideBar)}
+								<X />
+							{:else}
+								<Menu />
+							{/if}
 						</button>
 					{/if}
 					<BackButtonHeader
@@ -203,15 +208,11 @@
 			{#if isLoggedIn}
 				<div class="dropdown dropdown-left" role="button">
 					<button class="btn btn-circle flex p-0 text-base text-white">
-						{#if user.avatar}
-							<img
-								src={user.avatar}
-								alt="{user.name} avatar"
-								class="h-8 w-8 rounded-full object-cover"
-							/>
-						{:else}
-							<User />
-						{/if}
+						<img
+							src={user.avatar ? user.avatar : temp_avatar}
+							alt="{user.name} avatar"
+							class="h-8 w-8 rounded-full object-cover"
+						/>
 					</button>
 					<AvatarDropDown {user} />
 				</div>

@@ -91,7 +91,7 @@
 	<div
 		transition:slide
 		role="alert"
-		class="alert alert-info alert-soft fixed right-0 bottom-0 z-50"
+		class="alert alert-info alert-soft fixed right-0 bottom-20 z-50"
 	>
 		<span>Syncing projects...</span>
 		<span class="loading loading-infinity"></span>

@@ -62,7 +62,7 @@
 	<!-- CTA -->
 	<div class="mt-12">
 		<a
-			href="/portal/projects/showcase"
+			href="/portal/projects"
 			class="btn btn-outline rounded-full px-8 py-3 text-lg font-semibold text-white"
 		>
 			Browse All Showcases

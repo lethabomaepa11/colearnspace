@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { theme } from '$lib/states.svelte';
+	import { sideBar, theme } from '$lib/states.svelte';
 	import {
 		Building,
 		ChartBarIncreasing,
@@ -22,7 +22,9 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <ul
 	transition:slide
-	class="menu bg-base-100 fixed top-0 left-0 mt-20 hidden h-screen w-2/12 border-r transition {theme.darkTheme
+	class="menu bg-base-100 fixed top-0 left-0 mt-20 {sideBar.docsSideBar
+		? 'fixed z-50 flex'
+		: 'hidden w-2/12'} h-screen border-r transition {theme.darkTheme
 		? 'divide-gray-500 border-gray-700'
 		: 'divide-gray-200 border-gray-100'}  space-y-2 divide-y md:flex"
 >
