@@ -19,28 +19,32 @@
 		checks: false,
 		save: false
 	};
-
-	const checkUsername = async (username) => {
+	const clearInfo = () => {
 		info.message = null;
 		info.color = null;
 		info.type = null;
+	};
+	const setInfo = (message, color, type) => {
+		info.message = message;
+		info.color = color;
+		info.type = type;
+	};
+
+	const checkUsername = async (username) => {
+		clearInfo();
 		const res = await fetch(`/api/check-username?username=${username}`);
 		const data = await res.json();
 		if (data.available) {
-			info.message = 'Username available';
-			info.color = 'text-success';
-			info.type = 'success';
+			setInfo('Username available', 'text-success', 'success');
 		} else {
-			info.message = 'Choose a different username';
-			info.color = 'text-error';
-			info.type = 'error';
+			setInfo('Username not available', 'text-error', 'error');
 		}
 	};
 
 	if (form?.success) {
-		info.color = 'text-success';
-		info.message = 'Changes saved';
-		info.type = 'success';
+		setInfo('Changes saved', 'text-success', 'success');
+	} else if (form?.error) {
+		setInfo('Error saving changes', 'text-error', 'error');
 	}
 </script>
 
@@ -73,7 +77,6 @@
 				placeholder="Type here"
 			/>
 		</fieldset>
-
 		<button
 			onclick={() => (loadingStates.save = true)}
 			disabled={info.type != 'success'}

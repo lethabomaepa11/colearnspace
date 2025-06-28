@@ -48,19 +48,6 @@
 		</li>
 		<li class="px-4">
 			<a
-				href="/dashboard/notifications"
-				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
-					.pathname === '/dashboard/notifications'
-					? 'bg-primary text-white shadow'
-					: 'hover:bg-base-200'}"
-			>
-				<BellDot size={20} />
-
-				<span>Notifications</span>
-			</a>
-		</li>
-		<li class="px-4">
-			<a
 				href="/dashboard/profile"
 				class="flex flex-row items-center gap-3 rounded-lg px-3 py-2 transition-colors {page.url
 					.pathname === '/dashboard/profile'
