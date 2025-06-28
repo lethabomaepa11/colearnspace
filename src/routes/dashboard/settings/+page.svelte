@@ -1,7 +1,9 @@
 <script>
 	import { Check } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
+	import { appState } from '$lib/states.svelte';
 
+	appState.setAppTitle("Settings");
 	let { data } = $props();
 	const { apiKeys, initialKey } = data;
 
@@ -38,12 +40,6 @@
 		<Check />
 	</div>
 {/if}
-
-<div>
-	<h1>Settings</h1>
-</div>
-
-<div class="divider w-full"></div>
 
 <div>
 	<div class="flex items-center justify-between">
