@@ -1,5 +1,5 @@
 import { createproject, getProject, getProjects, getProjectsByUserId } from '$lib/server/projects/main.js';
-import { ratelimit, redis } from '$lib/server/rateLimiter.js';
+import { ratelimit } from '$lib/server/rateLimiter.js';
 import { json } from '@sveltejs/kit';
 
 
@@ -12,10 +12,7 @@ export const POST = async ({ locals: { supabase }, request, getClientAddress }) 
         return json({success: false, message: "Rate limit exceeded", status: 429});
     }
 	const { project } = await request.json();
-	const data = await createproject(supabase, project);
-
-  // optional: clear all cached pages after creating a project
-	await redis.del('projects:10:0'); 
+	const data = await createproject(supabase, project); 
 
 	return json({ success: true, data: data.project });
 };
@@ -35,7 +32,6 @@ export const GET = async ({ locals: { supabase }, url, getClientAddress, request
 	const ip = getClientAddress();//get the client ip for rate limiting
 	
 	const cache = url.searchParams.get('cache') || 'none';//used for setting cache header
-	
 	
 	// Rate limit check
 	const { success } = await ratelimit.limit(ip);
@@ -62,8 +58,6 @@ export const GET = async ({ locals: { supabase }, url, getClientAddress, request
 
 			//set the cache header specified by the user
 			const cacheHeader = cache == "private" ? "private, max-age=60" : "no-store" ;
-
-
 			//check if the user is only requesting only one project
 			if(id){
 				//user is requesting only one project
@@ -94,40 +88,16 @@ export const GET = async ({ locals: { supabase }, url, getClientAddress, request
 			}		
 		}
 		return json({success: false, message: "Unauthorized Access, Invalid API Key",status: 401});
-		
-
 
 	}
 
 	// public request
 	if(isPublic){
-		const cacheKey = `projects:${limit}:${offset}`;
-		// Try fetching from Redis
-		try {
-			const cached = await redis.get(cacheKey);
-			if (cached) {
-				const parsed = JSON.parse(cached);
-				return new Response(JSON.stringify(parsed), {
-					headers: {
-						'Content-Type': 'application/json',
-						'Cache-Control': 'public, max-age=300, s-maxage=300'
-					}
-				});
-			}
-		} catch (e) {
-			console.warn('Redis error or invalid cache:', e.message);
-			// Optionally clear broken cache
-			await redis.del(cacheKey);
-		}
-
 		// Fetch fresh data from Supabase
 		const data = await getProjects(supabase, { limit, offset });
 		
 		const payload = { success: true, data: data.projects };
 		const stringified = JSON.stringify(payload);
-
-		// Store in Redis (as string)
-		await redis.set(cacheKey, stringified, { ex: 300 }); // 5 mins
 
 		return new Response(stringified, {
 			headers: {
@@ -136,10 +106,5 @@ export const GET = async ({ locals: { supabase }, url, getClientAddress, request
 			}
 		});
 	}
-	
 
-	
-
-	
-	
 };
