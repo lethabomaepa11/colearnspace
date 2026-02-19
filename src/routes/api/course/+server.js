@@ -3,7 +3,7 @@ import { json } from '@sveltejs/kit';
 //Create a course
 export const POST = async ({ request,locals:{supabase} }) => {
     const {course} = await request.json();
-        const { data, error } = await supabase.from('courses').insert({
+        const { data, error } = await supabase.from('course').insert({
 
         })
           if (error) {
@@ -13,7 +13,7 @@ export const POST = async ({ request,locals:{supabase} }) => {
 }
 //get all courses
 export const GET = async ({locals:{supabase}}) => {
-    const {data, error} = await supabase.from('courses').select('*')
+    const {data, error} = await supabase.from('course').select('*')
     if(error){
         return json({success:false, error: error.message})
     }
