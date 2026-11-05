@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://colearnspace.netlify.app/sitemap.xml
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /waitlist
+Disallow: /api
+Sitemap: https://colearn.mosaictalent.co.za/sitemap.xml

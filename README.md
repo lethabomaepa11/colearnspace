@@ -1,146 +1,45 @@
 # CoLearnSpace
 
-A modern web application built with [SvelteKit](https://kit.svelte.dev), Supabase, and a modular feature-first architecture. This app is designed to scale, with a strong focus on shared logic, clean data handling, and good developer experience😅😓.
+Live at https://colearn.mosaictalent.co.za on Vercel. Free courses, lessons, progress tracking, challenges, submissions, community feedback and project showcases. Only Builder Pro has a waitlist at `/pro`; it proposes R79/month and does not charge. `/portal` is the free app, `/dashboard` the personal space.
 
----
+## Stack
 
-## Features
+SvelteKit 3, Svelte 5, Vite 8, TypeScript 6, Tailwind 4, Better Auth 1.7, Neon PostgreSQL and the Vercel Node 24 adapter. The original Supabase prototype is preserved in `archive/prototype`, excluded from builds. It is reference code, not the active implementation. No Supabase data has been imported or deleted. Existing prototype credentials/accounts are not automatically migrated.
 
-- Challenges: Create/host a tech challenge, have users battle it out to showcase their skills as they solve a problem you created💀I'm kidding... but for real
-- Courses: Create courses using videos under 50mb or use your youtube videos, can be embedded into your modules easily, just copy and paste the video link
-- Not sure if its a feature☠️ But you don't have to create an account to use the features here, "ghost" has got your back😅just don't abuse him🥺he's already working overtime.
+## Local setup
 
-## What to expect as a Dev?
+Copy `.env.example` to `.env`, set a Neon database and a new random `BETTER_AUTH_SECRET`, and set `BETTER_AUTH_URL` to your local origin. Run `npm install`, `npm run db:migrate`, `npm run db:platform`, `node scripts/seed-learning.mjs`, then `npm run dev`. The platform tables and authentication tables live only in the `colearn` schema; other apps are untouched. Starter courses and challenges are original practice content, not claims about accredited education or employment.
 
-- Feature-based folder structure (`/challenges`, `/courses`, etc.)
-- Shared business logic in `/lib/server/[feature]/`
-- API routes in `/routes/api/`
-- SSR-powered data fetching using `+page.server.ts`
-- Supabase for authentication, storage, and database
-- Supports both authenticated and anonymous users
+Run `npm run check`, `npm test`, `npm run lint`, and `npm run build`. On Windows the Vercel adapter packaging step needs symlink privileges; application and service worker compilation still complete. The production build is verified on Vercel Linux.
 
----
+## Accounts and content
 
-## 🗂️ Project Structure
+Reading is open. Publishing, feedback, votes, submissions and progress require a free email/password account. Better Auth provides hashed credentials, persistent sessions, CSRF protection and database rate limits. Contributions use additional persistent hourly limits and server-side ownership checks. Text is rendered as escaped plain text; outbound links accept HTTP(S) only. Videos use validated optional YouTube links and are not automatically downloaded.
 
-```
+Account settings support name updates and password-confirmed deletion. Public learning resources remain anonymised after account deletion; users can remove their own work before deleting the account. Password recovery/transactional email delivery still needs the existing Brevo key, which is sensitive in the Compete Vercel project and cannot be downloaded. Support contact is available in the meantime. No payment or paid entitlement logic is active.
 
-/
-├── lib/
-│   └── server/
-│       └── challenges/
-│           ├── core.ts         # Main logic: fetching challenges, etc.
-│           ├── submissions.ts  # Submission logic
-│           └── community.ts    # Community topics logic
-│
-├── routes/
-│   ├── challenge/
-│   │   └── \[slug]/
-│   │       ├── +page.svelte
-│   │       ├── +page.server.ts  # Uses logic from lib/server/challenges
-│   │       └── community/
-│   │       └── submissions/
-│   └── api/
-│       └── challenge/
-│           ├── +server.ts            # POST: Create challenge
-│           └── \[slug]/
-│               ├── +server.ts        # GET: Fetch specific challenge
-│               └── submissions/
-│                   └── +server.ts    # GET: Submissions for a challenge
-│
-└── README.md
+## Paid upgrade only
 
-```
+`/pro` accepts only Pro interest at proposed ZAR 7900/month, regardless of submitted plan values. One entry per normalised email, explicit consent, duplicate-safe insertion, abuse controls and private hashed-token withdrawal. Existing free-interest records from the first iteration are retained, but excluded from paid metrics.
 
----
+`/admin` uses HTTP Basic: username `owner`, password `ADMIN_PASSWORD`. It exposes aggregate paid-interest counts, not member emails. Brevo confirmation is best effort: missing email delivery never loses saved interest. No mailing-list contacts are automatically created.
 
-## 🧠 Data Layer Philosophy
+Paystack is the intended future billing provider. Checkout is not implemented or enabled in this release. Before enabling billing, create a dedicated ZAR monthly plan, authenticated checkout, verified callbacks and webhook entitlements, cancellation/refund flows and provider sandbox checks. Do not reuse another product’s plan IDs. Groq credentials are server-only, reserved for upcoming Pro guidance and unused by free account or waitlist flows.
 
-We use shared logic in `lib/server` to prevent code duplication. If a feature needs data fetching, validation, or transformation:
+## PWA and original branding
 
-- Create a folder for it in `lib/server/[feature]`
-- Place all logic functions in meaningful files (`core.ts`, `submissions.ts`, etc.)
-- Reuse these functions in both:
-  - `+page.server.ts` (for SSR)
-  - `+server.ts` (for APIs)
+Uses the supplied CoLearnSpace logo and original #FC6519 orange identity. `node scripts/icons.mjs` resizes the supplied logo for normal/maskable icons and Apple touch icons. `node scripts/banner.mjs` creates the share banner using the exact logo, never an AI-generated replacement mark.
 
----
+The manifest launches `/portal` in standalone mode. The versioned service worker caches immutable app assets and up to 60 opened anonymous public pages. Signed-in responses, account pages, Pro pages, private withdrawal tokens and API requests are excluded. Online-first navigation falls back to an opened page or a clear offline screen. Writes are never queued or falsely reported as saved. Optional videos require internet access. Install guidance and a safe update prompt appear in the app.
 
-## 💡 Example: How to Fetch Challenge Submissions
+## Verification scripts
 
-```ts
-// lib/server/challenges/submissions.ts
-export async function getSubmissionsForChallenge(slug: string) {
-	// Supabase logic here
-}
+`CHECK_ORIGIN=http://localhost:PORT node scripts/check-platform.mjs` verifies anonymous learning, signup, sessions, progress, publishing, feedback, votes, challenge submissions, course authoring, Pro separation, sign-out/sign-in and mobile navigation. Disposable content and accounts are removed. `check-launch.mjs` checks Pro interest and withdrawal. `check-ownership.mjs` tests cross-account access and password-confirmed account deletion. `check-pwa.mjs` requires a production build/preview or live HTTPS deployment and verifies the manifest, logo icons, offline lessons, fallback and private-cache exclusions.
 
-// routes/api/challenge/[slug]/submissions/+server.ts
-import { getSubmissionsForChallenge } from '$lib/server/challenges/submissions';
+## Operations
 
-export async function GET({ params }) {
-	const submissions = await getSubmissionsForChallenge(params.slug);
-	return json(submissions);
-}
-```
+`node scripts/configure-vercel.mjs` copies explicit local `.env` names to production without printing values. Daily authenticated Vercel cron cleans abuse limits and expired waitlist interest; `scripts/cleanup.mjs` is the manual equivalent. Secrets are ignored by Git. Deployed under the owner’s existing Vercel team and custom domain.
 
----
+## Research
 
-## Running Locally
-
-Lets get into business now
-
-### You just have to...
-
-```bash
-npm install
-npm run dev
-```
-
-### To spin up your backend, make sure you have Docker installed and running
-
-Run the following command
-
-```bash
-npx supabase start
-```
-
-It will download the supabase docker image for you to use locally
-When its done running, you will have to copy the supabase url and the anon key and create a .env file in the root of your project
-
-Then set up your `.env` with Supabase keys, for example:
-
-```env
-PUBLIC_SUPABASE_URL=...
-PUBLIC_SUPABASE_ANON_KEY=...
-```
-
-#### If you are having trouble with the previous step, go to this link https://supabase.com/docs/guides/local-development
-
----
-
-## 🌱 Contributing
-
-If you're adding a new feature:
-
-- Create a new folder in `lib/server/[feature]`
-- Add functions for handling server logic there
-- Use those in `+server.ts` or `+page.server.ts` as needed
-- Keep your files short and single-responsibility
-- We use camelCase in our code, and snake_case in our database to define entities and attributes
-
----
-
-## 🔐 Security Notes
-
-We support both authenticated and anonymous access. For anonymous users, progress tracking is done using the client IP address (non-invasive, limited use). Avoid storing any sensitive data.
-
----
-
-## 📦 Tech Stack
-
-- SvelteKit
-- Docker
-- Supabase (PostgreSQL, Storage, Auth)
-- TypeScript
-- Lucide Icons (via `lucide-svelte`)
-- TailwindCSS
+[Afrobarometer](https://www.afrobarometer.org/articles/south-african-youth-see-job-creation-as-priority-area-for-additional-investment-look-to-government-for-work/) identifies experience and training gaps. [World Bank](https://www.worldbank.org/en/news/feature/2026/08/14/from-demand-to-delivery-strengthening-south-africas-digital-skills) recommends practical experience aligned to demand. [Frontiers](https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2026.1820563/full) discusses connectivity barriers. Product response: clear text-first courses, concrete briefs, feedback, portfolio stories, flexible learning and offline public reading. These choices do not imply employment guarantees.

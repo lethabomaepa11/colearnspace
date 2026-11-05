@@ -1,93 +1,52 @@
-import * as Sentry from '@sentry/sveltekit';
-import { createServerClient } from '@supabase/ssr'
-import {  redirect } from '@sveltejs/kit'
-import { sequence } from '@sveltejs/kit/hooks'
-
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
-
-
-
-const supabase = async ({ event, resolve }) => {
-  /**
-   * Creates a Supabase client specific to this server request.
-   *
-   * The Supabase client gets the Auth token from the request cookies.
-   */
-  event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-    cookies: {
-      getAll: () => event.cookies.getAll(),
-      /**
-       * SvelteKit's cookies API requires `path` to be explicitly set in
-       * the cookie options. Setting `path` to `/` replicates previous/
-       * standard behavior.
-       */
-      setAll: (cookiesToSet) => {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          event.cookies.set(name, value, { ...options, path: '/' })
-        })
-      },
-    },
-  })
-
-  /**
-   * Unlike `supabase.auth.getSession()`, which returns the session _without_
-   * validating the JWT, this function also calls `getUser()` to validate the
-   * JWT before returning the session.
-   */
-  event.locals.safeGetSession = async () => {
-    const {
-      data: { session },
-    } = await event.locals.supabase.auth.getSession()
-    if (!session) {
-      return { session: null, user: null }
-    }
-
-    const {
-      data: { user },
-      error,
-    } = await event.locals.supabase.auth.getUser()
-    if (error) {
-      // JWT validation has failed
-      return { session: null, user: null }
-    }
-
-    return { session, user }
-  }
-
-  return resolve(event, {
-    filterSerializedResponseHeaders(name:string) {
-      /**
-       * Supabase libraries use the `content-range` and `x-supabase-api-version`
-       * headers, so we need to tell SvelteKit to pass it through.
-       */
-      return name === 'content-range' || name === 'x-supabase-api-version'
-    },
-  })
-}
-
-const authGuard= async ({ event, resolve }) => {
-  const { session, user } = await event.locals.safeGetSession()
-  event.locals.session = session
-  event.locals.user = user
-
-  if(event.locals.session && event.url.pathname == "/auth/login"){
-  //redirect logged in user from login page
-    redirect(303,"/dashboard");
-  }
-  if(event.locals.session && event.url.pathname == "/auth/signup"){
-    //redirect logged in user from signup page
-    redirect(303,"/dashboard");
-  }
-  if(!event.locals.session && event.url.pathname == "/dashboard"){
-    redirect(303, '/auth/login')
-  }
-
-
-  return resolve(event)
-}
-
-export const handle = sequence(Sentry.sentryHandle(), sequence(supabase, authGuard))
-
-//for server db queries
-
-export const handleError = Sentry.handleErrorWithSentry();
+import { building } from '$app/env';
+import { redirect } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
+import { svelteKitHandler } from 'better-auth/svelte-kit';
+import { getAuth } from '#lib/server/platform/auth.js';
+export const handle: Handle = async ({ event, resolve }) => {
+	event.locals.user = null;
+	const path = event.url.pathname;
+	if (path === '/auth/signup') redirect(303, '/auth/register');
+	if (path === '/docs') redirect(303, '/portal');
+	if (
+		!building &&
+		(path.startsWith('/api/auth/') ||
+			path.startsWith('/auth/') ||
+			path.startsWith('/dashboard') ||
+			event.request.headers.has('cookie'))
+	) {
+		const auth = getAuth();
+		if (path.startsWith('/api/auth/')) {
+			const headers = new Headers(event.request.headers);
+			headers.set('x-colearn-client-ip', event.getClientAddress());
+			const request = new Request(event.request, { headers });
+			const response = await svelteKitHandler({
+				event: { ...event, request },
+				resolve,
+				auth,
+				building
+			});
+			response.headers.set('Cache-Control', 'private, no-store');
+			response.headers.set('X-Content-Type-Options', 'nosniff');
+			return response;
+		}
+		const session = await auth.api.getSession({ headers: event.request.headers });
+		event.locals.user = session?.user ?? null;
+	}
+	if (path.startsWith('/dashboard') && !event.locals.user) redirect(303, '/auth/login');
+	const response = await resolve(event);
+	if (path.startsWith('/admin') && response.status === 401)
+		response.headers.set('WWW-Authenticate', 'Basic realm="CoLearnSpace owner", charset="UTF-8"');
+	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+	response.headers.set('X-Frame-Options', 'DENY');
+	if (
+		event.locals.user ||
+		path.startsWith('/auth') ||
+		path.startsWith('/admin') ||
+		path.startsWith('/waitlist') ||
+		event.request.method !== 'GET'
+	)
+		response.headers.set('Cache-Control', 'private, no-store');
+	return response;
+};

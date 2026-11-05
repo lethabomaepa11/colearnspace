@@ -24,3 +24,10 @@ vite.config.ts.timestamp-*
 
 # Sentry Config File
 .env.sentry-build-plugin
+.env*
+
+*-output.*
+test-results/
+playwright-report/
+
+output/

@@ -1,18 +1,25 @@
 <script>
-	import Seo from '$lib/components/SEO.svelte';
+	import { page } from '$app/state';
 </script>
 
-<Seo title="404 | ColearnSpace" desc="404 | Page could not be found" />
-
-<div class="">
-	<div class="flex min-h-screen items-center justify-center px-2">
-		<div class="text-center">
-			<h1 class="text-9xl font-bold">404</h1>
-			<p class="mt-4 text-2xl font-medium">Oops! Page not found</p>
-			<p class="mt-4 mb-8">The page you're looking for doesn't exist or has been moved.</p>
-			<a href="/portal" class="btn btn-primary rounded-full px-6 py-3 font-bold">
-				Go Back to Portal
-			</a>
-		</div>
-	</div>
-</div>
+<svelte:head
+	><title>{page.status} | CoLearnSpace</title><meta name="robots" content="noindex" /></svelte:head
+>
+<main class="legal">
+	<a href="/">← CoLearnSpace</a>
+	<h1>
+		{page.status === 401
+			? 'Owner sign-in required.'
+			: page.status === 404
+				? 'A little off track.'
+				: 'Something interrupted the journey.'}
+	</h1>
+	<p>
+		{page.status === 401
+			? 'Use your private owner credentials to see the interest overview.'
+			: page.status === 404
+				? 'This page doesn’t exist. Explore free courses, challenges and projects from Discover.'
+				: 'Please try again in a moment.'}
+	</p>
+	<a class="button" href="/portal">Back to Discover</a>
+</main>

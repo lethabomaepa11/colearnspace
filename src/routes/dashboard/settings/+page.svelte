@@ -1,69 +1,94 @@
-<script>
-	import { Check } from '@lucide/svelte';
-	import { slide } from 'svelte/transition';
-	import { appState } from '$lib/states.svelte';
-
-	appState.setAppTitle("Settings");
-	let { data } = $props();
-	const { apiKeys, initialKey } = data;
-
-	let isCopied = $state(false);
-	const copyKey = (key) => {
-		navigator.clipboard.writeText(key.id);
-		isCopied = true;
-		setTimeout(() => {
-			clearIsCopied();
-		}, 2000);
-	};
-	const clearIsCopied = () => {
-		isCopied = false;
-	};
+<script lang="ts">
+	import { page } from '$app/state';
+	import { goto, invalidateAll } from '$app/navigation';
+	let message = $state('');
+	let busy = $state(false);
+	let confirmDelete = $state(false);
+	async function update(event: SubmitEvent) {
+		event.preventDefault();
+		busy = true;
+		message = '';
+		const form = new FormData(event.currentTarget as HTMLFormElement);
+		try {
+			const response = await fetch('/api/auth/update-user', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name: form.get('name') })
+			});
+			if (!response.ok) throw new Error('Could not update your name. Please try again.');
+			await invalidateAll();
+			message = 'Name updated.';
+		} catch (error) {
+			message = error instanceof Error ? error.message : 'Please try again.';
+		} finally {
+			busy = false;
+		}
+	}
+	async function remove(event: SubmitEvent) {
+		event.preventDefault();
+		busy = true;
+		const form = new FormData(event.currentTarget as HTMLFormElement);
+		try {
+			const response = await fetch('/api/auth/delete-user', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ password: form.get('password') })
+			});
+			if (!response.ok)
+				throw new Error('Could not delete the account. Check your password and try again.');
+			await invalidateAll();
+			await goto('/portal');
+		} catch (error) {
+			message = error instanceof Error ? error.message : 'Please try again.';
+		} finally {
+			busy = false;
+		}
+	}
 </script>
 
-{#if isCopied}
-	<div
-		transition:slide
-		role="alert"
-		class="alert alert-info alert-soft fixed right-0 bottom-20 z-50"
-	>
-		<span>Key Copied</span>
-		<Check />
-	</div>
-{/if}
-{#if initialKey}
-	<div
-		transition:slide
-		role="alert"
-		class="alert alert-info alert-soft fixed right-0 bottom-20 z-50"
-	>
-		<span>We have created you an API Key</span>
-		<Check />
-	</div>
-{/if}
-
-<div>
-	<div class="flex items-center justify-between">
-		<h1>API Keys</h1>
-	</div>
-
-	<div class="my-3 grid gap-8 space-y-2 sm:grid-cols-2 lg:grid-cols-3">
-		{#each apiKeys as key}
-			<div class="card bg-base-200 w-full">
-				<div class="flex items-center justify-between p-5">
-					<h2 class="card-title">{key.name}</h2>
-
-					<button
-						class="btn btn-primary {isCopied ? 'btn-disabled' : ''}"
-						onclick={() => copyKey(key)}
-					>
-						{#if isCopied}
-							Copied<Check />
-						{:else}
-							Copy
-						{/if}
-					</button>
-				</div>
-			</div>
-		{/each}
-	</div>
-</div>
+<svelte:head
+	><title>Account settings | CoLearnSpace</title><meta
+		name="robots"
+		content="noindex"
+	/></svelte:head
+>
+<main id="app-main" class="app-main narrow">
+	<a class="back-link" href="/dashboard">← My space</a>
+	<h1>Your account.</h1>
+	<p>Your email: {page.data.user?.email}</p>
+	{#if message}<p class="action-message" role="status">{message}</p>{/if}
+	<form class="editor-form" onsubmit={update}>
+		<label for="name">Display name</label><input
+			id="name"
+			name="name"
+			value={page.data.user?.name}
+			required
+			minlength="2"
+			maxlength="60"
+		/>
+		<p class="field-help">
+			Your name is visible on your contributions. Existing published bylines retain the name used at
+			publication.
+		</p>
+		<button class="button" disabled={busy}>Save name</button>
+	</form>
+	<section class="danger-zone">
+		<h2>Delete your account</h2>
+		<p>
+			This deletes your account, progress, comments and votes. Your public courses, challenges and
+			projects stay available with a “Deleted member” byline. Delete any work you want removed from
+			its page first.
+		</p>
+		<button class="button secondary" onclick={() => (confirmDelete = !confirmDelete)}
+			>Review account deletion</button
+		>{#if confirmDelete}<form class="editor-form" onsubmit={remove}>
+				<label for="confirm-password">Confirm your password</label><input
+					id="confirm-password"
+					name="password"
+					type="password"
+					required
+					autocomplete="current-password"
+				/><button class="button danger" disabled={busy}>Permanently delete my account</button>
+			</form>{/if}
+	</section>
+</main>

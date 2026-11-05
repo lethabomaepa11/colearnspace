@@ -53,7 +53,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ```bash
 curl https://colearnspace.netlify.app/api/projects?limit=10&cache=private \
-  -H "Authorization: Bearer sk_live_91bff1f8-5ad7-42ab-85f9-abc12345def6"
+  -H "Authorization: Bearer YOUR_API_TOKEN"
 ```
 
 ---

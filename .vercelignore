@@ -1,0 +1,6 @@
+archive
+tests
+output
+*-output.*
+.env*
+scripts
