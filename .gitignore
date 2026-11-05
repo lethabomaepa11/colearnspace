@@ -31,3 +31,5 @@ test-results/
 playwright-report/
 
 output/
+
+!.env.example
